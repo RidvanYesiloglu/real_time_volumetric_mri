@@ -30,7 +30,7 @@ all_data_folder = '/raid/yesiloglu/data/real_time_volumetric_mri/'
 pt_ids = ['patient19', 'patient73', 'pt_19_5min', 'pt_56_5min', 'pt_73_5min', \
                'pt_82_5min', 'pt_85_5min', 'pt_92_5min', 'pt_95_5min']
 # Get patient id from user:
-pt_id = pt_ids[input('Patient ids are:\n{}\nChoose patient (use the numbers inside par.): '.format(pts_str_from_id_list(pt_ids)))]
+pt_id = pt_ids[int(input('Patient ids are:\n{}\nChoose patient (use the numbers inside par.): '.format(pts_str_from_id_list(pt_ids))))]
 # Create volumes list:
 patient_data_folder = all_data_folder + pt_id
 vol_list = os.listdir(patient_data_folder)

@@ -17,14 +17,31 @@ where 'x' is one of the following patient directory names:
 import os
 
 # Methods
-def extract_vol_no(name):
-    return int(name[name.find('_')+1:name.find('.')])
+def extract_vol_no(vol_name):
+    # Returns the volume number from volume string
+    # Example: 'volume_132.bin' => 132
+    return int(vol_name[vol_name.find('_')+1:vol_name.find('.')])
+
 def pts_str_from_id_list(pt_ids):
     pts_str = ''
     for no, pt_id in enumerate(pt_ids):
         pts_str += '{} ({})\n'.format(pt_id, no)
     return pts_str
 
+def ana_vol_nos(sorted_vol_list):
+    starts = [extract_vol_no(sorted_vol_list[0])]
+    ends = []
+    prev_vol_no = extract_vol_no(sorted_vol_list[0])
+    for vol_name in sorted_vol_list[1:]:
+        vol_no = extract_vol_no(vol_name)
+        if (vol_no != (prev_vol_no + 1)):
+            ends.append(prev_vol_no)
+            starts.append(vol_no)
+        prev_vol_no = vol_no
+    ends.append(vol_no)
+    return ['{}:{}, '.format(starts[ind], ends[ind]) for ind in len(starts)]
+        
+    
 # Constants
 all_data_folder = '/raid/yesiloglu/data/real_time_volumetric_mri/'
 pt_ids = ['patient19', 'patient73', 'pt_19_5min', 'pt_56_5min', 'pt_73_5min', \

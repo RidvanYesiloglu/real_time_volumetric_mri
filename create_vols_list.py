@@ -51,8 +51,9 @@ pt_id = pt_ids[int(input('Patient ids are:\n{}\nChoose patient (use the numbers 
 # Create volumes list:
 patient_data_folder = all_data_folder + pt_id
 vol_list = os.listdir(patient_data_folder)
-print('Vol list before sorting: ')
-print(vol_list)
+#print('Vol list before sorting: ')
+#print(vol_list)
 vol_list.sort(key=extract_vol_no)
-print('Vol list after sorting: ')
-print(vol_list)
+#print('Vol list after sorting: ')
+#print(vol_list)
+print(ana_vol_nos(vol_list))

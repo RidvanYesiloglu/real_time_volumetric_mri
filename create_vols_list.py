@@ -15,7 +15,7 @@ where 'x' is one of the following patient directory names:
 """
 # Imports
 import os
-
+import numpy as np
 # Methods
 def extract_vol_no(vol_name):
     # Returns the volume number from volume string
@@ -29,8 +29,9 @@ def pts_str_from_id_list(pt_ids):
     return pts_str
 
 def ana_vol_nos(sorted_vol_list):
-    print('min is {}, max is {}, len is {}'.format(len(sorted_vol_list)))
-    sorted_vol_list = np.asarray(sorted_vol_list)
+    nos = np.asarray([extract_vol_no(no) for no in sorted_vol_list])
+    print('len is {}, min is {}, max is {}'.format(nos.size, nos.min(), nos.max()))
+    
     print('min adj difference is {}, max adj difference is {}'.format(np.diff(sorted_vol_list).min(), np.diff(sorted_vol_list).max()))
     
     starts = [extract_vol_no(sorted_vol_list[0])]

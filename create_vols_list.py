@@ -39,7 +39,7 @@ def ana_vol_nos(sorted_vol_list):
             starts.append(vol_no)
         prev_vol_no = vol_no
     ends.append(vol_no)
-    return ['{}:{}, '.format(starts[ind], ends[ind]) for ind in len(starts)]
+    return ['{}:{}, '.format(starts[ind], ends[ind]) for ind in range(len(starts))]
         
     
 # Constants

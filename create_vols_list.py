@@ -29,6 +29,10 @@ def pts_str_from_id_list(pt_ids):
     return pts_str
 
 def ana_vol_nos(sorted_vol_list):
+    print('min is {}, max is {}, len is {}'.format(len(sorted_vol_list)))
+    sorted_vol_list = np.asarray(sorted_vol_list)
+    print('min adj difference is {}, max adj difference is {}'.format(np.diff(sorted_vol_list).min(), np.diff(sorted_vol_list).max()))
+    
     starts = [extract_vol_no(sorted_vol_list[0])]
     ends = []
     prev_vol_no = extract_vol_no(sorted_vol_list[0])

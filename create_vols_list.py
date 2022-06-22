@@ -32,7 +32,7 @@ def ana_vol_nos(sorted_vol_list):
     nos = np.asarray([extract_vol_no(no) for no in sorted_vol_list])
     print('len is {}, min is {}, max is {}'.format(nos.size, nos.min(), nos.max()))
     
-    print('min adj difference is {}, max adj difference is {}'.format(np.diff(sorted_vol_list).min(), np.diff(sorted_vol_list).max()))
+    print('min adj difference is {}, max adj difference is {}'.format(np.diff(nos).min(), np.diff(nos).max()))
     
     starts = [extract_vol_no(sorted_vol_list[0])]
     ends = []

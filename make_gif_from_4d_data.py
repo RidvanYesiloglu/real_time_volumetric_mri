@@ -41,8 +41,8 @@ def main(all_vols, pt_id):
         plt.suptitle(f"Axial Images ({pt_id}, Time Point: {t})")
         plt.savefig(filename, dpi=96, bbox_inches='tight')
         size = fig.get_size_inches() # size in inches
-        print('Size is ', size)
-        #plt.close()
+        #print('Size is ', size)
+        plt.close()
     print('Charts saved\n')
     # Build GIF
     print('Creating gif\n')

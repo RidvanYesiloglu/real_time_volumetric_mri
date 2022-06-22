@@ -22,7 +22,8 @@ def main(pt_id=None):
             img = np.fromfile(vol_dir, dtype='float32')
             data_4d[vol_no] = np.reshape(img.transpose(), vol_size, order="F")
         
-        np.save(all_data_folder+'/'+pt_id+'/all_vols',data_4d)
-        make_gif_from_4d_data.main(data_4d, pt_id)
+        #np.save(all_data_folder+'/'+pt_id+'/all_vols',data_4d)
+        make_gif_from_4d_data.main(data_4d, pt_id, 1)
+        make_gif_from_4d_data.main(data_4d, pt_id, 2)
 if __name__ == "__main__":
     main()

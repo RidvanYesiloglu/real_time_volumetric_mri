@@ -11,10 +11,10 @@ def main(all_vols, pt_id):
     print('this is main method')
     gif_name = 'axials_vs_t_'+pt_id
     filenames = []
-    temp_dir = gif_name + '_ims'
+    temp_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/{gif_name}_ims'
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
-    for t in np.arange(0, all_vols.shape[0]):
+    for t in np.arange(0, 1):#all_vols.shape[0]):
         filename = f'{temp_dir}/frame_{t}.png'
         filenames.append(filename)
         
@@ -24,7 +24,7 @@ def main(all_vols, pt_id):
                 filenames.append(filename)
                 
         # save img
-        fig,ax = plt.subplots(4,8)
+        fig,ax = plt.subplots(4,8, figsize=(16,8.66))
         for i in range(4):
             for j in range(8):
                 sl_no = (8*i+j)*2
@@ -35,16 +35,18 @@ def main(all_vols, pt_id):
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')
         plt.subplots_adjust(left=0, right=0.97, bottom=0, top=0.935, wspace=0.32)
-        manager = plt.get_current_fig_manager()
-        manager.full_screen_toggle()
+        # manager = plt.get_current_fig_manager()
+        # manager.full_screen_toggle()
         plt.show()
         plt.suptitle(f"Axial Images ({pt_id}, Time Point: {t})")
         plt.savefig(filename, dpi=96, bbox_inches='tight')
-        plt.close()
+        size = fig.get_size_inches() # size in inches
+        print('Size is ', size)
+        #plt.close()
     print('Charts saved\n')
     # Build GIF
     print('Creating gif\n')
-    with imageio.get_writer(f'{gif_name}.gif', mode='I') as writer:
+    with imageio.get_writer(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/{gif_name}.gif', mode='I') as writer:
         for filename in filenames:
             image = imageio.imread(filename)
             writer.append_data(image)

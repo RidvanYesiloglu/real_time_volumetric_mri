@@ -31,19 +31,23 @@ def pts_str_from_id_list(pt_ids):
         pts_str += '{} ({})\n'.format(pt_id, no)
     return pts_str
 
-def main():
+def main(pt_id=None, sort=True):
+# Gets from user (or argument to here) the patient id and returns the list of volume names like:
+# ['volume_1.bin','volume_2.bin',...]
     # Constants
     all_data_folder = '/raid/yesiloglu/data/real_time_volumetric_mri/'
     pt_ids = ['patient19', 'patient73', 'pt_19_5min', 'pt_56_5min', 'pt_73_5min', \
                    'pt_82_5min', 'pt_85_5min', 'pt_92_5min', 'pt_95_5min']
-    # Get patient id from user:
-    pt_id = pt_ids[int(input('Patient ids are:\n{}\nChoose patient (use the numbers inside par.): '.format(pts_str_from_id_list(pt_ids))))]
+    # Get patient id from user if not provided:
+    if pt_id is None:
+        pt_id = pt_ids[int(input('Patient ids are:\n{}\nChoose patient (use the numbers inside par.): '.format(pts_str_from_id_list(pt_ids))))]
     # Create volumes list:
     patient_data_folder = all_data_folder + pt_id
     print('Data folder was set to {}'.format(patient_data_folder))
     vol_list = os.listdir(patient_data_folder)
     # Sort volumes list according to volume no
-    vol_list.sort(key=extract_vol_no)
+    if sort:
+        vol_list.sort(key=extract_vol_no)
     # Print min, max, length etc. for the array of volume nos:
     vol_nos = np.asarray([extract_vol_no(no) for no in vol_list])
     print('Len is {}, min is {}, max is {}'.format(vol_nos.size, vol_nos.min(), vol_nos.max()))    

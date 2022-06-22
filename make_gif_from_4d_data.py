@@ -14,7 +14,7 @@ def main(all_vols, pt_id):
     temp_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/{gif_name}_ims'
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)
-    for t in np.arange(0, 1):#all_vols.shape[0]):
+    for t in np.arange(0, all_vols.shape[0]):
         filename = f'{temp_dir}/frame_{t}.png'
         filenames.append(filename)
         

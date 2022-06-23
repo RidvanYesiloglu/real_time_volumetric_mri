@@ -57,7 +57,7 @@ def main(all_vols, pt_id, ax_cr_sg):
             image = imageio.imread(filename)
             writer.append_data(image)
     print('Gif saved\n')
-    #print('Removing Images\n')
+    # print('Removing Images\n')
     # Remove files
     # for filename in set(filenames):
     #     os.remove(filename)

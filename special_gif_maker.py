@@ -28,7 +28,7 @@ def main(all_vols, pt_id, ax_cr_sg):
     plt.plot(cor_psnrs.min(0))
     plt.plot(cor_psnrs.max(0))
     #sag_psnrs = calc_sag_psnrs(all_vols)
-    for t in np.arange(40, 42): #all_vols.shape[0]):
+    for t in np.arange(0, all_vols.shape[0]):
         filename = f'{temp_dir}/frame_{t}.png'
         filenames.append(filename)
         

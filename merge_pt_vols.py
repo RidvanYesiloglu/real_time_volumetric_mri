@@ -2,10 +2,10 @@
 
 """
 import numpy as np
-import matplotlib.pyplot as plt
-import create_vol_dirs_list
+#import matplotlib.pyplot as plt
+#import create_vol_dirs_list
 import make_gif_from_4d_data
-import special_gif_maker
+#import special_gif_maker
 def main(pt_id=None):
     # Constants
     all_data_folder = '/raid/yesiloglu/data/real_time_volumetric_mri/'

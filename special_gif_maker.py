@@ -18,7 +18,7 @@ def main(all_vols, pt_id, ax_cr_sg):
     print('this is main method')
     gif_name = 'dist_axial_ims_vs_t_'+pt_id if ax_cr_sg==0 else 'dist_coronal_ims_vs_t_'+pt_id if ax_cr_sg==1 else 'dist_sagittal_ims_vs_t_'+pt_id if ax_cr_sg==2 else 'error'
     filenames = []
-    gif_ims_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/gifs/{gif_name}_ims'
+    gif_ims_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{gif_name}_ims'
     if not os.path.exists(gif_ims_dir):
         os.makedirs(gif_ims_dir)
     #ax_psnrs = calc_ax_psnrs(all_vols)
@@ -85,7 +85,7 @@ def main(all_vols, pt_id, ax_cr_sg):
     print('Charts saved\n')
     # Build GIF
     print('Creating gif\n')
-    with imageio.get_writer(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/gifs/{gif_name}.gif', mode='I') as writer:
+    with imageio.get_writer(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{gif_name}.gif', mode='I') as writer:
         for filename in filenames:
             image = imageio.imread(filename)
             writer.append_data(image)

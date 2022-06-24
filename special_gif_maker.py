@@ -16,7 +16,7 @@ def calc_sag_psnrs(ims):
     return 20*np.log((ims[0:1]**2).max((2,3)))-10*np.log(((ims[0:1]-ims)**2).mean((2,3)))
 def main(all_vols, pt_id, ax_cr_sg):
     print('this is main method')
-    gif_name = 'dist_axial_ims_vs_t_'+pt_id if ax_cr_sg==0 else 'dist_coronal_ims_vs_t_'+pt_id if ax_cr_sg==1 else 'dist_sagittal_ims_vs_t_'+pt_id if ax_cr_sg==2 else 'error'
+    gif_name = 'most_fluc_axial_ims_vs_t_'+pt_id if ax_cr_sg==0 else 'most_fluc_coronal_ims_vs_t_'+pt_id if ax_cr_sg==1 else 'most_fluc_sagittal_ims_vs_t_'+pt_id if ax_cr_sg==2 else 'error'
     filenames = []
     gif_ims_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{gif_name}_ims'
     if not os.path.exists(gif_ims_dir):
@@ -75,11 +75,11 @@ def main(all_vols, pt_id, ax_cr_sg):
         
         plt.show()
         if ax_cr_sg == 0:
-            plt.suptitle(f"Most Distinctive Axial Images ({pt_id}, Time Point: {t})")
+            plt.suptitle(f"Most Fluctuating Axial Images ({pt_id}, Time Point: {t})")
         elif ax_cr_sg == 1:
-            plt.suptitle(f"Most Distinctive Coronal Images ({pt_id}, Time Point: {t})")
+            plt.suptitle(f"Most Fluctuating Coronal Images ({pt_id}, Time Point: {t})")
         elif ax_cr_sg == 2:
-            plt.suptitle(f"Most Distinctive Sagittal Images ({pt_id}, Time Point: {t})")
+            plt.suptitle(f"Most Fluctuating Sagittal Images ({pt_id}, Time Point: {t})")
         plt.savefig(filename, dpi=96, bbox_inches='tight')
         plt.close()
     print('Charts saved\n')

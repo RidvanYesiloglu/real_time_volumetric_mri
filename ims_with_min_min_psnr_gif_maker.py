@@ -27,7 +27,8 @@ def main(all_vols, pt_id, ax_cr_sg):
     max_psnr = min(cor_psnrs.max(),100)
     
     cmap = mpl.cm.get_cmap('jet_r')
-        
+    norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
+    
     plt.figure()
     plt.plot(cor_psnrs.min(0))
     plt.plot(cor_psnrs.max(0))
@@ -65,13 +66,13 @@ def main(all_vols, pt_id, ax_cr_sg):
                 fig.colorbar(im, cax=cax, orientation='vertical')
         plt.subplots_adjust(left=0.01, right=0.90, bottom=0.05, top=0.935, wspace=0.32)
         cbar_ax = fig.add_axes([0.94, 0.15, 0.02, 0.7])
-        norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
+        
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap,
                                         norm=norm,
                                         orientation='vertical')
         cb1.set_label('PSNR wrt the Initial Image (dB)')
         
-        fig.show()
+        #fig.show()
         
         plt.show()
         if ax_cr_sg == 0:

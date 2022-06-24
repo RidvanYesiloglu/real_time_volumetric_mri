@@ -26,9 +26,9 @@ def main(pt_id=None):
         
         data_4d = np.load(all_data_folder+'/'+pt_id+'/all_vols.npy')
         #np.save(all_data_folder+'/'+pt_id+'/all_vols',data_4d)
-        
-        #make_gif_from_4d_data.main(data_4d, pt_id, 1)
-        #make_gif_from_4d_data.main(data_4d, pt_id, 2)
-        special_gif_maker.main(data_4d, pt_id, 1)
+        plot_most_fluc=False
+        for plot_most_fluc in [False, True]:
+            for ax_cr_sg in [0,1,2]:    
+                make_gif_from_4d_data.main(data_4d, pt_id, ax_cr_sg, plot_most_fluc)
 if __name__ == "__main__":
     main()

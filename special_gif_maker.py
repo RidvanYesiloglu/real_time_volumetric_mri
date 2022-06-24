@@ -53,7 +53,7 @@ def main(all_vols, pt_id, ax_cr_sg):
                 ps = cor_psnrs[t,sl_no]
                 ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))
                 # Create a Rectangle patch
-                rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=4.5, edgecolor=ps_color, facecolor='none')
+                rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
                 # Add the patch to the Axes
                 ax[i,j].add_patch(rect)
                 #print(f'max is {min_psnr}, min is {max_psnr}')

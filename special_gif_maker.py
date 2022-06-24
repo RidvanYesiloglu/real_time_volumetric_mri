@@ -3,6 +3,8 @@
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.patches as patches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import imageio
 import os
@@ -24,6 +26,8 @@ def main(all_vols, pt_id, ax_cr_sg):
     min_psnr = cor_psnrs.min()
     max_psnr = min(cor_psnrs.max(),100)
     
+    cmap = mpl.cm.get_cmap('jet_r')
+        
     plt.figure()
     plt.plot(cor_psnrs.min(0))
     plt.plot(cor_psnrs.max(0))
@@ -43,16 +47,32 @@ def main(all_vols, pt_id, ax_cr_sg):
         for i in range(2):
             for j in range(8):
                 sl_no = sl_nos[8*i+j]
-                im = ax[i,j].imshow(all_vols[t,:,sl_no,:],cmap='gray', interpolation='none')
+                im_to_show = all_vols[t,:,sl_no,:]
+                im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')
                 ax[i,j].axis('off')
                 ps = cor_psnrs[t,sl_no]
-                
+                ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))
+                # Create a Rectangle patch
+                rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=4.5, edgecolor=ps_color, facecolor='none')
+                # Add the patch to the Axes
+                ax[i,j].add_patch(rect)
                 #print(f'max is {min_psnr}, min is {max_psnr}')
-                ax[i,j].set_title('Slice {}\n(PSNR {:.3g})'.format(sl_no, ps), color=((ps>min_psnr)*(ps<=max_psnr)*(ps-min_psnr)/(max_psnr-min_psnr) + (ps>max_psnr)*1, 0, (ps<min_psnr)*1 + (ps>=min_psnr)*(ps<max_psnr)*(max_psnr-ps)/(max_psnr-min_psnr)))
+                ax[i,j].set_title('Slice {}'.format(sl_no))
+                ax[i,j].text(0.5,-0.1, '(PSNR: {:.3g} dB)'.format(ps), color=ps_color, size=12, ha="center", transform=ax[i,j].transAxes)
+                # color=((ps>min_psnr)*(ps<=max_psnr)*(ps-min_psnr)/(max_psnr-min_psnr) + (ps>max_psnr)*1, 0, (ps<min_psnr)*1 + (ps>=min_psnr)*(ps<max_psnr)*(max_psnr-ps)/(max_psnr-min_psnr)))
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')
-        plt.subplots_adjust(left=0, right=0.97, bottom=0.05, top=0.935, wspace=0.32)
+        plt.subplots_adjust(left=0.01, right=0.90, bottom=0.05, top=0.935, wspace=0.32)
+        cbar_ax = fig.add_axes([0.94, 0.15, 0.02, 0.7])
+        norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
+        cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap,
+                                        norm=norm,
+                                        orientation='vertical')
+        cb1.set_label('PSNR wrt the Initial Image (dB)')
+        
+        fig.show()
+        
         plt.show()
         if ax_cr_sg == 0:
             plt.suptitle(f"Most Distinctive Axial Images ({pt_id}, Time Point: {t})")

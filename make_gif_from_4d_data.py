@@ -3,6 +3,7 @@
 """
 import numpy as np
 import matplotlib.pyplot as plt
+
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import imageio
 import os
@@ -22,7 +23,8 @@ def main(all_vols, pt_id, ax_cr_sg):
         if (t == (all_vols.shape[0]-1)):
             for t in range(5):
                 filenames.append(filename)
-                
+            
+        
         # save img
         fig,ax = plt.subplots(4,8, figsize=(16,8.66)) if ax_cr_sg == 0 else plt.subplots(4,8, figsize=(12.5,8.66))
         for i in range(4):

@@ -52,7 +52,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                 filenames.append(filename)
             
         # save img
-        sl_nos = psnrs.min(0).argsort()[:nrows*ncols] if plot_most_fluc else np.arange(0,(nrows*ncols-1)*(psnrs.shape[1]//(nrows*ncols-1)),psnrs.shape[1]//(nrows*ncols-1))
+        sl_nos = psnrs.min(0).argsort()[:nrows*ncols] if plot_most_fluc else np.arange(0,(nrows*ncols-1)*(psnrs.shape[1]//(nrows*ncols-1))+1,psnrs.shape[1]//(nrows*ncols-1))
         fig,ax = plt.subplots(nrows,ncols, figsize=(16,8.66))
         for i in range(nrows):
             for j in range(ncols):

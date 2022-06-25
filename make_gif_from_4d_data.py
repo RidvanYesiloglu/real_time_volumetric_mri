@@ -41,7 +41,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     nrows = 2 if plot_most_fluc else 4
     ncols = int(2*nrows) if ax_cr_sg == 0 else int(2.5*nrows)
     figsize = (16,7.5) if (ax_cr_sg == 0 and plot_most_fluc) else (16,7.5) if (ax_cr_sg == 0 and (not plot_most_fluc))\
-        else (16,8.66) if (ax_cr_sg != 0 and plot_most_fluc) else (16,11)
+        else (16,9.5) if (ax_cr_sg != 0 and plot_most_fluc) else (18,11)
      #13.8 8.5
     filenames = []
     for t in np.arange(0, 50, 18):#all_vols.shape[0]):

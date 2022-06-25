@@ -39,7 +39,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     (min_psnr, max_psnr) = (psnrs.min(), min(psnrs.max(),100))
     norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
     nrows = 2 if plot_most_fluc else 4
-    ncols = 2*nrows if ax_cr_sg == 0 else 2.5*nrows
+    ncols = int(2*nrows) if ax_cr_sg == 0 else int(2.5*nrows)
     
     filenames = []
     for t in np.arange(0, 50, 18):#all_vols.shape[0]):

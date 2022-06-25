@@ -40,9 +40,9 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
     nrows = 2 if plot_most_fluc else 4
     ncols = int(2*nrows) if ax_cr_sg == 0 else int(2.5*nrows)
-    figsize = (16,6.5) if (ax_cr_sg == 0 and plot_most_fluc) else (16,7.5) if (ax_cr_sg == 0 and (not plot_most_fluc))\
-        else (16,8.66) if (ax_cr_sg != 0 and plot_most_fluc) else (13.8,8.5)
-    
+    figsize = (16,7.5) if (ax_cr_sg == 0 and plot_most_fluc) else (16,7.5) if (ax_cr_sg == 0 and (not plot_most_fluc))\
+        else (16,8.66) if (ax_cr_sg != 0 and plot_most_fluc) else (16,11)
+     #13.8 8.5
     filenames = []
     for t in np.arange(0, 50, 18):#all_vols.shape[0]):
         filename = f'{ind_ims_dir}/frame_{t}.png'
@@ -75,7 +75,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                 ax[i,j].add_patch(rect)
                 #print(f'max is {min_psnr}, min is {max_psnr}')
                 ax[i,j].set_title('Slice {}'.format(sl_no))
-                ax[i,j].text(0.5,-0.1*(1-plot_most_fluc)-0.05*plot_most_fluc, '({:.1f} dB)'.format(ps), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
+                ax[i,j].text(0.5,-0.1*(1-plot_most_fluc)-0.05*plot_most_fluc-0.01*(ax_cr_sg==0), '({:.1f} dB)'.format(ps), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')

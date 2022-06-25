@@ -16,6 +16,7 @@ def main(pt_id=None):
     for pt_id in pt_ids:
         if ((pt_id == 'patient19') or (pt_id == 'patient73')):
             continue
+        print(f'Patient {pt_id}')
         # vol_dirs = create_vol_dirs_list.main(pt_id, sort=True)
         
         # data_4d = np.zeros((len(vol_dirs),) + vol_size)

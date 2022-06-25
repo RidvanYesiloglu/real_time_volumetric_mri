@@ -55,7 +55,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
             
         # save img
         sl_nos = psnrs.min(0).argsort()[:nrows*ncols] if plot_most_fluc else np.arange(0,(nrows*ncols-1)*(psnrs.shape[1]//(nrows*ncols-1))+1,psnrs.shape[1]//(nrows*ncols-1))
-        fig,ax = plt.subplots(nrows,ncols, figsize=(16,8.66))
+        fig,ax = plt.subplots(nrows,ncols, figsize=figsize)
         for i in range(nrows):
             for j in range(ncols):
                 sl_no = sl_nos[ncols*i+j]
@@ -75,7 +75,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                 ax[i,j].add_patch(rect)
                 #print(f'max is {min_psnr}, min is {max_psnr}')
                 ax[i,j].set_title('Slice {}'.format(sl_no))
-                ax[i,j].text(0.5,-0.1, '({:4.1f} dB)'.format(ps), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
+                ax[i,j].text(0.5,-0.1, '({:.1f} dB)'.format(ps), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')

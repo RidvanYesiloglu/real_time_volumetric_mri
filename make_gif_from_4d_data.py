@@ -75,7 +75,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                 ax[i,j].add_patch(rect)
                 #print(f'max is {min_psnr}, min is {max_psnr}')
                 ax[i,j].set_title('Slice {}'.format(sl_no))
-                #ax[i,j].text(0.5,-0.1, '(PSNR: {:5.1f} dB)'.format(ps), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
+                ax[i,j].text(0.5,-0.1, '(PSNR: {:5.1f} dB)'.format(ps), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')

@@ -29,7 +29,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     start_time = time.perf_counter()
     im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'
     gif_name = f'most_fluc_{im_type_str}s_vs_t_{pt_id}' if plot_most_fluc else f'all_{im_type_str}s_vs_t_{pt_id}'
-    print('The gif {gif_name} is being created.')
+#    print(f'The gif {gif_name} is being created.')
     gifs_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs'
     ind_ims_dir = f'{gifs_dir}/{gif_name}_ims'
     if not os.path.exists(ind_ims_dir):
@@ -38,15 +38,15 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     else:
         print(f'Directory already exists, will be overwritten: {ind_ims_dir}')
     # Calculate PSNRs:
-    print(f'{im_type_str.capitalize()} PSNRs are being calculated.')
+#    print(f'{im_type_str.capitalize()} PSNRs are being calculated.')
     psnrs = calc_psnrs(all_vols, ax_cr_sg)
     curr_time = time.perf_counter()
-    print(f"Elapsed total for the gif: {curr_time-start_time} seconds")
+#    print(f"Elapsed total for the gif: {curr_time-start_time} seconds")
     # Create and save the plot of PSNRs:
-    print(f'Creating and saving the plot of {im_type_str.capitalize()} PSNRs.')
+#    print(f'Creating and saving the plot of {im_type_str.capitalize()} PSNRs.')
     fig,ax = plt.subplots()
     ax.imshow(psnrs)
-    ax.title(f'{im_type_str.capitalize()} PSNRs wrt the Initial Image')
+    ax.set_title(f'{im_type_str.capitalize()} PSNRs wrt the Initial Image')
     ax.set_xlabel('Time Index')
     ax.set_ylabel('Slice No')
     plt.show()

@@ -30,6 +30,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
         gif_name = 'most_fluc_axials_vs_t_'+pt_id if ax_cr_sg==0 else 'most_fluc_coronals_vs_t_'+pt_id if ax_cr_sg==1 else 'most_fluc_sagittals_vs_t_'+pt_id if ax_cr_sg==2 else 'error'
     else:
         gif_name = 'all_axials_vs_t_'+pt_id if ax_cr_sg==0 else 'all_coronals_vs_t_'+pt_id if ax_cr_sg==1 else 'all_sagittals_vs_t_'+pt_id if ax_cr_sg==2 else 'error'
+    gif_name = gif_name + '_NOTSORTED'
     ind_ims_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{gif_name}_ims'    
     if not os.path.exists(ind_ims_dir):
         os.makedirs(ind_ims_dir)

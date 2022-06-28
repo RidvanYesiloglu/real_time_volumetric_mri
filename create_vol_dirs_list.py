@@ -50,6 +50,7 @@ def main(pt_id=None, sort=True):
     # Sort volumes list according to volume no
     if sort:
         vol_list.sort(key=extract_vol_no)
+    print('FIRST FIVE VOLS: ', vol_list[:5])
     # Print min, max, length etc. for the array of integer volume nos:
     vol_nos = np.asarray([extract_vol_no(no) for no in vol_list])
     print('Len is {}, min is {}, max is {}'.format(vol_nos.size, vol_nos.min(), vol_nos.max()))    

@@ -37,7 +37,7 @@ def main(pt_id=None):
         np.save(all_data_folder+'/'+pt_id+'/all_vols',all_vols)
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
         print('3D PSNRs wrt the initial image are being plotted.')
-        make_3dpsnr_wrti_pl_from_4d_data.main(all_vols)
+        make_3dpsnr_wrti_pl_from_4d_data.main(all_vols, pt_id)
         #print('The gifs for the data is being plotted and saved.')
         # processes = []
         # for plot_most_fluc in [False, True]:

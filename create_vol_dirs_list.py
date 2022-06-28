@@ -45,16 +45,18 @@ def main(pt_id=None, sort=True):
         pt_id = pt_ids[int(input('Patient ids are:\n{}\nChoose patient (use the numbers inside par.): '.format(pts_str_from_id_list(pt_ids))))]
     # Create volumes list:
     vol_bins_folder = all_data_folder + '/' + pt_id + '/' + bin_dir
-    print('Data folder was set to {}'.format(vol_bins_folder))
+    print('Volumes folder was set to: {}'.format(vol_bins_folder))
     vol_list = os.listdir(vol_bins_folder)
     # Sort volumes list according to volume no
     if sort:
         vol_list.sort(key=extract_vol_no)
-    print('FIRST FIVE VOLS: ', vol_list[:5])
-    # Print min, max, length etc. for the array of integer volume nos:
+    # Check whether volume nos are consecutive integers after sorting:
     vol_nos = np.asarray([extract_vol_no(no) for no in vol_list])
-    print('Len is {}, min is {}, max is {}'.format(vol_nos.size, vol_nos.min(), vol_nos.max()))    
-    print('Min adj difference is {}, max adj difference is {}'.format(np.diff(vol_nos).min(), np.diff(vol_nos).max()))
+    if ((np.diff(vol_nos).min() == 1) and (np.diff(vol_nos).max() == 1)):
+        print('The .vol files are sorted, and they are indeed consecutive integers from {} to {}.'.format(vol_nos.min(), vol_nos.max()))
+    else:
+        print('The .vol files are NOT consecutive integers!')
+        assert(1==2)
     # Prepend the patient directory to each volume file:
     vol_list = [vol_bins_folder + '/' + vol_name for vol_name in vol_list]
     # Return volumes list:

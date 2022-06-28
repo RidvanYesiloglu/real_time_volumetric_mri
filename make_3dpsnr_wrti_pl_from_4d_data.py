@@ -13,7 +13,6 @@ def main(all_vols):
     ax.set_title('3D PSNRs wrt the Initial Image')
     ax.set_xlabel('Time Index')
     ax.set_ylabel('PSNR (dB)')
-    fig.colorbar(ax=ax, orientation='vertical')
     plt.show()
     plt.savefig('/raid/yesiloglu/data/real_time_volumetric_mri/temporal_evol_gifs/3dpsnrs_wrt_init', dpi=96, bbox_inches='tight')
     plt.close()

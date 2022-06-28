@@ -19,7 +19,7 @@ def main(pt_id=None):
     for pt_id in pt_ids:
         print(f'Now, patient {pt_id} is being processed.')
         start_time = time.perf_counter()
-        if ((pt_id == 'patient19') or (pt_id == 'patient73') or (pt_id != 'pt_85_5min')):
+        if ((pt_id == 'patient19') or (pt_id == 'patient73') or (pt_id != 'pt_92_5min')):
             print(f'Patient {pt_id} skipped.')
             continue
         

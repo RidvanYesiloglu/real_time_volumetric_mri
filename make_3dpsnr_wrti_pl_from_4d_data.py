@@ -14,7 +14,7 @@ def main(all_vols, pt_id):
     ax.set_xlabel('Time Index')
     ax.set_ylabel('PSNR (dB)')
     plt.show()
-    plt.savefig('/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/3dpsnrs_wrt_init', dpi=96, bbox_inches='tight')
+    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/3dpsnrs_wrt_init', dpi=96, bbox_inches='tight')
     plt.close()
     
 if __name__ == "__main__":

@@ -49,6 +49,6 @@ def main(pt_id=None):
         for p in processes:
             p.join()
         finish_time = time.perf_counter()
-        print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
+        print(f"Elapsed total for the patient: {finish_time-start_time} seconds, done.")
 if __name__ == "__main__":
     main()

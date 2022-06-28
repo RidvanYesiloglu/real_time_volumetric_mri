@@ -38,23 +38,25 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     else:
         print(f'Directory already exists, will be overwritten: {ind_ims_dir}')
     # Calculate PSNRs:
-#    print(f'{im_type_str.capitalize()} PSNRs are being calculated.')
+    print(f'{im_type_str.capitalize()} PSNRs are being calculated.')
     psnrs = calc_psnrs(all_vols, ax_cr_sg)
     curr_time = time.perf_counter()
-#    print(f"Elapsed total for the gif: {curr_time-start_time} seconds")
-    # Create and save the plot of PSNRs:
-#    print(f'Creating and saving the plot of {im_type_str.capitalize()} PSNRs.')
-    fig,ax = plt.subplots()
-    ax.imshow(psnrs)
-    ax.set_title(f'{im_type_str.capitalize()} PSNRs wrt the Initial Image')
-    ax.set_xlabel('Time Index')
-    ax.set_ylabel('Slice No')
-    plt.show()
-    plt.savefig(f'{gifs_dir}/{im_type_str}_psnrs_wrt_init', dpi=96, bbox_inches='tight')
-    plt.close()
-    curr_time = time.perf_counter()
     print(f"Elapsed total for the gif: {curr_time-start_time} seconds")
-    
+    if not plot_most_fluc:
+        # Create and save the plot of PSNRs:
+        print(f'Creating and saving the plot of {im_type_str.capitalize()} PSNRs.')
+        fig,ax = plt.subplots(figsize=(6,12))
+        im = ax.imshow(psnrs)
+        ax.set_title(f'{im_type_str.capitalize()} PSNRs wrt the Initial Image')
+        ax.set_xlabel('Time Index')
+        ax.set_ylabel('Slice No')
+        fig.colorbar(im, ax=ax, orientation='vertical')
+        plt.show()
+        plt.savefig(f'{gifs_dir}/{im_type_str}_psnrs_wrt_init', dpi=96, bbox_inches='tight')
+        plt.close()
+        curr_time = time.perf_counter()
+        print(f"Elapsed total for the gif: {curr_time-start_time} seconds")
+        
     # cmap = mpl.cm.get_cmap('jet_r')
     # (min_psnr, max_psnr) = (psnrs.min(), min(psnrs.max(),100))
     # norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)

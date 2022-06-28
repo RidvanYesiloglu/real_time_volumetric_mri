@@ -43,7 +43,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     plt.figure()
     plt.plot(psnrs[:,minind])
     plt.show()
-    plt.savefig('minpsnrli_notsorted', dpi=96, bbox_inches='tight')
+    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/minpsnrli_notsorted', dpi=96, bbox_inches='tight')
     plt.close()
     
     

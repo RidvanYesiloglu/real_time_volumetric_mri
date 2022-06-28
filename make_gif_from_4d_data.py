@@ -17,7 +17,7 @@ import imageio
 import os
 import time
 
-def calc_psnrs(all_vols, ax_cr_sg):
+def calc_psnrs_wrti(all_vols, ax_cr_sg):
     if ax_cr_sg == 0:
         return 20*np.log((all_vols[0:1]**2).max((1,2)))-10*np.log(((all_vols[0:1]-all_vols)**2).mean((1,2)))
     elif ax_cr_sg == 1:
@@ -39,7 +39,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
         print(f'Directory already exists, will be overwritten: {ind_ims_dir}')
     # Calculate PSNRs:
     print(f'{im_type_str.capitalize()} PSNRs are being calculated.')
-    psnrs = calc_psnrs(all_vols, ax_cr_sg)
+    psnrs = calc_psnrs_wrti(all_vols, ax_cr_sg)
     curr_time = time.perf_counter()
     print(f"Elapsed total for the gif {gif_name}: {curr_time-start_time} seconds")
     if not plot_most_fluc:

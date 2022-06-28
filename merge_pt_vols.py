@@ -2,9 +2,9 @@
 
 """
 import numpy as np
-#import matplotlib.pyplot as plt
 import create_vol_dirs_list
 import make_gif_from_4d_data
+import make_3dpsnr_wrti_pl_from_4d_data
 import multiprocessing
 import time
 
@@ -28,26 +28,26 @@ def main(pt_id=None):
         finish_time = time.perf_counter()
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
         print('The vol files'' for the patient are being merged in a numpy array.')
-        data_4d = np.zeros((len(vol_dirs),) + vol_size)
+        all_vols = np.zeros((len(vol_dirs),) + vol_size)
         for vol_no, vol_dir in enumerate(vol_dirs):
             img = np.fromfile(vol_dir, dtype='float32')
-            data_4d[vol_no] = np.reshape(img.transpose(), vol_size, order="F")
+            all_vols[vol_no] = np.reshape(img.transpose(), vol_size, order="F")
         finish_time = time.perf_counter()
+        #all_vols = np.load(all_data_folder+'/'+pt_id+'/all_vols.npy')
+        np.save(all_data_folder+'/'+pt_id+'/all_vols',all_vols)
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
-        print('The gifs for the data is being plotted and saved.')
-        #data_4d = np.load(all_data_folder+'/'+pt_id+'/all_vols.npy')
-        #np.save(all_data_folder+'/'+pt_id+'/all_vols',data_4d)
-        
-        processes = []
-        for plot_most_fluc in [False, True]:
-            for ax_cr_sg in [0,1,2]:
-                p = multiprocessing.Process(target = make_gif_from_4d_data.main, args=(data_4d, pt_id, ax_cr_sg, plot_most_fluc,))
-                p.start()
-                #make_gif_from_4d_data.main(data_4d, pt_id, ax_cr_sg, plot_most_fluc)
-                processes.append(p)
-        # Join all the processes 
-        for p in processes:
-            p.join()
+        print('3D PSNRs wrt the initial image are being plotted.')
+        make_3dpsnr_wrti_pl_from_4d_data.main(all_vols)
+        #print('The gifs for the data is being plotted and saved.')
+        # processes = []
+        # for plot_most_fluc in [False, True]:
+        #     for ax_cr_sg in [0,1,2]:
+        #         p = multiprocessing.Process(target = make_gif_from_4d_data.main, args=(all_vols, pt_id, ax_cr_sg, plot_most_fluc,))
+        #         p.start()
+        #         processes.append(p)
+        # # Join all the processes 
+        # for p in processes:
+        #     p.join()
         finish_time = time.perf_counter()
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds, done.")
 if __name__ == "__main__":

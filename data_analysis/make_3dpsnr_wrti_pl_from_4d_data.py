@@ -34,8 +34,8 @@ def main(all_vols, pt_id):
     # Create and save the plot of PSNRs:
     fig,ax = plt.subplots(1,3)
     psnrs = [calc_psnrs_wrti(all_vols, ax_cr_sg) for ax_cr_sg in [0,1,2]]
-    min_psnr = min([min(ax_cr_sg_psnrs) for ax_cr_sg_psnrs in psnrs])
-    max_psnr = max([max(ax_cr_sg_psnrs) for ax_cr_sg_psnrs in psnrs])
+    min_psnr = min([ax_cr_sg_psnrs.min() for ax_cr_sg_psnrs in psnrs])
+    max_psnr = max([ax_cr_sg_psnrs.max() for ax_cr_sg_psnrs in psnrs])
     for ax_cr_sg in [0,1,2]:
         
         im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'

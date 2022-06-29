@@ -9,7 +9,7 @@ def main(all_vols, pt_id):
     psnrs = calc_3dpsnrs_wrti(all_vols)
     print(psnrs[547], ' db 3dpsnr')
     # Create and save the plot of PSNRs:
-    fig,ax = plt.subplots(figsize=(12.5,6))
+    fig,ax = plt.subplots(figsize=(15,6))
     ax2 = ax.twinx()
     ax.plot(psnrs,'.-', color='black')
     ax2.scatter(np.where(psnrs==np.inf)[0], np.ones(((psnrs==np.inf).sum())), marker='.', color='black')
@@ -24,7 +24,7 @@ def main(all_vols, pt_id):
     ax.set_yticklabels(np.concatenate(([str(int(tick)) for tick in ax.get_yticks()[:-1]],np.array(['inf']))))
     plt.show()
     plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/3dpsnrs_wrt_init', dpi=96, bbox_inches='tight')
-    plt.close()
+    plt.close(fig)
     
 if __name__ == "__main__":
     main()

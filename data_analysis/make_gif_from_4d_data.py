@@ -59,7 +59,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
         fig.colorbar(im, ax=ax, orientation='vertical')
         plt.show()
         plt.savefig(f'{gifs_dir}/{im_type_str}_psnrs_wrt_init.pdf', dpi=48, bbox_inches='tight')
-        plt.close()
+        plt.close(fig)
     
     # # Create gif
     # print(f'Creating and saving the gif {gif_name}.')

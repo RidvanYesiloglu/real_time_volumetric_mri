@@ -32,25 +32,31 @@ def main(all_vols, pt_id):
     plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/3dpsnrs_wrt_init_vs_t_{pt_id}', dpi=96, bbox_inches='tight')
     plt.close(fig)
     # Create and save the plot of PSNRs:
+    fig,ax = plt.subplots(1,3)
+    psnrs = [calc_psnrs_wrti(all_vols, ax_cr_sg) for ax_cr_sg in [0,1,2]]
+    min_psnr = min([min(ax_cr_sg_psnrs) for ax_cr_sg_psnrs in psnrs])
+    max_psnr = max([max(ax_cr_sg_psnrs) for ax_cr_sg_psnrs in psnrs])
     for ax_cr_sg in [0,1,2]:
-        psnrs = calc_psnrs_wrti(all_vols, ax_cr_sg)
+        
         im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'
         print(f'Creating and saving the plot of {im_type_str.capitalize()} PSNRs.')
-        fig,ax = plt.subplots(figsize=(9,8))
+        #fig,ax = plt.subplots(figsize=(9,8))
+        
         sl_no_mplier = 5
-        im = ax.imshow(np.repeat(psnrs, sl_no_mplier, axis=1))
-        ax.set_title(f'{im_type_str.capitalize()} PSNRs wrt the Initial Image')
-        ax.set_xlabel('Slice No')
-        ax.set_xticks(sl_no_mplier*np.arange(0,psnrs.shape[1],step=10) + sl_no_mplier//2)
-        ax.set_xticklabels(np.arange(0,psnrs.shape[1],step=10))
-        ax.set_ylabel('Time Index')
-        ax.set_yticks(np.arange(0,psnrs.shape[0],step=50))
-        ax.set_yticklabels(np.arange(0,psnrs.shape[0],step=50))
-        fig.colorbar(im, ax=ax, orientation='vertical')
-        fig.tight_layout()
-        plt.show()
-        plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{im_type_str}_psnrs_wrt_init_vs_t_sl_{pt_id}.pdf', dpi=150, bbox_inches='tight')
-        plt.close(fig)
+        im = ax[ax_cr_sg].imshow(np.repeat(psnrs[ax_cr_sg], sl_no_mplier, axis=1), vmin=min_psnr, vmax=max_psnr)
+        ax[ax_cr_sg].set_title(f'{im_type_str.capitalize()} PSNRs wrt the Initial Image')
+        ax[ax_cr_sg].set_xlabel('Slice No')
+        ax[ax_cr_sg].set_xticks(sl_no_mplier*np.arange(0,psnrs[ax_cr_sg].shape[1],step=10) + sl_no_mplier//2)
+        ax[ax_cr_sg].set_xticklabels(np.arange(0,psnrs[ax_cr_sg].shape[1],step=10))
+        ax[ax_cr_sg].set_ylabel('Time Index')
+        ax[ax_cr_sg].set_yticks(np.arange(0,psnrs[ax_cr_sg].shape[0],step=50))
+        ax[ax_cr_sg].set_yticklabels(np.arange(0,psnrs[ax_cr_sg].shape[0],step=50))
+    #fig.colorbar(im, ax=ax, orientation='vertical')
+    plt.colorbar()
+    fig.tight_layout()
+    plt.show()
+    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.pdf', dpi=150, bbox_inches='tight')
+    plt.close(fig)
     
 if __name__ == "__main__":
     main()

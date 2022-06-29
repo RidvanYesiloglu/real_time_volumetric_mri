@@ -29,7 +29,7 @@ def main(all_vols, pt_id):
     ax.set_yticks(np.concatenate((ax.get_yticks(),ax.get_yticks()[-1:]+20)))
     ax.set_yticklabels(np.concatenate(([str(int(tick)) for tick in ax.get_yticks()[:-1]],np.array(['inf']))))
     plt.show()
-    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/3dpsnrs_wrt_init', dpi=96, bbox_inches='tight')
+    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/3dpsnrs_wrt_init_vs_t_{pt_id}', dpi=96, bbox_inches='tight')
     plt.close(fig)
     # Create and save the plot of PSNRs:
     for ax_cr_sg in [0,1,2]:
@@ -49,7 +49,7 @@ def main(all_vols, pt_id):
         fig.colorbar(im, ax=ax, orientation='vertical')
         fig.tight_layout()
         plt.show()
-        plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{im_type_str}_psnrs_wrt_init.pdf', dpi=150, bbox_inches='tight')
+        plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{im_type_str}_psnrs_wrt_init_vs_t_sl_{pt_id}.pdf', dpi=150, bbox_inches='tight')
         plt.close(fig)
     
 if __name__ == "__main__":

@@ -45,16 +45,16 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     if not plot_most_fluc:
         # Create and save the plot of PSNRs:
         print(f'Creating and saving the plot of {im_type_str.capitalize()} PSNRs.')
-        fig,ax = plt.subplots(figsize=(10,10))
+        fig,ax = plt.subplots(figsize=(9,8))
         sl_no_mplier = 5
-        im = ax.imshow(np.repeat(np.random.rand(50,50), sl_no_mplier, axis=1))
+        im = ax.imshow(np.repeat(psnrs, sl_no_mplier, axis=1))
         ax.set_title(f'{im_type_str.capitalize()} PSNRs wrt the Initial Image')
         ax.set_xlabel('Slice No')
         ax.set_xticks(sl_no_mplier*np.arange(0,psnrs.shape[1],step=10) + sl_no_mplier//2)
         ax.set_xticklabels(np.arange(0,psnrs.shape[1],step=10))
         ax.set_ylabel('Time Index')
-        ax.set_yticks(np.arange(0,psnrs.shape[0],step=10))
-        ax.set_yticklabels(np.arange(0,psnrs.shape[0],step=10))
+        ax.set_yticks(np.arange(0,psnrs.shape[0],step=50))
+        ax.set_yticklabels(np.arange(0,psnrs.shape[0],step=50))
         fig.colorbar(im, ax=ax, orientation='vertical')
         plt.show()
         plt.savefig(f'{gifs_dir}/{im_type_str}_psnrs_wrt_init', dpi=96, bbox_inches='tight')

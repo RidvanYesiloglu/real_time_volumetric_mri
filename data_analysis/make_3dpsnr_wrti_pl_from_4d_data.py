@@ -7,6 +7,7 @@ def calc_3dpsnrs_wrti(all_vols):
 def main(all_vols, pt_id):
     # Calculate 3d PSNRs with respect to the initial image
     psnrs = calc_3dpsnrs_wrti(all_vols)
+    print(psnrs[547], ' db 3dpsnr')
     # Create and save the plot of PSNRs:
     fig,ax = plt.subplots(figsize=(12.5,6))
     plt.plot(psnrs)

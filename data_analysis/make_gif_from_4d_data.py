@@ -40,6 +40,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     # Calculate PSNRs:
     print(f'{im_type_str.capitalize()} PSNRs are being calculated.')
     psnrs = calc_psnrs_wrti(all_vols, ax_cr_sg)
+    print(psnrs[547,30:40])
     curr_time = time.perf_counter()
     print(f"Elapsed total for the gif {gif_name}: {curr_time-start_time} seconds")
     if not plot_most_fluc:

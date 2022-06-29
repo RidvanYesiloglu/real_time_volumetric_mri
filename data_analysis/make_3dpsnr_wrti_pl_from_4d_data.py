@@ -22,7 +22,7 @@ def main(all_vols, pt_id):
     ax.set_xticks(np.arange(0,psnrs.shape[0],step=50))
     ax.set_yticks(np.concatenate((ax.get_yticks(),ax.get_yticks()[-1:]+20)))
     ax.set_yticklabels(np.concatenate(([str(int(tick)) for tick in ax.get_yticks()[:-1]],np.array(['inf']))))
-    #plt.show()
+    plt.show()
     plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/3dpsnrs_wrt_init', dpi=96, bbox_inches='tight')
     plt.close(fig)
     

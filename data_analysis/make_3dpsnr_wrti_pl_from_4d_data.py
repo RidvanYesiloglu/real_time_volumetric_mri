@@ -47,8 +47,9 @@ def main(all_vols, pt_id):
         ax.set_yticks(np.arange(0,psnrs.shape[0],step=50))
         ax.set_yticklabels(np.arange(0,psnrs.shape[0],step=50))
         fig.colorbar(im, ax=ax, orientation='vertical')
+        fig.tight_layout()
         plt.show()
-        plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{im_type_str}_psnrs_wrt_init.pdf')
+        plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/{im_type_str}_psnrs_wrt_init.pdf', dpi=150, bbox_inches='tight')
         plt.close(fig)
     
 if __name__ == "__main__":

@@ -52,7 +52,7 @@ def main(all_vols, pt_id):
         ax[ax_cr_sg].set_yticks(np.arange(0,psnrs[ax_cr_sg].shape[0],step=50))
         ax[ax_cr_sg].set_yticklabels(np.arange(0,psnrs[ax_cr_sg].shape[0],step=50))
     #fig.colorbar(im, ax=ax, orientation='vertical')
-    plt.colorbar()
+    fig.colorbar()
     fig.tight_layout()
     plt.show()
     plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.pdf', dpi=150, bbox_inches='tight')

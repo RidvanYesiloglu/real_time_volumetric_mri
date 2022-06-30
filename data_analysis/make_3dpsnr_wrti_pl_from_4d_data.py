@@ -4,7 +4,7 @@ import matplotlib.patches as patches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 class data_linewidth_plot():
-    def __init__(self, x, y, **kwargs):
+    def __init__(self, x, y, z, t, **kwargs):
         self.ax = kwargs.pop("ax", plt.gca())
         self.fig = self.ax.get_figure()
         self.lw_data = kwargs.pop("linewidth", 1)
@@ -15,15 +15,18 @@ class data_linewidth_plot():
         self.trans = self.ax.transData.transform
         self.linehandle, = self.ax.plot([],[],**kwargs)
         if "label" in kwargs: kwargs.pop("label")
-        self.line, = self.ax.plot(x, y, **kwargs)
-        self.line.set_color(self.linehandle.get_color())
+        self.line1, = self.ax.plot(x, y, **kwargs)
+        self.line2, = self.ax.plot(z, t, **kwargs)
+        self.line1.set_color(self.linehandle.get_color())
+        self.line2.set_color(self.linehandle.get_color())
         self._resize()
         self.cid = self.fig.canvas.mpl_connect('draw_event', self._resize)
 
     def _resize(self, event=None):
         lw =  ((self.trans((1, self.lw_data))-self.trans((0, 0)))*self.ppd)[1]
         if lw != self.lw:
-            self.line.set_linewidth(lw)
+            self.line1.set_linewidth(lw)
+            self.line2.set_linewidth(lw)
             self.lw = lw
             self._redraw_later()
 
@@ -100,14 +103,23 @@ def main(all_vols, pt_id):
     ax.text(-30, sl_no_mplier*(psnrs_sep.shape[0]/2) + sl_no_mplier//2, 'Slice No', va='center', ha='center', rotation='vertical', size='large')
     ax.text(psnrs_sep.shape[1]/2, sl_no_mplier*(psnrs_sep.shape[0]) + sl_no_mplier//2 + 18, 'Time Index', va='center', ha='center', rotation='horizontal', size='large')
 
+
     divider = make_axes_locatable(ax)
     cax = divider.append_axes('right', size='2%', pad=0.20)
     fig.colorbar(shown_im, cax=cax, orientation='vertical')
-    fig.tight_layout()
-    sep_loc_1 = sl_no_mplier*(all_vols.shape[3]+sep/2)+sl_no_mplier//2-1.5
-    data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_1,sep_loc_1], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
-    sep_loc_2 = sl_no_mplier*(all_vols.shape[3]+all_vols.shape[2]+sep+sep/2)+sl_no_mplier//2-1
-    data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_2,sep_loc_2], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95, 0, 0.5))
+    # data_linewidth_plot([sep*sl_no_mplier/2.0-0.5, psnrs.shape[1]-sep*sl_no_mplier/2.0-0.5], [all_vols.shape[3]*sl_no_mplier+(sep*sl_no_mplier-1)/2.0,all_vols.shape[3]*sl_no_mplier+(sep*sl_no_mplier-1)/2.0], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
+    # data_linewidth_plot([sep*sl_no_mplier/2.0-0.5, psnrs.shape[1]-sep*sl_no_mplier/2.0-0.5], [(all_vols.shape[3]+sep+all_vols.shape[2])*sl_no_mplier+(sep*sl_no_mplier-1)/2.0,(all_vols.shape[3]+sep+all_vols.shape[2])*sl_no_mplier+(sep*sl_no_mplier-1)/2.0], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
+    
+    data_linewidth_plot([sep*sl_no_mplier/2.0-0.5, psnrs.shape[1]-sep*sl_no_mplier/2.0-0.5], [all_vols.shape[3]*sl_no_mplier+(sep*sl_no_mplier-1)/2.0,all_vols.shape[3]*sl_no_mplier+(sep*sl_no_mplier-1)/2.0], \
+                        [sep*sl_no_mplier/2.0-0.5, psnrs.shape[1]-sep*sl_no_mplier/2.0-0.5], \
+                        [(all_vols.shape[3]+sep+all_vols.shape[2])*sl_no_mplier+(sep*sl_no_mplier-1)/2.0,(all_vols.shape[3]+sep+all_vols.shape[2])*sl_no_mplier+(sep*sl_no_mplier-1)/2.0], \
+                            ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
+    
+
+    # sep_loc_1 = sl_no_mplier*(all_vols.shape[3]+sep/2)+sl_no_mplier//2-0.5
+    # data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_1,sep_loc_1], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
+    # sep_loc_2 = sl_no_mplier*(all_vols.shape[3]+all_vols.shape[2]+sep+sep/2)+sl_no_mplier//2-0.5
+    # data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_2,sep_loc_2], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95, 0, 0))
     
     plt.show()
     plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.png', dpi=150, bbox_inches='tight')

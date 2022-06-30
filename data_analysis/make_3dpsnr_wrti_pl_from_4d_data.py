@@ -110,7 +110,7 @@ def main(all_vols, pt_id):
     data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_2,sep_loc_2], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95, 0, 0))
     
     plt.show()
-    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.pdf', dpi=150, bbox_inches='tight')
+    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.png', dpi=150, bbox_inches='tight')
     plt.close(fig)
     '''
     # Create and save the plot of PSNRs:

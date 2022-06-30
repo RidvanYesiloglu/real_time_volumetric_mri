@@ -114,7 +114,7 @@ def main(all_vols, pt_id):
                         [sep*sl_no_mplier/2.0-0.5, psnrs.shape[1]-sep*sl_no_mplier/2.0-0.5], \
                         [(all_vols.shape[3]+sep+all_vols.shape[2])*sl_no_mplier+(sep*sl_no_mplier-1)/2.0,(all_vols.shape[3]+sep+all_vols.shape[2])*sl_no_mplier+(sep*sl_no_mplier-1)/2.0], \
                             ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
-    
+
 
     # sep_loc_1 = sl_no_mplier*(all_vols.shape[3]+sep/2)+sl_no_mplier//2-0.5
     # data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_1,sep_loc_1], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
@@ -122,7 +122,8 @@ def main(all_vols, pt_id):
     # data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_2,sep_loc_2], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95, 0, 0))
     
     plt.show()
-    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.png', dpi=150, bbox_inches='tight')
+    fig.tight_layout()
+    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.png',bbox_inches='tight')
     plt.close(fig)
     '''
     # Create and save the plot of PSNRs:

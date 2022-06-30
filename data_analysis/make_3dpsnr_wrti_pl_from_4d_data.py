@@ -66,7 +66,7 @@ def main(all_vols, pt_id):
     
     psnrs = np.concatenate([calc_psnrs_wrti(all_vols, ax_cr_sg) for ax_cr_sg in [0,1,2]], axis=1).T
     #psnrs = np.random.rand(320,876)
-    sep = 2
+    sep = 10
     sl_no_mplier = 1
     psnrs_sep = np.concatenate((psnrs[:all_vols.shape[3], :], np.ones((sep,psnrs.shape[1]))*psnrs.min(), psnrs[all_vols.shape[3]:all_vols.shape[2]+all_vols.shape[3], :], np.ones((sep,psnrs.shape[1]))*psnrs.min(), psnrs[all_vols.shape[2]+all_vols.shape[3]:, :]),0)
     
@@ -103,10 +103,10 @@ def main(all_vols, pt_id):
     divider = make_axes_locatable(ax)
     cax = divider.append_axes('right', size='2%', pad=0.20)
     fig.colorbar(shown_im, cax=cax, orientation='vertical')
-    sep_loc_1 = sl_no_mplier*(all_vols.shape[3])+sl_no_mplier//2+0.5
-    data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_1,sep_loc_1], ax=ax, linewidth=2, color='black')
-    sep_loc_2 = sl_no_mplier*(all_vols.shape[3]+all_vols.shape[2]+sep)+sl_no_mplier//2+0.5
-    data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_2,sep_loc_2], ax=ax, linewidth=2, color='black')
+    sep_loc_1 = sl_no_mplier*(all_vols.shape[3]+sep/2)+sl_no_mplier//2-0.5
+    data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_1,sep_loc_1], ax=ax, linewidth=sep*sl_no_mplier, color='red')
+    sep_loc_2 = sl_no_mplier*(all_vols.shape[3]+all_vols.shape[2]+sep+sep/2)+sl_no_mplier//2-0.5
+    data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_2,sep_loc_2], ax=ax, linewidth=sep*sl_no_mplier, color='red')
     fig.tight_layout()
     plt.show()
     plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.pdf', dpi=150, bbox_inches='tight')

@@ -103,11 +103,12 @@ def main(all_vols, pt_id):
     divider = make_axes_locatable(ax)
     cax = divider.append_axes('right', size='2%', pad=0.20)
     fig.colorbar(shown_im, cax=cax, orientation='vertical')
+    fig.tight_layout()
     sep_loc_1 = sl_no_mplier*(all_vols.shape[3]+sep/2)+sl_no_mplier//2-0.5
     data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_1,sep_loc_1], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
     sep_loc_2 = sl_no_mplier*(all_vols.shape[3]+all_vols.shape[2]+sep+sep/2)+sl_no_mplier//2-0.5
     data_linewidth_plot([0.5, psnrs.shape[1]-1.5], [sep_loc_2,sep_loc_2], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95, 0, 0))
-    fig.tight_layout()
+    
     plt.show()
     plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.pdf', dpi=150, bbox_inches='tight')
     plt.close(fig)

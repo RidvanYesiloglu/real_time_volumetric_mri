@@ -57,7 +57,7 @@ def main(all_vols, pt_id):
     ax2.set_ylim([0,1])
     ax2.set_yticks([])
     ax2.set_yticklabels([])
-    ax.set_title('3D PSNRs wrt the Initial Image')
+    ax.set_title(f'3D PSNRs wrt the Initial Image ({pt_id})')
     ax.set_xlabel('Time Index')
     ax.set_ylabel('PSNR (dB)')
     ax.set_xticks(np.arange(0,psnrs.shape[0],step=50))
@@ -76,7 +76,7 @@ def main(all_vols, pt_id):
     fig,ax=plt.subplots(figsize=(19,10))
     
     shown_im = ax.imshow(np.repeat(psnrs_sep, sl_no_mplier, axis=0))
-    ax.set_title('Axial, Coronal and Sagittal PSNRs wrt the Initial Image', size='x-large')
+    ax.set_title(f'Axial, Coronal and Sagittal PSNRs wrt the Initial Image ({pt_id})', size='x-large')
     xticklabels = np.arange(0,psnrs.shape[1],step=30)
     ax.set_xticklabels(xticklabels)
     ax.set_xticks(xticklabels)
@@ -106,7 +106,8 @@ def main(all_vols, pt_id):
 
     divider = make_axes_locatable(ax)
     cax = divider.append_axes('right', size='2%', pad=0.20)
-    fig.colorbar(shown_im, cax=cax, orientation='vertical')
+    cb = fig.colorbar(shown_im, cax=cax, orientation='vertical')
+    cb.set_label('PSNR wrt the Initial Image (dB)')
     # data_linewidth_plot([sep*sl_no_mplier/2.0-0.5, psnrs.shape[1]-sep*sl_no_mplier/2.0-0.5], [all_vols.shape[3]*sl_no_mplier+(sep*sl_no_mplier-1)/2.0,all_vols.shape[3]*sl_no_mplier+(sep*sl_no_mplier-1)/2.0], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
     # data_linewidth_plot([sep*sl_no_mplier/2.0-0.5, psnrs.shape[1]-sep*sl_no_mplier/2.0-0.5], [(all_vols.shape[3]+sep+all_vols.shape[2])*sl_no_mplier+(sep*sl_no_mplier-1)/2.0,(all_vols.shape[3]+sep+all_vols.shape[2])*sl_no_mplier+(sep*sl_no_mplier-1)/2.0], ax=ax, linewidth=sep*sl_no_mplier, color=(0.95,0,0))
     

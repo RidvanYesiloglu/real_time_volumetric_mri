@@ -54,7 +54,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     figsize = (16,7.5) if (ax_cr_sg == 0 and plot_most_fluc) else (16,7.5) if (ax_cr_sg == 0 and (not plot_most_fluc))\
         else (16,9.5) if (ax_cr_sg != 0 and plot_most_fluc) else (19.5,11)
     filenames = []
-    for t in np.arange(0, all_vols.shape[0]):
+    for t in np.arange(0, 10):#all_vols.shape[0]):
         filename = f'{ind_ims_dir}/frame_{t}.png'
         filenames.append(filename)
         
@@ -95,7 +95,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
             plt.suptitle(f"Most Fluctuating {im_type_str.capitalize()} Images ({pt_id}, Time Point: {t:3d})")
         else:
             plt.suptitle(f"{im_type_str.capitalize()} Images ({pt_id}, Time Point: {t:3d})")   
-        fig.tight_layout()
+        plt.tight_layout()
         plt.show()
         plt.savefig(filename, dpi=96, bbox_inches='tight')
         plt.close()

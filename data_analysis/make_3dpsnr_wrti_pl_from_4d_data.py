@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.patches as patches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import os
 
 class data_linewidth_plot():
     def __init__(self, x, y, z, t, **kwargs):
@@ -48,7 +49,12 @@ def calc_psnrs_wrti(all_vols, ax_cr_sg):
 def main(all_vols, pt_id):
     # Calculate 3d PSNRs with respect to the initial image
     psnrs = calc_3dpsnrs_wrti(all_vols)
-    print(psnrs[547], ' db 3dpsnr')
+    save_dir = '/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs'
+    if not os.path.exists(save_dir):
+        print(f'Directory created: {save_dir}')
+        os.makedirs(save_dir)
+    else:
+        print(f'Directory already exists, will be overwritten: {save_dir}')
     # Create and save the plot of PSNRs:
     fig,ax = plt.subplots(figsize=(15,6))
     ax2 = ax.twinx()
@@ -64,7 +70,7 @@ def main(all_vols, pt_id):
     ax.set_yticks(np.concatenate((ax.get_yticks(),ax.get_yticks()[-1:]+20)))
     ax.set_yticklabels(np.concatenate(([str(int(tick)) for tick in ax.get_yticks()[:-1]],np.array(['inf']))))
     plt.show()
-    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/3dpsnrs_wrt_init_vs_t_{pt_id}', dpi=96, bbox_inches='tight')
+    plt.savefig(f'{save_dir}/3dpsnrs_wrt_init_vs_t_{pt_id}', dpi=96, bbox_inches='tight')
     plt.close(fig)
     
     psnrs = np.concatenate([calc_psnrs_wrti(all_vols, ax_cr_sg) for ax_cr_sg in [0,1,2]], axis=1).T
@@ -124,7 +130,7 @@ def main(all_vols, pt_id):
     
     plt.show()
     fig.tight_layout()
-    plt.savefig(f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.png',bbox_inches='tight')
+    plt.savefig(f'{save_dir}/ax_cr_sg_psnrs_wrt_init_vs_t_sl_{pt_id}.png',bbox_inches='tight')
     plt.close(fig)
     '''
     # Create and save the plot of PSNRs:

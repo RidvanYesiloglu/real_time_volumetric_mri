@@ -43,7 +43,7 @@ def main(pt_id=None):
         processes = []
         for plot_most_fluc in [False, True]:
             for ax_cr_sg in [0,1,2]:
-                p = multiprocessing.Process(target = make_gif_from_4d_data.main, args=(all_vols, pt_id, ax_cr_sg, plot_most_fluc,))
+                p = multiprocessing.Process(target = make_gif_from_4d_data.main, args=(all_vols, pt_id+'_cropped', ax_cr_sg, plot_most_fluc,))
                 p.start()
                 processes.append(p)
         # Join all the processes 

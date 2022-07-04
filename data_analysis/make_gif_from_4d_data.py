@@ -63,6 +63,8 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
             for t in range(5):
                 filenames.append(filename)
         # create the image for time=t
+        immin = all_vols.min()
+        immax = all_vols.max()
         sl_nos = psnrs.min(0).argsort()[:nrows*ncols] if plot_most_fluc else np.arange(0,(nrows*ncols-1)*(psnrs.shape[1]//(nrows*ncols-1))+1,psnrs.shape[1]//(nrows*ncols-1))
         fig,ax = plt.subplots(nrows,ncols, figsize=figsize)
         for i in range(nrows):
@@ -74,7 +76,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                     im_to_show = all_vols[t,:,sl_no,:]
                 elif ax_cr_sg == 2:
                     im_to_show = all_vols[t,sl_no,:,:]
-                im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')
+                im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none', vmin=)
                 ax[i,j].axis('off')
                 ps = psnrs[t,sl_no]
                 ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))

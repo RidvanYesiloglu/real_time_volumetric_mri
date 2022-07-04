@@ -88,7 +88,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')
-        plt.subplots_adjust(left=0.01, right=0.90, bottom=0.05, top=0.935, wspace=0.32)
+        #plt.subplots_adjust(left=0.01, right=0.90, bottom=0.05, top=0.935, wspace=0.32)
         cbar_ax = fig.add_axes([0.94, 0.15, 0.02, 0.7])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR wrt the Initial Image (dB)')

@@ -55,7 +55,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
         else (16,9.5) if (ax_cr_sg != 0 and plot_most_fluc) else (19.5,11)
     filenames = []
     for t in np.arange(0, 10):#all_vols.shape[0]):
-        filename = f'{ind_ims_dir}/frame_{t}.pdf'
+        filename = f'{ind_ims_dir}/frame_{t}.png'
         filenames.append(filename)
         
         # last frame stays longer

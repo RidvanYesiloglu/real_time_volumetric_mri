@@ -65,8 +65,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
             
         # create the image for time=t
         sl_nos = psnrs.min(0).argsort()[:nrows*ncols] if plot_most_fluc else np.arange(0,(nrows*ncols-1)*(psnrs.shape[1]//(nrows*ncols-1))+1,psnrs.shape[1]//(nrows*ncols-1))
-        plt.rcParams['figure.constrained_layout.use'] = True
-        fig,ax = plt.subplots(nrows,ncols, figsize=figsize, constrained_layout=True)
+        fig,ax = plt.subplots(nrows,ncols, figsize=figsize)
         for i in range(nrows):
             for j in range(ncols):
                 sl_no = sl_nos[ncols*i+j]
@@ -88,7 +87,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')
-        #plt.subplots_adjust(left=0.01, right=0.90, bottom=0.05, top=0.935, wspace=0.32)
+        plt.subplots_adjust(left=0.01, right=0.90, bottom=0.05, top=0.935, wspace=0.32)
         cbar_ax = fig.add_axes([0.94, 0.15, 0.02, 0.7])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR wrt the Initial Image (dB)')
@@ -98,7 +97,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
             plt.suptitle(f"{im_type_str.capitalize()} Images ({pt_id}, Time Point: {t:3d})")   
         plt.show()
         #plt.tight_layout()
-        plt.savefig(filename, bbox_inches='tight')
+        plt.savefig(filename, dpi=96, bbox_inches='tight')
         plt.close()
 
     with imageio.get_writer(f'{gifs_dir}/{gif_name}.gif', mode='I') as writer:

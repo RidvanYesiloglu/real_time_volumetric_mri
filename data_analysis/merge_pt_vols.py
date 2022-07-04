@@ -37,12 +37,12 @@ def main(pt_id=None):
         #np.save(all_data_folder+'/'+pt_id+'/all_vols',all_vols)
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
         print('3D PSNRs wrt the initial image are being plotted.')
-        make_3dpsnr_wrti_pl_from_4d_data.main(all_vols, pt_id+'_new3')
+        make_3dpsnr_wrti_pl_from_4d_data.main(all_vols, 'xc')
         print('The gifs for the data is being plotted and saved.')
         processes = []
         for plot_most_fluc in [False, True]:
             for ax_cr_sg in [0,1,2]:
-                p = multiprocessing.Process(target = make_gif_from_4d_data.main, args=(all_vols, pt_id+'_new3', ax_cr_sg, plot_most_fluc,))
+                p = multiprocessing.Process(target = make_gif_from_4d_data.main, args=(all_vols, 'dds', ax_cr_sg, plot_most_fluc,))
                 p.start()
                 processes.append(p)
         # Join all the processes 

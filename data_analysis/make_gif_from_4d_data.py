@@ -55,7 +55,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
         else (16,9.5) if (ax_cr_sg != 0 and plot_most_fluc) else (19.5,11)
     filenames = []
     for t in np.arange(0, 10):#all_vols.shape[0]):
-        filename = f'{ind_ims_dir}/frame_{t}.png'
+        filename = f'{ind_ims_dir}/frame_{t}.pdf'
         filenames.append(filename)
         
         # last frame stays longer
@@ -64,7 +64,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                 filenames.append(filename)
         # create the image for time=t
         sl_nos = psnrs.min(0).argsort()[:nrows*ncols] if plot_most_fluc else np.arange(0,(nrows*ncols-1)*(psnrs.shape[1]//(nrows*ncols-1))+1,psnrs.shape[1]//(nrows*ncols-1))
-        fig,ax = plt.subplots(nrows,ncols, figsize=tuple([2*x for x in figsize]))
+        fig,ax = plt.subplots(nrows,ncols, figsize=figsize)
         for i in range(nrows):
             for j in range(ncols):
                 sl_no = sl_nos[ncols*i+j]

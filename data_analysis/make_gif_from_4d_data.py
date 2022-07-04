@@ -97,8 +97,8 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
         else:
             plt.suptitle(f"{im_type_str.capitalize()} Images ({pt_id}, Time Point: {t:3d})")   
         plt.show()
-        plt.tight_layout()
-        plt.savefig(filename, bbox_inches='tight', dpi=350)
+        #plt.tight_layout()
+        plt.savefig(filename, bbox_inches='tight')
         plt.close()
 
     with imageio.get_writer(f'{gifs_dir}/{gif_name}.gif', mode='I') as writer:

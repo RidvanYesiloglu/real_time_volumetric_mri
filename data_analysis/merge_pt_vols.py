@@ -50,7 +50,7 @@ def main(pt_id=None):
         finish_time = time.perf_counter()
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds.")
         print('3D PSNRs wrt the initial image are being plotted.')
-        make_3dpsnr_wrti_pl_from_4d_data.main(all_vols, pt_id)
+        make_3dpsnr_wrti_pl_from_4d_data.main(all_vols, pt_id+'_rangedeneme')
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds, done.")
 if __name__ == "__main__":
     main()

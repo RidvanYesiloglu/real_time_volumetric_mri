@@ -36,8 +36,7 @@ def main(pt_id=None):
         #all_vols = np.load(all_data_folder+'/'+pt_id+'/all_vols.npy')
         #np.save(all_data_folder+'/'+pt_id+'/all_vols',all_vols)
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
-        print('3D PSNRs wrt the initial image are being plotted.')
-        #make_3dpsnr_wrti_pl_from_4d_data.main(all_vols, 'xc')
+        
         print('The gifs for the data is being plotted and saved.')
         processes = []
         for plot_most_fluc in [False, True]:
@@ -49,6 +48,9 @@ def main(pt_id=None):
         for p in processes:
             p.join()
         finish_time = time.perf_counter()
+        print(f"Elapsed total for the patient: {finish_time-start_time} seconds.")
+        print('3D PSNRs wrt the initial image are being plotted.')
+        make_3dpsnr_wrti_pl_from_4d_data.main(all_vols, 'xc')
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds, done.")
 if __name__ == "__main__":
     main()

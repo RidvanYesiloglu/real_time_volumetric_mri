@@ -45,6 +45,8 @@ def create_opts_strs(args_list, params_dict):
                     opts += " --"+name + " " + dict_str
                 elif params_dict.param_infos[no].typ == 'type_check.positive_int_tuple':
                     opts += " --"+name + " " + (str(eval("args."+name))[1:-1].replace(',',''))
+                elif params_dict.param_infos[no].typ == 'type_check.boolean':
+                    opts = (opts + " --"+name + " 1") if eval("args."+name) else (opts + " --"+name + " 0")
                 else:
                     opts += " --"+name + " " + str(eval("args."+name))
         opts_strs += opts + "\n"#":"
@@ -53,7 +55,7 @@ def create_opts_strs(args_list, params_dict):
 
 def main(args=None):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
-    no_of_time_pts = 30
+    no_of_time_pts = 1
     print('No of time pts is: {}'.format(no_of_time_pts))
     args.lr_tr = 1e-4
     for i in range(1,no_of_time_pts):

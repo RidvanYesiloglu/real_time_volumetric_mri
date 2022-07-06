@@ -55,7 +55,7 @@ def create_opts_strs(args_list, params_dict):
 
 def main(args=None):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
-    no_of_time_pts = 1
+    no_of_time_pts = 2
     print('No of time pts is: {}'.format(no_of_time_pts))
     args.lr_tr = 1e-4
     for i in range(1,no_of_time_pts):

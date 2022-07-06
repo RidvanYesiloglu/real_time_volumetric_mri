@@ -6,6 +6,12 @@ import itertools
 import math
 class Param_Info():
     def __init__(self, name, desc, typ, poss, defa, req, ask, cart, shrt_repr):
+        print('ask')
+        print(ask)
+        print('req')
+        print(req)
+        print('shrt_repr')
+        print(shrt_repr)
         self.name = name
         self.desc = desc
         self.typ = typ
@@ -143,7 +149,7 @@ def create_repr_str(args, dict_names_list, indRunNo=None, wantShort=False, param
         if getattr(args, name) and ( name == 'img_path'):
             print('imgpath conceal in create_repr_str')
             repr_str += name + '_' + str(getattr(args, name))[-8:-4] + '&'
-        elif getattr(args, name) and ((not wantShort) or (params_dict.param_infos[no].shrt_repr==1)):
+        elif getattr(args, name) and ((not wantShort) or (params_dict.param_infos[no].shrt_repr==1) or ((params_dict.param_infos[no].shrt_repr==2) and )):
             repr_str += name + '_' + str(getattr(args, name))+'&'
         
     if indRunNo is not None:

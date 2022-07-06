@@ -28,7 +28,7 @@ def main():
     params_dict = parameters.decode_arguments_dictionary(dict_file)
     args_list = get_parameters_of_runs(params_dict)
     for args in args_list:
-        if args.train_for_all:
+        if args.tr_for_all_ts:
             train_for_all_ts.main(args)
         else:
             train.main(args)

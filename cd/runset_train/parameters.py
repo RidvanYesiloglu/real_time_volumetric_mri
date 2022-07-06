@@ -10,7 +10,6 @@ class Param_Info():
         self.desc = desc
         self.typ = typ
         self.poss = [eval(typ)(elem) for elem in poss] if (poss is not None) else None
-        print(f'param name {name}')
         self.defa = eval(typ)(defa) if (defa is not None) else None
         self.req = req
         self.ask = ask

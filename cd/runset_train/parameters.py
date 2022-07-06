@@ -7,11 +7,11 @@ import math
 class Param_Info():
     def __init__(self, name, desc, typ, poss, defa, req, ask, cart, shrt_repr):
         print('ask')
-        print(ask)
+        print(ask[0])
         print('req')
-        print(req)
+        print(req[0])
         print('shrt_repr')
-        print(shrt_repr)
+        print(shrt_repr[0])
         self.name = name
         self.desc = desc
         self.typ = typ

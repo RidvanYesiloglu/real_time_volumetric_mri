@@ -149,7 +149,7 @@ def create_repr_str(args, dict_names_list, indRunNo=None, wantShort=False, param
         if getattr(args, name) and ( name == 'img_path'):
             print('imgpath conceal in create_repr_str')
             repr_str += name + '_' + str(getattr(args, name))[-8:-4] + '&'
-        elif getattr(args, name) and ((not wantShort) or (params_dict.param_infos[no].shrt_repr==1) or ((params_dict.param_infos[no].shrt_repr==2) and )):
+        elif getattr(args, name) and ((not wantShort) or (params_dict.param_infos[no].shrt_repr==1) ):
             repr_str += name + '_' + str(getattr(args, name))+'&'
         
     if indRunNo is not None:

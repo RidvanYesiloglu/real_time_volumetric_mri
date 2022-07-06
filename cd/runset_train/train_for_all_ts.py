@@ -64,7 +64,7 @@ def main(args=None):
         print('opts_strts:')
         print(opts_strs)
         print('boyle')
-        os.system(f'python3 -m runset_train.train from runset_train{opts_strs}')
+        os.system(f'python3 -m runset_train.train{opts_strs}')
         
     
     

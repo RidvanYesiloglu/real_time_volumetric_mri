@@ -25,31 +25,25 @@ def main(args=None, im_ind=None):
     # Constants
     res_dir = '/home/yesiloglu/projects/cascaded_nerp/results/'
     prior_dir = res_dir + 'prior_models/'
-    
-    # Get arguments
-    params_dict = parameters.decode_arguments_dictionary('params_dictionary')
-    
-    
-    if args is None: #if train for all time points:
-        #args = parameters.get_arguments(params_dict)
-        filehandler = open('args_obj', 'rb') 
-        with open('args_obj', 'rb') as filehandler:
-            pkl_obj_list = pickle.load(filehandler)
-        args = pkl_obj_list['args']
-        im_ind = pkl_obj_list['i']
-        #pt = pkl_obj_list['pt']
-    if args.load_prev_tr:
-        working_dir += '/load_prev_net'
-    print('imind is ', im_ind)
-    repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
-    print('**Start up**')
-    check_gpu(args.gpu_id)
     dtype = torch.float
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     np.set_printoptions(precision=7)
-    print_freq = 1000000 # print thetas once in "print_frequency" epochs 
-    write_freq = 1000000 # print thetas once in "print_frequency" epochs
+    print_freq = 100 # print results once in "print_frequency" epochs 
+    write_freq = 100 # print results once in "print_frequency" epochs
     cudnn.benchmark = True
+    
+    # Get arguments
+    params_dict = parameters.decode_arguments_dictionary('params_dictionary')
+    if args is None:
+        args = parameters.get_arguments(params_dict)
+    # Create representative string for the training
+    repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
+    print(args)
+    print('argsboyle')
+    print(repr_str)
+    print('reprboyle')
+    assert 1==2
+    
     
     if im_ind is not None:
         args.im_ind = im_ind

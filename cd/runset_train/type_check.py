@@ -15,6 +15,7 @@ def positive_float(value):
         raise argparse.ArgumentTypeError("%s is an invalid positive float value" % value)
     return cnv_value
 def dictionary(value):
+    print(f'type check value {value}')
     cnv_value = dict(eval(value))
     return cnv_value
 def positive_int_tuple(value):

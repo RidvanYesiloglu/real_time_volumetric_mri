@@ -20,7 +20,7 @@ class Param_Info():
         self.req = req
         self.ask = ask
         self.cart = int(cart)
-        self.shrt_repr = int(shrt_repr)
+        self.shrt_repr = shrt_repr
         
     def const_quest_prompt(self):
         ask_str = self.desc
@@ -149,7 +149,7 @@ def create_repr_str(args, dict_names_list, indRunNo=None, wantShort=False, param
         if getattr(args, name) and ( name == 'img_path'):
             print('imgpath conceal in create_repr_str')
             repr_str += name + '_' + str(getattr(args, name))[-8:-4] + '&'
-        elif getattr(args, name) and ((not wantShort) or (params_dict.param_infos[no].shrt_repr==1) ):
+        elif getattr(args, name) and ((not wantShort) or (params_dict.param_infos[no].shrt_repr=='1') or ((params_dict.param_infos[no].shrt_repr[0]=='2') and eval('args.' + params_dict.param_infos[no].shrt_repr[1:]))):
             repr_str += name + '_' + str(getattr(args, name))+'&'
         
     if indRunNo is not None:

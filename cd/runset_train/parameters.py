@@ -11,7 +11,7 @@ class Param_Info():
         print('req')
         print(req[0])
         print('shrt_repr')
-        print(shrt_repr[0])
+        print(shrt_repr)
         self.name = name
         self.desc = desc
         self.typ = typ

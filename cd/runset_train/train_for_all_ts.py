@@ -55,16 +55,16 @@ def create_opts_strs(args_list, params_dict):
 
 def main(args=None):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
-    no_of_time_pts = 2
-    print('No of time pts is: {}'.format(no_of_time_pts))
     args.lr_tr = 1e-4
-    for i in range(1,no_of_time_pts):
-        print('Train for all for loop iteration time t = {}'.format(i))
+    if args.end_ind == -1:
+        args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
+    for i in range(args.st_ind, args.end_ind + 1):
+        print('Train for all for loop iteration time t = {}'.format(i)),
         opts_strs = create_opts_strs([args], params_dict)
-        print('opts_strts:')
-        print(opts_strs)
-        print('boyle')
-        os.system(f'python3 -m runset_train.train{opts_strs}')
+        #print('opts_strts:')
+        #print(opts_strs)
+        #print('boyle')
+        #os.system(f'python3 -m runset_train.train{opts_strs}')
         
     
     

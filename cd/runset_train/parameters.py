@@ -41,10 +41,9 @@ class Param_Info():
             if len(inp_list) == 0:
                 if self.defa is not None:
                     inp_list = [self.poss.index(self.defa)+1] if (self.poss is not None) else [self.defa]
-                else:
-                    if (self.req[0] != '0') and ((self.req[0] == '1') or \
-                        eval('any([val {} for val in vals_list[names_list.index(self.req[1])]])'.format(self.req[2]))):
-                        raise ValueError('You have''nt provided a value!')
+        if (((inp_list is None) or (len(inp_list) == 0)) and ((self.req[0] != '0') and ((self.req[0] == '1') or \
+            eval('any([val {} for val in vals_list[names_list.index(self.req[1])]])'.format(self.req[2]))))):
+            raise ValueError('You have''nt provided a value!')
         inp_list = self.conv_to_poss(inp_list)
         if len(cart_prod_runsets) > 0:
             new_prod = []

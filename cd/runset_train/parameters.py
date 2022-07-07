@@ -6,12 +6,6 @@ import itertools
 import math
 class Param_Info():
     def __init__(self, name, desc, typ, poss, defa, req, ask, cart, shrt_repr):
-        print('ask')
-        print(ask[0])
-        print('req')
-        print(req[0])
-        print('shrt_repr')
-        print(shrt_repr)
         self.name = name
         self.desc = desc
         self.typ = typ
@@ -159,12 +153,10 @@ def create_repr_str(args, dict_names_list, indRunNo=None, wantShort=False, param
 def check_args(args, params_dict):
     req_check_list = []
     for param_info in params_dict.param_infos:
-        if param_info.req[0] == '2': req_check_list.append('(not args.{}) or args.{}'.format(param_info.req[1]+param_info.req[2], param_info.name))
+        if param_info.req[0] == '2': req_check_list.append('(not args.{}) or (args.{} is not None)'.format(param_info.req[1]+param_info.req[2], param_info.name))
     # req check:
     for req_check in req_check_list:
-        if not eval(req_check): 
-            print(req_check)
-            raise ValueError("Cond-required param is missing: {} is false.".format(req_check))
+        if not eval(req_check): raise ValueError("Cond-required param is missing: {} is false.".format(req_check))
     # conds check:
     for cond in params_dict.conds: 
         expr_str = ""

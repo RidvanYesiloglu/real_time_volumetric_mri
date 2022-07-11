@@ -32,7 +32,7 @@ def prerun_i_actions(inps_dict):
     # Setup input encoder for image nerp:
     encoder = Positional_Encoder(args)
     # Setup model for image nerp:
-    model = SIREN(args.net)
+    model = SIREN(args.net_inp_sz, args.net_wd, args.net_dp, args.net_ou_sz)
     model.cuda(args.gpu_id)
     model.train()
     # Setup optimizer for image nerp:

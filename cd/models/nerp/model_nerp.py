@@ -25,31 +25,7 @@ class Swish(nn.Module):
     def __init__(self):
         super().__init__()
 
-    def forward(self, x):
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    def forward(self, x):      
         return x * torch.sigmoid(x)
 
 class FFN(nn.Module):

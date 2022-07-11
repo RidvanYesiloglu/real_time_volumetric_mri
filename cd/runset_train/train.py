@@ -113,7 +113,7 @@ def main(args=None, im_ind=None):
             # gl_z = mse_loss_fn(output_im.narrow(3,1,63), output_im.narrow(3,0,63))
             # gl_t = mse_loss_fn(output_im, preallruns_dict['prev_rec'])
             # geometric_loss = (gl_x + gl_y + gl_z + gl_t)/4.0
-            print('gt im shape ' + preruni_dict['image'].shape)
+            print('gt im shape ', preruni_dict['image'].shape)
             train_loss = preruni_dict['mse_loss_fn'](output_im, preruni_dict['image'])
             #main_loss+ args.lambda_JR*Reg_loss + args.lambda_gl*geometric_loss # full loss 
             #print('R: ', R, ' main_loss: ', main_loss)
@@ -124,7 +124,7 @@ def main(args=None, im_ind=None):
             preruni_dict['optim'].step()
             # Add loss to the losses list for r
             losses_r.append(train_loss.item())
-            l_components_r.append([main_loss.item(), Reg_loss.item(), geometric_loss.item()])
+            #l_components_r.append([main_loss.item(), Reg_loss.item(), geometric_loss.item()])
             
             with torch.no_grad():
                 test_loss = preruni_dict['mse_loss_fn'](output_im, preruni_dict['image'])

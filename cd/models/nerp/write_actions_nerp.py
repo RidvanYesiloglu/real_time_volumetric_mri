@@ -163,7 +163,7 @@ def prerun_i_actions(inps_dict):
     r_logs.write(init_psnr_str)
     r_logs.close()
     
-    main_logs = open(os.path.join(inps_dict['save_folder'], 'main_logs.txt'), "a")
+    main_logs = open(os.path.join(inps_dict['res_dir'], 'main_logs.txt'), "a")
     main_logs.write(init_thetas_str)
     main_logs.write(init_psnr_str)
     main_logs.close()

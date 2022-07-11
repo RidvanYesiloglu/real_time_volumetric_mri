@@ -83,7 +83,7 @@ def main(args=None, im_ind=None):
         # Setup loss function
         mse_loss_fn = torch.nn.MSELoss()
         if des_n_proj != -1:
-            a_dir = '../cascade_models/load_prev_tr_lrtr1e4/detailed_results/all_{}/vol_{}'.format(ptno, im_ind) #'../cascade_models/detailed_results/all_data73/vol_{}'.format(im_ind)
+            a_dir = '/home/yesiloglu/projects/cascaded_nerp/cascade_models/load_prev_tr_lrtr1e4/detailed_results/all_{}/vol_{}'.format(ptno, im_ind) #'../cascade_models/detailed_results/all_data73/vol_{}'.format(im_ind)
             for i in range(1):#3
                 kk = [name for name in os.listdir(a_dir) if os.path.isdir(os.path.join(a_dir, name)) and name.endswith(runname)]
                 a_dir += '/'+kk[0]

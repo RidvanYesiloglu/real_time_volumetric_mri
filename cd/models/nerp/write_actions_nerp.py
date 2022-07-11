@@ -36,7 +36,7 @@ def prerun_i_actions(inps_dict):
     model.cuda(args.gpu_id)
     model.train()
     # Setup optimizer for image nerp:
-    optim = torch.optim.Adam(model.parameters(), lr=args.lr_mdl, betas=(args.beta1, args.beta2), weight_decay=args.weight_decay)
+    optim = torch.optim.Adam(model.parameters(), lr=args.lr_mdl, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
     # Setup loss function
     mse_loss_fn = torch.nn.MSELoss()
     

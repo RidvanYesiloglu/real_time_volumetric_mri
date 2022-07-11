@@ -35,7 +35,7 @@ def main(args=None, im_ind=None):
     pt_dir = f'/home/yesiloglu/projects/cascaded_nerp/results/{args.pt}/'
     prior_dir = pt_dir + 'prior_model/'
     res_dir = (pt_dir + 'pri_emb/') if (args.prEmOrTr == 1) else (pt_dir + 'net_trn/')
-    dtype = torch.float
+    dtype = torch.float32
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     np.set_printoptions(precision=7)
     print_freq = 100 # print results once in "print_frequency" epochs 
@@ -52,7 +52,7 @@ def main(args=None, im_ind=None):
         torch.cuda.empty_cache()
 
         
-        preruni_dict = wr_acts.prerun_i_actions({'res_dir': res_dir, 'args':args, 'repr_str':repr_str, 'run_number':run_number, 'device':device})
+        preruni_dict = wr_acts.prerun_i_actions({'res_dir': res_dir, 'args':args, 'repr_str':repr_str, 'run_number':run_number, 'device':device, 'dtype':dtype})
 
         psnrs_r = [] 
         losses_r = []

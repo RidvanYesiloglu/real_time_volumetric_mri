@@ -115,7 +115,8 @@ def prerun_i_actions(inps_dict):
     #img_path = '../../data73/ims_tog.npy' if args.togOrSepNorm==1 else '../../data73/ims_sep.npy'
     print('**before image**')
     check_gpu(args.gpu_id)
-    image = torch.from_numpy(np.expand_dims(np.load(args.img_path)[args.im_ind],(0,-1)).astype('float32')).cuda(args.gpu_id)
+    im_dir = args.data_dir + args.pt + 'all_vols.npy'
+    image = torch.from_numpy(np.expand_dims(np.load(im_dir)[args.im_ind],(0,-1)).astype('float32')).cuda(args.gpu_id)
     print('**after image**')
     check_gpu(args.gpu_id)
     #print('All slices shape ', )

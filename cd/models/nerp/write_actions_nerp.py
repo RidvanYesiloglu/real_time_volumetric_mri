@@ -109,8 +109,8 @@ def prerun_i_actions(inps_dict):
     #data_loader = get_data_loader(config['data'], config['img_path'], config['img_size'], img_slice=None, train=True, batch_size=config['batch_size'])
     
     
-    args.img_size = (args.img_size, args.img_size, args.img_size) if type(args.img_size) == int else tuple(args.img_size)
-    slice_idx = list(range(0, args.img_size[0], int(args.img_size[0]/args.display_image_num)))
+    # args.img_size = (args.img_size, args.img_size, args.img_size) if type(args.img_size) == int else tuple(args.img_size)
+    # slice_idx = list(range(0, args.img_size[0], int(args.img_size[0]/args.display_image_num)))
     
     #img_path = '../../data73/ims_tog.npy' if args.togOrSepNorm==1 else '../../data73/ims_sep.npy'
     print('**before image**')
@@ -169,7 +169,7 @@ def prerun_i_actions(inps_dict):
     preruni_dict={'model':model, 'grid':grid, 'model_tr':model_tr,'image':image,\
                   'ktraj':ktraj, 'im_size':im_size, 'grid_size':grid_size,'image_kdata':kdata,\
                   'spec_loss_fn':spec_loss_fn,'encoder_tr':encoder_tr,\
-                  'encoder':encoder, 'mse_loss_fn':mse_loss_fn, 'slice_idx':slice_idx, \
+                  'encoder':encoder, 'mse_loss_fn':mse_loss_fn, \
                       'optim':optim, 'optim_tr':optim_tr}
 
         #np.save(os.path.join(inps_dict['save_folder'], 'pretrainmodel_out'), test_output.detach().cpu().numpy())

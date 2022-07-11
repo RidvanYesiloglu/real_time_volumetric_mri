@@ -23,7 +23,7 @@ from utils import mri_fourier_transform_3d, save_image_3d, PSNR, check_gpu
 import glob
 
 from torchnufftexample import create_radial_mask, project_radial, backproject_radial
-from networks import Positional_Encoder, FFN, SIREN
+#from networks import Positional_Encoder, FFN, SIREN
 from skimage.metrics import structural_similarity as ssim
 import torch.nn as nn
 class Namespace:

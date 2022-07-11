@@ -120,7 +120,7 @@ def main(args=None, im_ind=None):
             train_loss.backward()
             # print('after i backward')
             # check_gpu(args.gpu_id)
-            preruni_dict['optim_tr'].step()
+            #preruni_dict['optim_tr'].step()
             preruni_dict['optim'].step()
             # Add loss to the losses list for r
             losses_r.append(train_loss.item())

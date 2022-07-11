@@ -106,7 +106,6 @@ def prerun_i_actions(inps_dict):
     
     
     # Setup data loader
-    print('Load image: {}'.format(args.img_path))
     #data_loader = get_data_loader(config['data'], config['img_path'], config['img_size'], img_slice=None, train=True, batch_size=config['batch_size'])
     
     

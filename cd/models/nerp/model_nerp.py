@@ -7,7 +7,7 @@ from pathlib import Path
 class Positional_Encoder():
     def __init__(self, args, not_gpu=False):
         if args.enc_emb == 'gauss':
-            self.B = torch.randn((args.encoder['embedding_size'], args.encoder['coordinates_size'])) * args.encoder['scale']
+            self.B = torch.randn((args.enc_emb_sz, args.enc_crd_sz)) * args.enc_scale
             if not not_gpu:
                 self.B = self.B.cuda(args.gpu_id)
         else:

@@ -32,7 +32,7 @@ def main(args=None, im_ind=None):
     
     
     # Constants
-    pt_dir = f'/home/yesiloglu/projects/cascaded_nerp/results/{args.pt}/'
+    pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{args.pt}/'
     prior_dir = pt_dir + 'prior_model/'
     res_dir = (pt_dir + 'pri_emb/') if (args.prEmOrTr == 1) else (pt_dir + 'net_trn/')
     dtype = torch.float32

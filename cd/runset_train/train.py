@@ -182,12 +182,12 @@ def main(args=None, im_ind=None):
                     'res_dir': res_dir, 'run_number':run_number,'losses_r':losses_r}, preruni_dict)
                 start_time = write_freq_dict['start_time']
                 # Save final model
-            if (t + 1) % args.image_save_iter == 0:
-                model_name = os.path.join(preruni_dict['checkpoint_directory'], 'model_%06d.pt' % (t + 1))
-                torch.save({'net': preruni_dict['model'].state_dict(), \
-                            'enc': preruni_dict['encoder'].B, \
-                            'opt': preruni_dict['optim'].state_dict(), \
-                            }, model_name)
+            # if (t + 1) % args.image_save_iter == 0:
+            #     model_name = os.path.join(preruni_dict['checkpoint_directory'], 'model_%06d.pt' % (t + 1))
+            #     torch.save({'net': preruni_dict['model'].state_dict(), \
+            #                 'enc': preruni_dict['encoder'].B, \
+            #                 'opt': preruni_dict['optim'].state_dict(), \
+            #                 }, model_name)
         #wr_acts.postrun_i_actions({'args':args, 'run_number':run_number, 'save_folder':save_folder, 'losses_r':losses_r, 'psnrs_r':psnrs_r,'device':device, \
          #                         't':t},preallruns_dict, preruni_dict)
 

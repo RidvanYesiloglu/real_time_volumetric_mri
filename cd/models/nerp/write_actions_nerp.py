@@ -4,139 +4,94 @@ import numpy as np
 
 import time
 
-from networks import Positional_Encoder, FFN, SIREN
+from model_nerp import Positional_Encoder, FFN, SIREN
 from utils import prepare_sub_folder, mri_fourier_transform_3d, complex2real, random_sample_uniform_mask, random_sample_gaussian_mask, save_image_3d, PSNR, check_gpu
 
 from torchnufftexample import create_radial_mask, project_radial, backproject_radial
 import sys
 import torch.nn as nn
-# inps_dict: {'save_folder': save_folder, 'args':args, 'repr_str':repr_str, 'device':device}
-# outs_dict: {'mean_f_zk':mean_f_zk, 'log_mean_f_zk':log_mean_f_zk, 'final_f_zk_vals':final_f_zk_vals, 'final_thetas':final_thetas}
-def preallruns_actions(inps_dict):
-    args = inps_dict['args']
-    mean_psnr = 0
-    
-    main_logs = open(os.path.join(inps_dict['save_folder'], 'main_logs.txt'), "a")
-    main_logs.write('Runset Name: {}, Individual Run No: {}\n'.format(args.runsetName, args.indRunNo))
-    main_logs.write('Configuration: {}\n'.format(inps_dict['repr_str']))
-    if torch.cuda.is_available():
-        main_logs.write('GPU Total Memory [GB]: {}\n'.format(torch.cuda.get_device_properties(0).total_memory/1e9))
-    else:
-        main_logs.write('Using CPU.\n')
-    main_logs.close()
-        
-    final_psnrs = np.zeros((args.noRuns))
-    np.save(os.path.join(inps_dict['save_folder'],'final_psnrs'),final_psnrs)
-
-    prev_rec = torch.from_numpy(np.load(args.prev_rec_path))
-    preallruns_dict = {'mean_psnr':mean_psnr, 'final_psnrs':final_psnrs, 'prev_rec':prev_rec}
-    return preallruns_dict
-
 
 # inps_dict: {'save_folder': save_folder, 'args':args, 'repr_str':repr_str, 'run_number':run_number, 'model': model}
 # outs_dict: 
-def prerun_i_actions(inps_dict, preallruns_dict):
+def prerun_i_actions(inps_dict):
     args =inps_dict['args']
     device = inps_dict['device']
     
-    
-    # Setup output folder
-    #output_folder = os.path.splitext(os.path.basename(opts.config))[0]
-    output_subfolder = args.data
-    model_name = os.path.join(inps_dict['save_folder'], output_subfolder + '/img{}_af{}_{}_{}_{}_{}_lr{:.2g}_encoder_{}' \
-        .format(args.img_size, args.sampler['af'], \
-            args.model, args.net['network_input_size'], args.net['network_width'], \
-            args.net['network_depth'], args.lr_mdl, args.encoder['embedding']))
-    if not(args.encoder['embedding'] == 'none'):
-        model_name += '_scale{}_size{}'.format(args.encoder['scale'], args.encoder['embedding_size'])
-    print(model_name)
-    
-    # train_writer = tensorboardX.SummaryWriter(os.path.join(opts.output_path + "/logs", model_name))
-    output_path = '/home/yesiloglu/projects/3d_tracking_nerp/output_path'
-    output_directory = os.path.join(output_path + "/outputs", model_name)
-    checkpoint_directory, image_directory = prepare_sub_folder(output_directory)
-    #shutil.copy(opts.config, os.path.join(output_directory, 'config.yaml')) # copy config file to output folder
-
-    #########################
-    # Setup input encoder:
-    encoder_tr = Positional_Encoder(args)
-    # Setup model
-    model_tr = SIREN(args.net)
-    model_tr.cuda(args.gpu_id)
-    
-    model_tr.train()
-    # Setup optimizer
-    optim_tr = torch.optim.Adam(model_tr.parameters(), lr=args.lr_tr, betas=(args.beta1, args.beta2), weight_decay=args.weight_decay)
-    
-    # print('GPU 3 aftr model load:')
-    # check_gpu(3)
-    ########################
-    args.net['network_width']=256
-    args.net['network_depth']=8
-    args.net['network_output_size']=1
-    # Setup input encoder:
+    if args.prEmOrTr == 2:
+        # Setup input encoder for transformation nerp:
+        encoder_tr = Positional_Encoder(args)
+        # Setup model for transformation nerp:
+        model_tr = SIREN(args.tr_inp_sz, args.tr_wd, args.tr_dp, args.tr_ou_sz)
+        model_tr.cuda(args.gpu_id)
+        model_tr.train()
+        # Setup optimizer for transformation nerp:
+        optim_tr = torch.optim.Adam(model_tr.parameters(), lr=args.lr_tr, betas=(args.beta1, args.beta2), weight_decay=args.weight_decay)
+    # Setup input encoder for image nerp:
     encoder = Positional_Encoder(args)
-    # Setup model
+    # Setup model for image nerp:
     model = SIREN(args.net)
     model.cuda(args.gpu_id)
-    
     model.train()
+    # Setup optimizer for image nerp:
     optim = torch.optim.Adam(model.parameters(), lr=args.lr_mdl, betas=(args.beta1, args.beta2), weight_decay=args.weight_decay)
     # Setup loss function
     mse_loss_fn = torch.nn.MSELoss()
     
-    # Load pretrain model
-    if args.pretrain_im and ((not args.load_prev_tr) or (inps_dict['im_ind'] == 1)):
-        # model_path = '../transformer_ep737_53.43dB.pt' #.format(config['data'], config['img_size'], \
-        #                 #config['model'], config['net']['network_width'], config['net']['network_depth'], \
-        #                 #config['encoder']['scale'])
-        # state_dict = torch.load(model_path, map_location=lambda storage, loc: storage.cuda(args.gpu_id))
-        # model_tr.load_state_dict(state_dict['net_tr'])
-        # encoder_tr.B = state_dict['enc_tr'].cuda(args.gpu_id)
-        # model_tr = model_tr.cuda(args.gpu_id)
-        # model_tr.train()
+    #if args.ld_pri_im:
+    #
+    
+    # # Load pretrain model
+    # if args.pretrain_im and ((not args.load_prev_tr) or (inps_dict['im_ind'] == 1)):
+    #     # model_path = '../transformer_ep737_53.43dB.pt' #.format(config['data'], config['img_size'], \
+    #     #                 #config['model'], config['net']['network_width'], config['net']['network_depth'], \
+    #     #                 #config['encoder']['scale'])
+    #     # state_dict = torch.load(model_path, map_location=lambda storage, loc: storage.cuda(args.gpu_id))
+    #     # model_tr.load_state_dict(state_dict['net_tr'])
+    #     # encoder_tr.B = state_dict['enc_tr'].cuda(args.gpu_id)
+    #     # model_tr = model_tr.cuda(args.gpu_id)
+    #     # model_tr.train()
         
         
-        model_path = args.pri_im_path#.format(config['data'], config['img_size'], \
-                        #config['model'], config['net']['network_width'], config['net']['network_depth'], \
-                        #config['encoder']['scale'])
-        state_dict = torch.load(model_path, map_location=lambda storage, loc: storage.cuda(args.gpu_id))
-        model.load_state_dict(state_dict['net'])
-        encoder.B = state_dict['enc'].cuda(args.gpu_id)
-        model = model.cuda(args.gpu_id)
-        model.train()
-        #optim.load_state_dict(state_dict['opt'])
-        print('Load pretrain model: {}'.format(model_path))
-        # with torch.no_grad():
-        #     deformed_grid = grid + (model(train_embedding))  # [B, C, H, W, 1]
-        #     deformed_prior = model_Pus(encoder_Pus.embedding(deformed_grid))
-        #     plain_prior = model_Pus(encoder_Pus.embedding(grid))
-        # image = torch.from_numpy(np.expand_dims(np.load('../data73/ims_tog.npy')[70],(0,-1)).astype('float32')).cuda(args.gpu_id)
-        # def_psnr = - 10 * torch.log10(mse_loss_fn(deformed_prior, image)).item()
-        # pla_psnr = - 10 * torch.log10(mse_loss_fn(plain_prior, image)).item()
-        # print('PLain PSNR: {:.5f}, Deformed PSNR: {:.5f}'.format(pla_psnr, def_psnr))
+    #     model_path = args.pri_im_path#.format(config['data'], config['img_size'], \
+    #                     #config['model'], config['net']['network_width'], config['net']['network_depth'], \
+    #                     #config['encoder']['scale'])
+    #     state_dict = torch.load(model_path, map_location=lambda storage, loc: storage.cuda(args.gpu_id))
+    #     model.load_state_dict(state_dict['net'])
+    #     encoder.B = state_dict['enc'].cuda(args.gpu_id)
+    #     model = model.cuda(args.gpu_id)
+    #     model.train()
+    #     #optim.load_state_dict(state_dict['opt'])
+    #     print('Load pretrain model: {}'.format(model_path))
+    #     # with torch.no_grad():
+    #     #     deformed_grid = grid + (model(train_embedding))  # [B, C, H, W, 1]
+    #     #     deformed_prior = model_Pus(encoder_Pus.embedding(deformed_grid))
+    #     #     plain_prior = model_Pus(encoder_Pus.embedding(grid))
+    #     # image = torch.from_numpy(np.expand_dims(np.load('../data73/ims_tog.npy')[70],(0,-1)).astype('float32')).cuda(args.gpu_id)
+    #     # def_psnr = - 10 * torch.log10(mse_loss_fn(deformed_prior, image)).item()
+    #     # pla_psnr = - 10 * torch.log10(mse_loss_fn(plain_prior, image)).item()
+    #     # print('PLain PSNR: {:.5f}, Deformed PSNR: {:.5f}'.format(pla_psnr, def_psnr))
         
-        # np.save('/home/yesiloglu/projects/transformation_nerp/priors/deformed_prior.npy',deformed_prior.detach().cpu().numpy())
-        # np.save('/home/yesiloglu/projects/transformation_nerp/priors/plain_prior.npy',plain_prior.detach().cpu().numpy())
-        # print('Saved, exiting')
-        # sys.exit()
-    model_tr = nn.DataParallel(model_tr,[args.gpu_id,args.gpu2_id])
-    model = nn.DataParallel(model, [args.gpu_id, args.gpu2_id])
+    #     # np.save('/home/yesiloglu/projects/transformation_nerp/priors/deformed_prior.npy',deformed_prior.detach().cpu().numpy())
+    #     # np.save('/home/yesiloglu/projects/transformation_nerp/priors/plain_prior.npy',plain_prior.detach().cpu().numpy())
+    #     # print('Saved, exiting')
+    #     # sys.exit()
+  #  model_tr = nn.DataParallel(model_tr,[args.gpu_id,args.gpu2_id])
+    #model = nn.DataParallel(model, [args.gpu_id, args.gpu2_id])
 
-    # Load pretrain model
-    if args.load_prev_tr and (inps_dict['im_ind'] > 1):
-        state_dict = torch.load(args.prev_tr_model_path, map_location=lambda storage, loc: storage.cuda(args.gpu_id))
-        model.load_state_dict(state_dict['net'])
-        encoder.B = state_dict['enc'].cuda(args.gpu_id)
-        model = model.cuda(args.gpu_id)
-        model.train()
-        model_tr.load_state_dict(state_dict['net_tr'])
-        encoder_tr.B = state_dict['enc_tr'].cuda(args.gpu_id)
-        model_tr = model_tr.cuda(args.gpu_id)
-        model_tr.train()
-        print('**Load previous model: {} (from t = {})'.format(args.prev_tr_model_path, inps_dict['im_ind']))
-    elif args.load_prev_tr:
-        print('**Since it is time {}, prev tr was not loaded.'.format(inps_dict['im_ind']))
+    # # Load pretrain model
+    # if args.load_prev_tr and (inps_dict['im_ind'] > 1):
+    #     state_dict = torch.load(args.prev_tr_model_path, map_location=lambda storage, loc: storage.cuda(args.gpu_id))
+    #     model.load_state_dict(state_dict['net'])
+    #     encoder.B = state_dict['enc'].cuda(args.gpu_id)
+    #     model = model.cuda(args.gpu_id)
+    #     model.train()
+    #     model_tr.load_state_dict(state_dict['net_tr'])
+    #     encoder_tr.B = state_dict['enc_tr'].cuda(args.gpu_id)
+    #     model_tr = model_tr.cuda(args.gpu_id)
+    #     model_tr.train()
+    #     print('**Load previous model: {} (from t = {})'.format(args.prev_tr_model_path, inps_dict['im_ind']))
+    # elif args.load_prev_tr:
+    #     print('**Since it is time {}, prev tr was not loaded.'.format(inps_dict['im_ind']))
     
     
     def spec_loss_fn(pred_spec, gt_spec):
@@ -198,7 +153,7 @@ def prerun_i_actions(inps_dict, preallruns_dict):
     init_thetas_str = "Run no: {}\n".format(inps_dict['run_number']) + '\n'
     init_psnr_str = 'Initial psnr: {:.4f} \n'.format(1)
     
-    r_logs = open(os.path.join(inps_dict['save_folder'], 'logs_{}.txt'.format(inps_dict['run_number'])), "a")
+    r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_{}.txt'.format(inps_dict['run_number'])), "a")
     r_logs.write('Runset Name: {}, Individual Run No: {}\n'.format(args.runsetName, args.indRunNo))
     r_logs.write('Configuration: {}\n'.format(inps_dict['repr_str']))
     r_logs.write(init_thetas_str)
@@ -212,8 +167,8 @@ def prerun_i_actions(inps_dict, preallruns_dict):
     preruni_dict={'model':model, 'grid':grid, 'model_tr':model_tr,'image':image,\
                   'ktraj':ktraj, 'im_size':im_size, 'grid_size':grid_size,'image_kdata':kdata,\
                   'spec_loss_fn':spec_loss_fn,'encoder_tr':encoder_tr,\
-                  'encoder':encoder, 'mse_loss_fn':mse_loss_fn, 'slice_idx':slice_idx, 'image_directory':image_directory, \
-                      'checkpoint_directory':checkpoint_directory, 'optim':optim, 'optim_tr':optim_tr}
+                  'encoder':encoder, 'mse_loss_fn':mse_loss_fn, 'slice_idx':slice_idx, \
+                      'optim':optim, 'optim_tr':optim_tr}
 
         #np.save(os.path.join(inps_dict['save_folder'], 'pretrainmodel_out'), test_output.detach().cpu().numpy())
     return preruni_dict

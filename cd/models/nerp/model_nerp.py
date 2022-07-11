@@ -4,40 +4,85 @@ import numpy as np
 import os
 from pathlib import Path
 
-class SigmBernNes(nn.Module):
-    def __init__(self, inps_dict, device, dtype):
-        super(SigmBernNes, self).__init__()
-        args = inps_dict['args']
-        self.sg_slope = args.sgSlp
-        self.device = device
-        self.dtype = dtype
-        if args.ini == 'cns':
-            y = torch.from_numpy(1-2*np.ones((args.K,args.N))*np.random.randint(2, size=(args.K,1))).to(device)
-            x = torch.randn((args.K, args.N), device=device, dtype=dtype)
-            self.w = nn.Parameter((y==1)*((x<0)*(-x)+(x>=0)*x) + (y==-1)*((x<0)*x+(x>=0)*(-x)), requires_grad=True)
-        elif args.ini == 'rnd':
-            self.w = nn.Parameter(torch.randn((args.K, args.N), device=device, dtype=dtype), requires_grad=True)
-        elif (args.ini == np.asarray(['gold','weil','gw_c'])).sum() > 0:
-            raise ValueError('Gold weil and gw_c are not implemented yet.')
-            #self.w = nn.Parameter(torch.from_numpy(np.load('{}_param_for_{}_{}.npy')).to(device),  requires_grad=True)
-        elif (args.ini == np.asarray(['sp1','sp2'])).sum() > 0:
-            if args.N == 8:
-                y = torch.from_numpy(1-2*np.ones((args.K,args.N))*np.random.randint(2, size=(args.K,1))).to(device)
-                x = torch.randn((args.K, args.N), device=device, dtype=dtype)
-                self.w = nn.Parameter((y==1)*((x<0)*(-x)+(x>=0)*x) + (y==-1)*((x<0)*x+(x>=0)*(-x)), requires_grad=True)
-            else:
-                #nover2folder=os.path.join(Path(inps_dict['save_folder']).parent, inps_dict['repr_str'])
-                init_param = np.load(os.path.join(inps_dict['nover2folder'],'init_param_for_2N_{}.npy'.format(args.ini)))
-                self.w = nn.Parameter(torch.from_numpy(init_param).to(device), requires_grad=True)
-        else:
-            assert 1==2
-        self.sigmoid_layer = nn.Sigmoid()
-    # forward propagate input
-    def forward(self):
-        self.thetas = self.sigmoid_layer(self.sg_slope*self.w)
-        return self.thetas
-    
-    #return (is_converged, number of not yet convergeds)
-    def is_converged(self):
-        theta_ts = np.asarray(self().tolist())
-        return np.logical_or(theta_ts<=0.02,theta_ts>=0.98).all(), (1-np.logical_or(theta_ts<=0.02,theta_ts>=0.98)).sum()
+############ Fourier Feature Network ############
+class Swish(nn.Module):
+
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, x):
+        return x * torch.sigmoid(x)
+
+class FFN(nn.Module):
+    def __init__(self, params):
+        super(FFN, self).__init__()
+
+        num_layers = params['network_depth']
+        hidden_dim = params['network_width']
+        input_dim = params['network_input_size']
+        output_dim = params['network_output_size']
+
+        layers = [nn.Linear(input_dim, hidden_dim), nn.ReLU()]
+        for i in range(1, num_layers - 1):
+            layers.append(nn.Linear(hidden_dim, hidden_dim))
+            layers.append(nn.ReLU())
+
+        layers.append(nn.Linear(hidden_dim, output_dim))
+        layers.append(nn.Sigmoid())
+
+        self.model = nn.Sequential(*layers)
+
+    def forward(self, x):
+        out = self.model(x)
+        return out
+
+
+
+############ Fourier Feature Network ############
+class SirenLayer(nn.Module):
+    def __init__(self, in_f, out_f, w0=30, is_first=False, is_last=False):
+        super().__init__()
+        self.in_f = in_f
+        self.w0 = w0
+        self.linear = nn.Linear(in_f, out_f)
+        self.is_first = is_first
+        self.is_last = is_last
+        self.init_weights()
+
+    def init_weights(self):
+        b = 1 / \
+            self.in_f if self.is_first else np.sqrt(6 / self.in_f) / self.w0
+        with torch.no_grad():
+            self.linear.weight.uniform_(-b, b)
+
+    def forward(self, x):
+        # print('Sirenlayer incoming x.shape: {}: '.format(x.shape))
+        # check_gpu(1)
+        x = self.linear(x)
+        # print('Sirenlayer x.shape after linear: {}: '.format(x.shape))
+        # check_gpu(1)
+        return x if self.is_last else torch.sin(self.w0 * x)
+
+
+class SIREN(nn.Module):
+    def __init__(self, net_inp_sz, net_wd, net_dp, net_ou_sz):
+        super(SIREN, self).__init__()
+
+        input_dim = net_inp_sz
+        hidden_dim = net_wd
+        num_layers = net_dp
+        output_dim = net_ou_sz
+
+        layers = [SirenLayer(input_dim, hidden_dim, is_first=True)]
+        for i in range(1, num_layers - 1):
+            layers.append(SirenLayer(hidden_dim, hidden_dim))
+        layers.append(SirenLayer(hidden_dim, output_dim, is_last=True))
+
+        self.model = nn.Sequential(*layers)
+
+    def forward(self, x):
+        # print('SIREN forwardi. x.shape: {}'.format(x.shape))
+        # check_gpu(1)
+        out = self.model(x)
+
+        return out

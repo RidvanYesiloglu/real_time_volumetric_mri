@@ -132,7 +132,7 @@ def main(args=None, im_ind=None):
                 # print('STARTING MODEL PSNR: {:.5f}'.format(test_psnr))
 
             psnrs_r.append(test_psnr)
-            if (args.priEmOrTra == 2) and (test_psnr == max(psnrs_r)): # network training
+            if (args.prEmOrTr == 2) and (test_psnr == max(psnrs_r)): # network training
                 # Save the test output and the model:
                 for filename in glob.glob(os.path.join(save_folder, 'savedmodel_run{}*'.format(run_number))):
                     os.remove(filename)
@@ -150,7 +150,7 @@ def main(args=None, im_ind=None):
                 np.save(os.path.join(save_folder,'savedrec_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), output_im.detach().cpu().numpy())
                 with open('l_comps_{}'.format(run_number), 'wb') as f:
                     pickle.dump(l_components_r, f)
-            elif (args.priEmOrTra == 1) and (test_psnr == max(psnrs_r)): # prior embedding
+            elif (args.prEmOrTr == 1) and (test_psnr == max(psnrs_r)): # prior embedding
                 # Save the test output and the model:
                 for filename in glob.glob(os.path.join(res_dir, 'savedmodel_run{}*'.format(run_number))):
                     os.remove(filename)

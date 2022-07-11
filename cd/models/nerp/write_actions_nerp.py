@@ -167,7 +167,7 @@ def prerun_i_actions(inps_dict):
     main_logs.write(init_thetas_str)
     main_logs.write(init_psnr_str)
     main_logs.close()
-    preruni_dict={'model':model, 'grid':grid, 'model_tr':model_tr,'image':image,\
+    preruni_dict={'model':model, 'grid':grid,'image':image,\
                   'ktraj':ktraj, 'im_size':im_size, 'grid_size':grid_size,'image_kdata':kdata,\
                   'spec_loss_fn':spec_loss_fn,'encoder_tr':encoder_tr,\
                   'encoder':encoder, 'mse_loss_fn':mse_loss_fn, \

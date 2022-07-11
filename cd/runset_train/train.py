@@ -73,63 +73,27 @@ def main(args=None, im_ind=None):
         print('after init psnr calc')
         check_gpu(args.gpu_id)
         for t in tqdm(range(args.max_iter)):
-            # print('T=',t)
-            #preruni_dict['model_tr'].train()
-            #preruni_dict['optim_tr'].zero_grad()
+
             preruni_dict['model'].train()
             preruni_dict['optim'].zero_grad()
-            # print('before')
-            # check_gpu(args.gpu_id)
-            
-            #deformed_grid = preruni_dict['grid'] + (preruni_dict['model_tr'](preruni_dict['encoder_tr'].embedding(preruni_dict['grid'])))  # [B, C, H, W, 1]
-            #deformed_grid = preruni_dict['grid'] + (preruni_dict['model_tr'](preruni_dict['train_embedding_tr']))  # [B, C, H, W, 1]
-            
-            #print('shapes ', deformed_grid.shape, ' grid: ', preruni_dict['grid'].shape)
-            # print('after 1')
-            # check_gpu(args.gpu_id)
-            # torch.cuda.empty_cache()
-            # print('after 2')
-            # check_gpu(args.gpu_id)
+
             
             output_im = preruni_dict['model'](preruni_dict['encoder'].embedding(preruni_dict['grid']))
             output_im = output_im.reshape((1,128,128,64,1))
             output_im.retain_grad()
-            # print('after 3')
-            # check_gpu(args.gpu_id)
-            #train_kdata = project_radial(output_im, preruni_dict['ktraj'], preruni_dict['im_size'], preruni_dict['grid_size'])
-            #train_spec = mri_fourier_transform_3d(train_output)  # [B, H, W, C]
-            #train_spec = train_spec * preruni_dict['mask'][None, ..., None]
-            #print('dumb tensors 1')
-            #dump_tensors()
-            #torch.cuda.empty_cache()
-            #print('dumb tensors 2')
-            #dump_tensors()
-            #Reg_loss = reg(preruni_dict['grid'], deformed_grid)   # Jacobian regularization
-            #main_loss = preruni_dict['mse_loss_fn'](train_kdata, preruni_dict['image_kdata'])
-            
-            mse_loss_fn = torch.nn.MSELoss()
-            # gl_x = mse_loss_fn(output_im.narrow(1,1,127), output_im.narrow(1,0,127))
-            # gl_y = mse_loss_fn(output_im.narrow(2,1,127), output_im.narrow(2,0,127))
-            # gl_z = mse_loss_fn(output_im.narrow(3,1,63), output_im.narrow(3,0,63))
-            # gl_t = mse_loss_fn(output_im, preallruns_dict['prev_rec'])
-            # geometric_loss = (gl_x + gl_y + gl_z + gl_t)/4.0
+
             train_loss = preruni_dict['mse_loss_fn'](output_im, preruni_dict['image'])
-            #main_loss+ args.lambda_JR*Reg_loss + args.lambda_gl*geometric_loss # full loss 
-            #print('R: ', R, ' main_loss: ', main_loss)
+
             train_loss.backward()
-            # print('after i backward')
-            # check_gpu(args.gpu_id)
-            #preruni_dict['optim_tr'].step()
             preruni_dict['optim'].step()
-            # Add loss to the losses list for r
-            losses_r.append(train_loss.item())
-            #l_components_r.append([main_loss.item(), Reg_loss.item(), geometric_loss.item()])
+            
             
             with torch.no_grad():
                 test_loss = preruni_dict['mse_loss_fn'](output_im, preruni_dict['image'])
                 test_psnr = - 10 * torch.log10(test_loss).item()
                 # print('STARTING MODEL PSNR: {:.5f}'.format(test_psnr))
 
+            losses_r.append(test_loss.item())
             psnrs_r.append(test_psnr)
             if (args.prEmOrTr == 2) and (test_psnr == max(psnrs_r)): # network training
                 # Save the test output and the model:

@@ -169,7 +169,7 @@ def prerun_i_actions(inps_dict):
     main_logs.close()
     preruni_dict={'model':model, 'grid':grid,'image':image,\
                   'ktraj':ktraj, 'im_size':im_size, 'grid_size':grid_size,'image_kdata':kdata,\
-                  'model_tr':model_tr, 'encoder_tr':encoder_tr,/
+                  #'model_tr':model_tr, 'encoder_tr':encoder_tr,\
                       'spec_loss_fn':spec_loss_fn,\
                   'encoder':encoder, 'mse_loss_fn':mse_loss_fn, \
                       'optim':optim, 'optim_tr':optim_tr}

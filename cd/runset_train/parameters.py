@@ -96,7 +96,7 @@ class Param_Info():
         return new_prod, vals_list
     
     def conv_to_poss(self, list_val_nos):
-        if self.poss is None:
+        if (self.poss is None) or (list_val_nos is None):
             return list_val_nos
         noncomplyings = [val_no for val_no in list_val_nos if (val_no>len(self.poss) or val_no<1)]
         if len(noncomplyings)>0:

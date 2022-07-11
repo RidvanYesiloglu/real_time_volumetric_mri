@@ -6,7 +6,7 @@ from pathlib import Path
 ############ Input Positional Encoding ############
 class Positional_Encoder():
     def __init__(self, args, not_gpu=False):
-        if args.encoder['embedding'] == 'gauss':
+        if args.enc_emb == 'gauss':
             self.B = torch.randn((args.encoder['embedding_size'], args.encoder['coordinates_size'])) * args.encoder['scale']
             if not not_gpu:
                 self.B = self.B.cuda(args.gpu_id)
@@ -26,6 +26,30 @@ class Swish(nn.Module):
         super().__init__()
 
     def forward(self, x):
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         return x * torch.sigmoid(x)
 
 class FFN(nn.Module):

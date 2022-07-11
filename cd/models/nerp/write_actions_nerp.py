@@ -4,9 +4,9 @@ import numpy as np
 
 import time
 
-import models.model_nerp.Positional_Encoder as Positional_Encoder#, , 
-import models.model_nerp.FFN as FFN
-import models.model_nerp.SIREN as SIREN
+import models.nerp.model_nerp.Positional_Encoder as Positional_Encoder#, , 
+import models.nerp.model_nerp.FFN as FFN
+import models.nerp.model_nerp.SIREN as SIREN
 from utils import prepare_sub_folder, mri_fourier_transform_3d, complex2real, random_sample_uniform_mask, random_sample_gaussian_mask, save_image_3d, PSNR, check_gpu
 
 from torchnufftexample import create_radial_mask, project_radial, backproject_radial

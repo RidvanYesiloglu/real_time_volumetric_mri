@@ -33,8 +33,7 @@ def main(args=None, im_ind=None):
     
     # Constants
     pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{args.pt}/'
-    prior_dir = pt_dir + 'prior_model/'
-    res_dir = (pt_dir + 'pri_emb/') if (args.prEmOrTr == 1) else (pt_dir + 'net_trn/')
+    res_dir = f'{pt_dir}{args.conf}/{repr_str}'
     dtype = torch.float32
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     np.set_printoptions(precision=7)
@@ -55,88 +54,86 @@ def main(args=None, im_ind=None):
         preruni_dict = wr_acts.prerun_i_actions({'res_dir': res_dir, 'args':args, 'repr_str':repr_str, 'run_number':run_number, 'device':device, 'dtype':dtype})
 
         psnrs_r = [] 
+        ssims_r = [] 
         losses_r = []
-        l_components_r = []
+        #l_components_r = []
         start_time = time.time()
         
-        # with torch.no_grad():
-        #     deformed_grid = preruni_dict['grid'] + (preruni_dict['model_tr'](preruni_dict['encoder_tr'].embedding(preruni_dict['grid'])))  # [B, C, H, W, 1]
-        #     #deformed_grid = preruni_dict['grid'] + (preruni_dict['model_tr'](preruni_dict['train_embedding_tr']))  # [B, C, H, W, 1]
-        #     output_im = preruni_dict['model'](preruni_dict['encoder'].embedding(deformed_grid))
-        #     output_im = output_im.reshape((1,128,128,64,1))
-        #     test_loss = preruni_dict['mse_loss_fn'](output_im, preruni_dict['image'])
-        #     test_psnr = - 10 * torch.log10(test_loss).item()
-        #     print('STARTING MODEL PSNR: {:.5f}'.format(test_psnr))
-        #torch.cuda.empty_cache()
-        reg = JacobianReg(gpu_id=args.gpu_id) # Jacobian regularization
-        #lambda_JR = 100 # hyperparameter
-        print('after init psnr calc')
-        check_gpu(args.gpu_id)
         for t in tqdm(range(args.max_iter)):
-
-            preruni_dict['model'].train()
-            preruni_dict['optim'].zero_grad()
-
-            
-            output_im = preruni_dict['model'](preruni_dict['encoder'].embedding(preruni_dict['grid']))
-            output_im = output_im.reshape((1,128,128,64,1))
-            output_im.retain_grad()
-
-            train_loss = preruni_dict['mse_loss_fn'](output_im, preruni_dict['image'])
-
+            preruni_dict['main_module'].train()
+            for optim in preruni_dict['main_module'].optims:
+                optim.zero_grad()
+            train_loss = preruni_dict['main_module']()
             train_loss.backward()
             preruni_dict['optim'].step()
-            
-            
-            with torch.no_grad():
-                test_loss = preruni_dict['mse_loss_fn'](output_im, preruni_dict['image'])
-                test_psnr = - 10 * torch.log10(test_loss).item()
-                # print('STARTING MODEL PSNR: {:.5f}'.format(test_psnr))
+            test_psnr, test_ssim = preruni_dict['main_module'].calc_psnr_ssim()
 
-            losses_r.append(test_loss.item())
+            losses_r.append(train_loss.item())
             psnrs_r.append(test_psnr)
-            if (args.prEmOrTr == 2) and (test_psnr == max(psnrs_r)): # network training
+            ssims_r.append(test_ssim)
+            
+            #'pri_emb','trn_wo_trns','trn_w_trns'
+            # Save the model and the reconstruction
+            if (args.conf=='pri_emb') and (test_psnr == max(psnrs_r)):
                 # Save the test output and the model:
-                for filename in glob.glob(os.path.join(save_folder, 'savedmodel_run{}*'.format(run_number))):
+                for filename in glob.glob(os.path.join(res_dir, 'model_{}*'.format(repr_str))):
                     os.remove(filename)
-                for filename in glob.glob(os.path.join(save_folder, 'savedrec_run{}*'.format(run_number))):
+                for filename in glob.glob(os.path.join(res_dir, 'rec_{}*'.format(repr_str))):
                     os.remove(filename)
-                #np.save(os.path.join(save_folder,'defpr_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), deformed_prior.detach().cpu().numpy())
-                model_name = os.path.join(save_folder, 'savedmodel_run{}_ep{}_{:.4g}dB.pt'.format(run_number, t+1, test_psnr))
-                torch.save({'net_tr': preruni_dict['model_tr'].state_dict(), \
-                        'enc_tr': preruni_dict['encoder_tr'].B, \
-                        'opt_tr': preruni_dict['optim_tr'].state_dict(), \
-                        'net': preruni_dict['model'].state_dict(), \
-                        'enc': preruni_dict['encoder'].B, \
-                        'opt': preruni_dict['optim'].state_dict()}, \
-                        model_name)
-                np.save(os.path.join(save_folder,'savedrec_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), output_im.detach().cpu().numpy())
-                with open('l_comps_{}'.format(run_number), 'wb') as f:
-                    pickle.dump(l_components_r, f)
-            elif (args.prEmOrTr == 1) and (test_psnr == max(psnrs_r)): # prior embedding
-                # Save the test output and the model:
-                for filename in glob.glob(os.path.join(res_dir, 'savedmodel_run{}*'.format(run_number))):
-                    os.remove(filename)
-                for filename in glob.glob(os.path.join(res_dir, 'savedrec_run{}*'.format(run_number))):
-                    os.remove(filename)
-                #np.save(os.path.join(save_folder,'defpr_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), deformed_prior.detach().cpu().numpy())
-                model_name = os.path.join(res_dir, 'savedmodel_run{}_ep{}_{:.4g}dB.pt'.format(run_number, t+1, test_psnr))
-                # torch.save({'net_tr': preruni_dict['model_tr'].state_dict(), \
-                #         'enc_tr': preruni_dict['encoder_tr'].B, \
-                #         'opt_tr': preruni_dict['optim_tr'].state_dict(), \
-                #         'net': preruni_dict['model'].state_dict(), \
-                #         'enc': preruni_dict['encoder'].B, \
-                #         'opt': preruni_dict['optim'].state_dict()}, \
-                #         model_name)
+                model_name = os.path.join(res_dir, 'model_{}_ep{}_{:.4g}dB.pt'.format(repr_str, t+1, test_psnr))
                 torch.save({'net': preruni_dict['model'].state_dict(), \
                         'enc': preruni_dict['encoder'].B, \
                         'opt': preruni_dict['optim'].state_dict()}, \
                         model_name)
-                np.save(os.path.join(res_dir,'savedrec_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), output_im.detach().cpu().numpy())
-            if t % 100 == 0:
+                output_im, test_psnr, test_ssim = preruni_dict['main_module'].calc_psnr_ssim(ret_im=True)
+                np.save(os.path.join(res_dir,'rec_{}_ep{}_{:.4g}dB'.format(repr_str, t+1, test_psnr)), output_im.detach().cpu().numpy())
                 np.save(os.path.join(res_dir,'psnrs_r{}'.format(run_number)), np.asarray(psnrs_r))
-                with open('l_comps_{}'.format(run_number), 'wb') as f:
-                    pickle.dump(l_components_r, f)
+                np.save(os.path.join(res_dir,'ssims_r{}'.format(run_number)), np.asarray(ssims_r))
+                np.save(os.path.join(res_dir,'losses_r{}'.format(run_number)), np.asarray(losses_r))
+            # if (args.conf == 2) and (test_psnr == max(psnrs_r)): # network training
+            #     # Save the test output and the model:
+            #     for filename in glob.glob(os.path.join(save_folder, 'savedmodel_run{}*'.format(run_number))):
+            #         os.remove(filename)
+            #     for filename in glob.glob(os.path.join(save_folder, 'savedrec_run{}*'.format(run_number))):
+            #         os.remove(filename)
+            #     #np.save(os.path.join(save_folder,'defpr_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), deformed_prior.detach().cpu().numpy())
+            #     model_name = os.path.join(save_folder, 'savedmodel_run{}_ep{}_{:.4g}dB.pt'.format(run_number, t+1, test_psnr))
+            #     torch.save({'net_tr': preruni_dict['model_tr'].state_dict(), \
+            #             'enc_tr': preruni_dict['encoder_tr'].B, \
+            #             'opt_tr': preruni_dict['optim_tr'].state_dict(), \
+            #             'net': preruni_dict['model'].state_dict(), \
+            #             'enc': preruni_dict['encoder'].B, \
+            #             'opt': preruni_dict['optim'].state_dict()}, \
+            #             model_name)
+            #     np.save(os.path.join(save_folder,'savedrec_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), output_im.detach().cpu().numpy())
+            #     # with open('l_comps_{}'.format(run_number), 'wb') as f:
+            #     #     pickle.dump(l_components_r, f)
+            # elif (args.conf == 1) and (test_psnr == max(psnrs_r)): # prior embedding
+            #     # Save the test output and the model:
+            #     for filename in glob.glob(os.path.join(res_dir, 'savedmodel_run{}*'.format(run_number))):
+            #         os.remove(filename)
+            #     for filename in glob.glob(os.path.join(res_dir, 'savedrec_run{}*'.format(run_number))):
+            #         os.remove(filename)
+            #     #np.save(os.path.join(save_folder,'defpr_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), deformed_prior.detach().cpu().numpy())
+            #     model_name = os.path.join(res_dir, 'savedmodel_run{}_ep{}_{:.4g}dB.pt'.format(run_number, t+1, test_psnr))
+            #     # torch.save({'net_tr': preruni_dict['model_tr'].state_dict(), \
+            #     #         'enc_tr': preruni_dict['encoder_tr'].B, \
+            #     #         'opt_tr': preruni_dict['optim_tr'].state_dict(), \
+            #     #         'net': preruni_dict['model'].state_dict(), \
+            #     #         'enc': preruni_dict['encoder'].B, \
+            #     #         'opt': preruni_dict['optim'].state_dict()}, \
+            #     #         model_name)
+            #     torch.save({'net': preruni_dict['model'].state_dict(), \
+            #             'enc': preruni_dict['encoder'].B, \
+            #             'opt': preruni_dict['optim'].state_dict()}, \
+            #             model_name)
+            #     np.save(os.path.join(res_dir,'savedrec_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), output_im.detach().cpu().numpy())
+            if t % 100 == 0:
+                np.save(os.path.join(res_dir,'psnrs_{}'.format(repr_str)), np.asarray(psnrs_r))
+                np.save(os.path.join(res_dir,'ssims_{}'.format(repr_str)), np.asarray(ssims_r))
+                np.save(os.path.join(res_dir,'losses_{}'.format(repr_str)), np.asarray(losses_r))
+                # with open('l_comps_{}'.format(run_number), 'wb') as f:
+                #     pickle.dump(l_components_r, f)
             # Print
             if (t+1) % print_freq == 0:
                 wr_acts.print_freq_actions({'args':args, 't':t, 'losses_r':losses_r})

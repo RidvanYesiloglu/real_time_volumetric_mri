@@ -84,10 +84,10 @@ def postrun_i_actions(inps_dict, preallruns_dict, preruni_dict):
     to_write = "[Validation Iteration: {}/{}] Test loss: {:.4g} | Test psnr: {:.4g}".format(inps_dict['t']+1, args.max_iter, test_loss, test_psnr)
     r_logs.write(to_write)
     r_logs.close()
-    plt_model.plot_change_of_objective(inps_dict['f_zks_r'], args.obj, args.K, args.N, inps_dict['run_number'], True, inps_dict['save_folder'])
+    #plt_model.plot_change_of_objective(inps_dict['f_zks_r'], args.obj, args.K, args.N, inps_dict['run_number'], True, inps_dict['save_folder'])
     
     
-    vals, metric_name, repr_str, runno, to_save=False, save_folder=None):
+    #vals, metric_name, repr_str, runno, to_save=False, save_folder=None):
     
     print('**************')
     print('FINAL RES.: ' + to_write)

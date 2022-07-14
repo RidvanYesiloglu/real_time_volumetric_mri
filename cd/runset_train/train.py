@@ -61,12 +61,12 @@ def main(args=None, im_ind=None):
         
         for t in tqdm(range(args.max_iter)):
             preruni_dict['main_module'].train()
-            for optim in preruni_dict['main_module'].optims:
-                optim.zero_grad()
+            for optimizer in preruni_dict['main_module'].optims:
+                optimizer.zero_grad()
             train_loss = preruni_dict['main_module']()
             train_loss.backward()
-            for optim in preruni_dict['main_module'].optims:
-                optim.step()
+            for optimizer in preruni_dict['main_module'].optims:
+                optimizer.step()
             test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim()
 
             losses_r.append(test_loss)

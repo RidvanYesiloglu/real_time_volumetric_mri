@@ -32,7 +32,7 @@ class Main_Module(nn.Module):
         self.im_nerp_mlp = SIREN(args.net_inp_sz, args.net_wd, args.net_dp, args.net_ou_sz)
         self.im_nerp_mlp.cuda(args.gpu_id)
         self.im_nerp_mlp.train()
-        optim_im_nerp_mlp = torch.optim.Adam(self.im_nerp_mlp.parameters(), lr=args.lr_mdl, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
+        optim_im_nerp_mlp = torch.optim.Adam(self.im_nerp_mlp.parameters(), lr=args.lr_im, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
         self.optims.append(optim_im_nerp_mlp)
         
         if self.conf != 'pri_emb': #gt_kdata and ktraj needed for loss calc
@@ -59,8 +59,8 @@ class Main_Module(nn.Module):
             output_im = output_im.reshape(self.im_shape)
             #train_spec = mri_fourier_transform_3d(output_im)  # [B, H, W, C]
             #train_spec = train_spec * preruni_dict['mask'][None, ..., None]
-            train_kdata = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
-            train_loss = self.mse_loss_fn(train_kdata, self.gt_kdata)
+            out_kspace = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
+            train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
         elif self.conf == 'trn_w_trns':
             raise ValueError('not impl 2')
         return train_loss

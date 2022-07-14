@@ -82,7 +82,7 @@ def main(args=None, im_ind=None):
                 for filename in glob.glob(os.path.join(res_dir, 'rec_{}*'.format(repr_str))):
                     os.remove(filename)
                 model_name = os.path.join(res_dir, 'model_{}_ep{}_{:.4g}dB.pt'.format(repr_str, t+1, test_psnr))
-                torch.save({'net': preruni_dict['model'].state_dict(), \
+                torch.save({'net': preruni_dict['main_module'].state_dict(), \
                         'enc': preruni_dict['encoder'].B, \
                         'opt': preruni_dict['optim'].state_dict()}, \
                         model_name)

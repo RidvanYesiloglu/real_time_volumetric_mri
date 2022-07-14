@@ -82,10 +82,7 @@ def main(args=None, im_ind=None):
                 for filename in glob.glob(os.path.join(res_dir, 'rec_{}*'.format(repr_str))):
                     os.remove(filename)
                 model_name = os.path.join(res_dir, 'model_{}_ep{}_{:.4g}dB.pt'.format(repr_str, t+1, test_psnr))
-                torch.save({'net': preruni_dict['main_module'].state_dict(), \
-                        'enc': preruni_dict['encoder'].B, \
-                        'opt': preruni_dict['optim'].state_dict()}, \
-                        model_name)
+                torch.save(preruni_dict['main_module'].get_to_save_list(), model_name)
                 output_im, test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim(ret_im=True)
                 np.save(os.path.join(res_dir,'rec_{}_ep{}_{:.4g}dB'.format(repr_str, t+1, test_psnr)), output_im.detach().cpu().numpy())
                 np.save(os.path.join(res_dir,'psnrs_r{}'.format(run_number)), np.asarray(psnrs_r))

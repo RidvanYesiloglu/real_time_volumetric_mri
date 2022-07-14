@@ -39,6 +39,7 @@ def main(args=None, im_ind=None):
     np.set_printoptions(precision=7)
     print_freq = 100 # print results once in "print_frequency" epochs 
     write_freq = 100 # print results once in "print_frequency" epochs
+    gif_freq = 25
     cudnn.benchmark = True
     
     if not os.path.exists(res_dir):
@@ -139,6 +140,8 @@ def main(args=None, im_ind=None):
                 write_freq_dict = wr_acts.write_freq_actions({'args':args, 't':t, 'start_time':start_time, 'res_dir': res_dir, 'run_number':run_number,\
                     'repr_str':repr_str,'psnrs_r':psnrs_r,'ssims_r':ssims_r,'losses_r':losses_r}, preruni_dict)
                 start_time = write_freq_dict['start_time']
+            if (t+1) % gif_freq == 0:
+                wr_acts.gif_freq_actions({'args':args, 't':t, 'res_dir': res_dir}, preruni_dict)
                 # Save final model
             # if (t + 1) % args.image_save_iter == 0:
             #     model_name = os.path.join(preruni_dict['checkpoint_directory'], 'model_%06d.pt' % (t + 1))

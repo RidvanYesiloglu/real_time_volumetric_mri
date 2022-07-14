@@ -31,7 +31,7 @@ def calc_psnrs_2d(reconstructed, original, ax_cr_sg):
     elif ax_cr_sg == 2:
         return 20*np.log((original**2).max((2,3)))-10*np.log(((original-reconstructed)**2).mean((2,3)))
     
-def main(output_im, ref_im, pt_id, ax_cr_sg, res_dir, plot_max_mse=False):
+def main(output_im, ref_im, step, ax_cr_sg, pt_id, res_dir, plot_max_mse=False):
     start_time = time.perf_counter()
     im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'
     gif_name = f'max_mse_{im_type_str}s_vs_t_{pt_id}' if plot_max_mse else f'all_{im_type_str}s_vs_t_{pt_id}'

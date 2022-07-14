@@ -25,11 +25,11 @@ def mean_squared_err_2d(reconstructed, original, ax_cr_sg): # input, target
         return ((reconstructed-original)**2).mean((1,2))
 def calc_psnrs_2d(reconstructed, original, ax_cr_sg):
     if ax_cr_sg == 0:
-        return 20*np.log((original**2).max((1,2)))-10*np.log(((original-reconstructed)**2).mean((0,1)))
+        return 20*np.log((original**2).max((0,1)))-10*np.log(((original-reconstructed)**2).mean((0,1)))
     elif ax_cr_sg == 1:
-        return 20*np.log((original**2).max((1,3)))-10*np.log(((original-reconstructed)**2).mean((0,2)))
+        return 20*np.log((original**2).max((0,2)))-10*np.log(((original-reconstructed)**2).mean((0,2)))
     elif ax_cr_sg == 2:
-        return 20*np.log((original**2).max((2,3)))-10*np.log(((original-reconstructed)**2).mean((1,2)))
+        return 20*np.log((original**2).max((1,2)))-10*np.log(((original-reconstructed)**2).mean((1,2)))
 def main(output_im, ref_im, step, ax_cr_sg, pt_id, res_dir, args, repr_str, plot_max_mse=False):
     start_time = time.perf_counter()
     im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'

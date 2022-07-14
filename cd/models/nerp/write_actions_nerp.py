@@ -58,6 +58,7 @@ def write_freq_actions(inps_dict, preruni_dict):
     start_time = time.time()
     r_logs.close()
     print('runnumber ', inps_dict['run_number'])
+    inps_dict['repr_str'] = 'asd'
     plot_change_of_objective(inps_dict['psnrs_r'], 'PSNR', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
     plot_change_of_objective(inps_dict['ssims_r'], 'SSIM', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
     plot_change_of_objective(inps_dict['losses_r'], 'Loss', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])

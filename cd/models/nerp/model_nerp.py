@@ -11,7 +11,7 @@ class Main_Module(nn.Module):
     def __init__(self, args):
         if sum([args.conf==item for item in ['pri_emb','trn_wo_trns','trn_w_trns']])  == 0:
             raise ValueError('Invalid configuration')
-        if (self.conf == 'pri_emb') and (args.reg is not None):
+        if (args.conf == 'pri_emb') and (args.reg is not None):
             raise ValueError(f'In prior embedding, no regularization can be used but {args.reg} is specified.')
         self.conf = args.conf
         self.optims = []

@@ -84,15 +84,15 @@ class Main_Module(nn.Module):
             return output_im, test_psnr , test_ssim, test_loss
         else:
             return test_psnr , test_ssim, test_loss
-        def get_to_save_list(self):
-            to_save_dict = {'im_nerp_mlp': self.im_nerp_mlp.state_dict(), \
-                        'im_nerp_enc':self.im_nerp_enc.B}
-            if self.conf == 'trn_w_trns':
-                to_save_dict['tr_nerp_mlp'] = self.tr_nerp_mlp
-                to_save_dict['tr_nerp_enc'] = self.tr_nerp_enc
-            for no,optim in enumerate(self.optims):
-                to_save_dict[f'opt{no}'] = self.optims[no]
-            return to_save_dict
+    def get_to_save_list(self):
+        to_save_dict = {'im_nerp_mlp': self.im_nerp_mlp.state_dict(), \
+                    'im_nerp_enc':self.im_nerp_enc.B}
+        if self.conf == 'trn_w_trns':
+            to_save_dict['tr_nerp_mlp'] = self.tr_nerp_mlp
+            to_save_dict['tr_nerp_enc'] = self.tr_nerp_enc
+        for no,optim in enumerate(self.optims):
+            to_save_dict[f'opt{no}'] = self.optims[no]
+        return to_save_dict
 ############ Input Positional Encoding ############
 class Positional_Encoder():
     def __init__(self, args, not_gpu=False):

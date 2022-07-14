@@ -67,9 +67,9 @@ def main(args=None, im_ind=None):
             train_loss.backward()
             for optim in preruni_dict['main_module'].optims:
                 optim.step()
-            test_psnr, test_ssim = preruni_dict['main_module'].test_psnr_ssim()
+            test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim()
 
-            losses_r.append(train_loss.item())
+            losses_r.append(test_loss)
             psnrs_r.append(test_psnr)
             ssims_r.append(test_ssim)
             
@@ -86,7 +86,7 @@ def main(args=None, im_ind=None):
                         'enc': preruni_dict['encoder'].B, \
                         'opt': preruni_dict['optim'].state_dict()}, \
                         model_name)
-                output_im, test_psnr, test_ssim = preruni_dict['main_module'].test_psnr_ssim(ret_im=True)
+                output_im, test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim(ret_im=True)
                 np.save(os.path.join(res_dir,'rec_{}_ep{}_{:.4g}dB'.format(repr_str, t+1, test_psnr)), output_im.detach().cpu().numpy())
                 np.save(os.path.join(res_dir,'psnrs_r{}'.format(run_number)), np.asarray(psnrs_r))
                 np.save(os.path.join(res_dir,'ssims_r{}'.format(run_number)), np.asarray(ssims_r))

@@ -70,12 +70,12 @@ class Main_Module(nn.Module):
             if self.conf == 'pri_emb':
                 output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(self.grid))
                 output_im = output_im.reshape(self.im_shape)
-                test_loss = self.mse_loss_fn(output_im, self.image)
+                test_loss = self.mse_loss_fn(output_im, self.image).item()
             elif self.conf == 'trn_wo_trns':
                 output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(self.grid))
                 output_im = output_im.reshape(self.im_shape)
                 test_kdata = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
-                test_loss = self.mse_loss_fn(test_kdata, self.gt_kdata)
+                test_loss = self.mse_loss_fn(test_kdata, self.gt_kdata).item()
             elif self.conf == 'trn_w_trns':
                 raise ValueError('not impl 2')
         test_psnr = - 10 * torch.log10(self.mse_loss_fn(output_im, self.image)).item()

@@ -9,6 +9,7 @@ from skimage.metrics import structural_similarity as ssim
 class Main_Module(nn.Module):
 
     def __init__(self, args):
+        super().__init__()
         print('reg is ', args.reg)
         if sum([args.conf==item for item in ['pri_emb','trn_wo_trns','trn_w_trns']])  == 0:
             raise ValueError('Invalid configuration')
@@ -46,7 +47,7 @@ class Main_Module(nn.Module):
             optim_tr_nerp_mlp = torch.optim.Adam(self.tr_nerp_mlp.parameters(), lr=args.lr_tr, betas=(args.beta1, args.beta2), weight_decay=args.weight_decay)
             self.optims.append(optim_tr_nerp_mlp)
 
-        super().__init__()
+        
     
     def forward(self, x):
         if self.conf == 'pri_emb':

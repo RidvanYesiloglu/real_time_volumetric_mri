@@ -79,7 +79,7 @@ class Main_Module(nn.Module):
             elif self.conf == 'trn_w_trns':
                 raise ValueError('not impl 2')
         test_psnr = - 10 * torch.log10(self.mse_loss_fn(output_im, self.image)).item()
-        test_ssim = ssim(output_im.cpu().numpy().squeeze(), self.image.cpu().numpy().squeeze(), self.image.max().item()-self.image.min().item())
+        test_ssim = ssim(output_im.cpu().numpy().squeeze(), self.image.cpu().numpy().squeeze(), range=self.image.max().item()-self.image.min().item())
         if ret_im:
             return output_im, test_psnr , test_ssim, test_loss
         else:

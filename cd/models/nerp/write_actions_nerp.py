@@ -5,7 +5,7 @@ import numpy as np
 import time
 
 from models.nerp.model_nerp import Main_Module as Main_Module
-from models.nerp.plot_nerp import plot_change_of_objective
+from models.nerp.plot_nerp import plot_change_of_value
 
 
 from utils import prepare_sub_folder, mri_fourier_transform_3d, complex2real, random_sample_uniform_mask, random_sample_gaussian_mask, save_image_3d, PSNR, check_gpu
@@ -57,14 +57,9 @@ def write_freq_actions(inps_dict, preruni_dict):
     r_logs.write(to_write)
     start_time = time.time()
     r_logs.close()
-    print('runnumber ', inps_dict['run_number'])
-    inps_dict['repr_str'] = 'asd'
-    print('psnr is ')
-    ppss = PSNR(torch.zeros((10,10)), torch.zeros((10,10)))
-    print(ppss)
-    plot_change_of_objective(inps_dict['psnrs_r'], 'PSNR', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
-    plot_change_of_objective(inps_dict['ssims_r'], 'SSIM', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
-    plot_change_of_objective(inps_dict['losses_r'], 'Loss', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
+    plot_change_of_value(inps_dict['psnrs_r'], 'PSNR', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
+    plot_change_of_value(inps_dict['ssims_r'], 'SSIM', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
+    plot_change_of_value(inps_dict['losses_r'], 'Loss', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
     print(to_write)
     return {'start_time':start_time}
 

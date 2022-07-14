@@ -65,7 +65,8 @@ def main(args=None, im_ind=None):
                 optim.zero_grad()
             train_loss = preruni_dict['main_module']()
             train_loss.backward()
-            preruni_dict['optim'].step()
+            for optim in preruni_dict['main_module'].optims:
+                optim.step()
             test_psnr, test_ssim = preruni_dict['main_module'].calc_psnr_ssim()
 
             losses_r.append(train_loss.item())

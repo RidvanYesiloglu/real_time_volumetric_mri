@@ -67,7 +67,7 @@ def gif_freq_actions(inps_dict, preruni_dict):
     print("[Epoch: {}/{}] Loss: {:.4g}, PSNR: {:.4g}, SSIM: {:.4g}".format(inps_dict['t']+1, args.max_iter, test_loss, test_psnr, test_ssim))
     for ax_cr_sg in [0,1,2]:
         plot_max_mse=True
-        p = multiprocessing.Process(target = make_gif_of_rec_vs_gt.main, args=(output_im.cpu().detach().numpy().squeeze(), preruni_dict['main_module'].image.cpu().detach().numpy().squeeze(), 350, ax_cr_sg, args.pt, inps_dict['res_dir'], plot_max_mse,))
+        p = multiprocessing.Process(target = make_gif_of_rec_vs_gt.main, args=(output_im.cpu().detach().numpy().squeeze(), preruni_dict['main_module'].image.cpu().detach().numpy().squeeze(), 350, ax_cr_sg, args.pt, inps_dict['res_dir'], args, inps_dict['repr_str'], plot_max_mse,))
         p.start()
     
         

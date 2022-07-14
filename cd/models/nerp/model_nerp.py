@@ -9,6 +9,7 @@ from skimage.metrics import structural_similarity as ssim
 class Main_Module(nn.Module):
 
     def __init__(self, args):
+        print('reg is ', args.reg)
         if sum([args.conf==item for item in ['pri_emb','trn_wo_trns','trn_w_trns']])  == 0:
             raise ValueError('Invalid configuration')
         if (args.conf == 'pri_emb') and (args.reg is not None):

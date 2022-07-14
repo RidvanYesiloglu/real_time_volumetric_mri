@@ -134,7 +134,7 @@ def main(args=None, im_ind=None):
                 #     pickle.dump(l_components_r, f)
             # Print
             if (t+1) % print_freq == 0:
-                wr_acts.print_freq_actions({'args':args, 't':t, 'losses_r':losses_r})
+                wr_acts.print_freq_actions({'args':args, 't':t}, preruni_dict)
             if (t+1) % write_freq == 0:   
                 write_freq_dict = wr_acts.write_freq_actions({'args':args, 't':t, 'start_time':start_time, 'res_dir': res_dir, 'run_number':run_number,\
                     'repr_str':repr_str,'psnrs_r':psnrs_r,'ssims_r':ssims_r,'losses_r':losses_r}, preruni_dict)

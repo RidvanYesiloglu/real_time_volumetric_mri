@@ -5,6 +5,7 @@ import numpy as np
 import time
 
 from models.nerp.model_nerp import Main_Module as Main_Module
+from models.nerp.plot_nerp import plot_change_of_objective
 
 
 from utils import prepare_sub_folder, mri_fourier_transform_3d, complex2real, random_sample_uniform_mask, random_sample_gaussian_mask, save_image_3d, PSNR, check_gpu
@@ -35,11 +36,11 @@ def prerun_i_actions(inps_dict):
     #np.save(os.path.join(inps_dict['save_folder'], 'pretrainmodel_out'), test_output.detach().cpu().numpy())
     return preruni_dict
 
-def print_freq_actions(inps_dict):
+def print_freq_actions(inps_dict, preruni_dict):
     args =inps_dict['args']
-    inps_dict['main_module'].eval()
-    test_psnr, test_ssim, test_loss = inps_dict['main_module'].test_psnr_ssim()
-    inps_dict['main_module'].train()
+    preruni_dict['main_module'].eval()
+    test_psnr, test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim()
+    preruni_dict['main_module'].train()
     print("[Epoch: {}/{}] Loss: {:.4g}, PSNR: {:.4g}, SSIM: {:.4g}".format(inps_dict['t']+1, args.max_iter, test_loss, test_psnr, test_ssim))
     
 def write_freq_actions(inps_dict, preruni_dict):
@@ -47,16 +48,18 @@ def write_freq_actions(inps_dict, preruni_dict):
     end_time = time.time()
     
     preruni_dict['main_module'].eval()
-    test_psnr, test_ssim, test_loss = inps_dict['main_module'].test_psnr_ssim()
+    test_psnr, test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim()
     preruni_dict['main_module'].train()
     
     r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_{}_{}.txt'.format(inps_dict['run_number'], inps_dict['repr_str'])), "a")
     r_logs.write('Epoch: {}/{}, Time: {}, Loss: {:.4f}\n'.format(inps_dict['t']+1,args.max_iter,end_time-inps_dict['start_time'],inps_dict['losses_r'][-1]))
-    to_write = "PSNR: {:.4g} | SSIM: {:.4g}\n".format(inps_dict['t']+1, args.max_iter, test_psnr, test_ssim)
+    to_write = "PSNR: {:.4g} | SSIM: {:.4g}\n".format(test_psnr, test_ssim)
     r_logs.write(to_write)
     start_time = time.time()
     r_logs.close()
-    plt_model.plot_change_of_objective(vals, metric_name, inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
+    plot_change_of_objective(inps_dict['psnrs_r'], 'PSNR', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
+    plot_change_of_objective(inps_dict['ssims_r'], 'SSIM', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
+    plot_change_of_objective(inps_dict['losses_r'], 'Loss', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
     print(to_write)
     return {'start_time':start_time}
 

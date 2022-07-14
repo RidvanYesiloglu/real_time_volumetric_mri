@@ -36,19 +36,17 @@ class Param_Info():
                                      eval('any([val {} for val in vals_list[names_list.index(self.ask[1])]])'.format(self.ask[2]))):
             ask_str = self.const_quest_prompt()
             inp_list = [int(item) if (self.poss is not None) else eval(self.typ)(item) for item in input(ask_str).split()]
-            print('iste inplist', inp_list)
-            print('bitmedi')
             if len(inp_list) != len(set(inp_list)): 
                 raise ValueError('Input contains duplicates, no need to do that.')
             if len(inp_list) == 0:
                 if self.defa is not None:
                     inp_list = [self.poss.index(self.defa)+1] if (self.poss is not None) else [self.defa]
+                else:
+                    inp_list = None
         if (((inp_list is None) or (len(inp_list) == 0)) and ((self.req[0] != '0') and ((self.req[0] == '1') or \
             eval('any([val {} for val in vals_list[names_list.index(self.req[1])]])'.format(self.req[2]))))):
             raise ValueError('You have''nt provided a value!')
         inp_list = self.conv_to_poss(inp_list)
-        print('iste inplist', inp_list)
-        print('bitti')
         if len(cart_prod_runsets) > 0:
             new_prod = []
             for no,runset_wo_new in enumerate(list(cart_prod_runsets)):

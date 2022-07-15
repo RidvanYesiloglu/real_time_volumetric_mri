@@ -40,9 +40,6 @@ def main(output_im, ref_im, step, ax_cr_sg, res_dir, args, repr_str, ep_no, plot
     # Calculate PSNRs:
     print(f'{im_type_str.capitalize()} MSEs are being calculated.')
     mses = mean_squared_err_2d(output_im, ref_im, ax_cr_sg)
-
-    curr_time = time.perf_counter()
-    print(f"Elapsed total for the gif {gif_name}: {curr_time-start_time} seconds")
     
     # Create gif
     print(f'Creating and saving the gif {gif_name}.')

@@ -43,7 +43,7 @@ def main(output_im, ref_im, step, ax_cr_sg, res_dir, args, repr_str, ep_no, plot
     else:
         print(f'Directory already exists, will be overwritten: {ims_dir}')
     # Remove previous ims
-    for filename in glob.glob(f"{ims_dir}{gif_name[:gif_name.rfind('ep')+2]}"):
+    for filename in glob.glob(f"{ims_dir}{gif_name[:gif_name.rfind('ep')+2]}*"):
         os.remove(filename)
     # Calculate PSNRs:
     print(f'{im_type_str.capitalize()} MSEs are being calculated.')

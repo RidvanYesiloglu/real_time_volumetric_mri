@@ -16,6 +16,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import imageio
 import os
 import time
+import glob
 def mean_squared_err_2d(reconstructed, original, ax_cr_sg): # input, target
     if ax_cr_sg == 0:
         return ((reconstructed-original)**2).mean((0,1))
@@ -41,7 +42,9 @@ def main(output_im, ref_im, step, ax_cr_sg, res_dir, args, repr_str, ep_no, plot
         os.makedirs(ims_dir)
     else:
         print(f'Directory already exists, will be overwritten: {ims_dir}')
-
+    # Remove previous ims
+    for filename in glob.glob(f"{ims_dir}{gif_name[:gif_name.rfind('ep')+2]}"):
+        os.remove(filename)
     # Calculate PSNRs:
     print(f'{im_type_str.capitalize()} MSEs are being calculated.')
     mses = mean_squared_err_2d(output_im, ref_im, ax_cr_sg)

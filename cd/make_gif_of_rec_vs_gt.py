@@ -35,7 +35,12 @@ def main(output_im, ref_im, step, ax_cr_sg, res_dir, args, repr_str, ep_no, plot
     im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'
     gif_name = f'mmse_{im_type_str}s_vs_t_{args.pt}_im{args.im_ind}_ep{ep_no}' if plot_max_mse else f'all_{im_type_str}s_vs_t_{args.pt}_im{args.im_ind}_ep{ep_no}'
     print(f'The gif {gif_name} is being created.')
-
+    ims_dir = f'{res_dir}/ims/'
+    if not os.path.exists(ims_dir):
+        print(f'Directory created: {ims_dir}')
+        os.makedirs(ims_dir)
+    else:
+        print(f'Directory already exists, will be overwritten: {ims_dir}')
 
     # Calculate PSNRs:
     print(f'{im_type_str.capitalize()} MSEs are being calculated.')
@@ -86,7 +91,7 @@ def main(output_im, ref_im, step, ax_cr_sg, res_dir, args, repr_str, ep_no, plot
     else:
         plt.suptitle(f"{im_type_str.capitalize()} Images ({args.pt}, Time Point: {args.im_ind:3d})")      
     plt.show()
-    plt.savefig(f'{res_dir}/{gif_name}', dpi=96, bbox_inches='tight')
+    plt.savefig(f'{ims_dir}{gif_name}', dpi=96, bbox_inches='tight')
     plt.close()
     # with imageio.get_writer(f'{res_dir}{gif_name}.gif', mode='I') as writer:
     #     for filename in filenames:

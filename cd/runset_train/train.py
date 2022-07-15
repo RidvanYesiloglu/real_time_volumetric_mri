@@ -39,7 +39,7 @@ def main(args=None, im_ind=None):
     np.set_printoptions(precision=7)
     print_freq = 100 # print results once in "print_frequency" epochs 
     write_freq = 100 # print results once in "print_frequency" epochs
-    gif_freq = 25
+    gif_freq = 100
     cudnn.benchmark = True
     
     if not os.path.exists(res_dir):

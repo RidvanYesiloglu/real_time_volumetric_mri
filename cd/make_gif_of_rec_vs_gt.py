@@ -51,6 +51,7 @@ def main(output_im, ref_im, step, ax_cr_sg, res_dir, args, repr_str, ep_no, plot
     ncols = int(2*nrows) if ax_cr_sg == 0 else int(2.5*nrows)
     sl_nos = mses.argsort()[-nrows*ncols:] if plot_max_mse else np.arange(0,(nrows*ncols-1)*(mses.shape[1]//(nrows*ncols-1))+1,mses.shape[0]//(nrows*ncols-1))
     psnrs = calc_psnrs_2d(output_im, ref_im, ax_cr_sg)
+    print('PSNRs of mmse slices: ', psnrs[sl_nos])
     cmap = mpl.cm.get_cmap('jet_r')
     (min_psnr, max_psnr) = (psnrs.min(), min(psnrs.max(),100))
     norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
@@ -95,7 +96,7 @@ def main(output_im, ref_im, step, ax_cr_sg, res_dir, args, repr_str, ep_no, plot
     #         image = imageio.imread(filename)
     #         writer.append_data(image)
     curr_time = time.perf_counter()
-    print(f"Elapsed total for the gif {gif_name}: {curr_time-start_time} seconds, done.")
+    print(f"Elapsed total for the gif {gif_name}: {curr_time-start_time:.1f} seconds, done.")
     
 if __name__ == "__main__":
     main()

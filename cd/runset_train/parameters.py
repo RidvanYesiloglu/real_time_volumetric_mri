@@ -32,6 +32,7 @@ class Param_Info():
         inp_list = None
         if self.defa is not None:
             inp_list = [self.poss.index(self.defa)+1] if (self.poss is not None) else [self.defa]
+        print(self.name, ' name')
         print(inp_list)
         print(vals_list)
         if len(vals_list) > 5:

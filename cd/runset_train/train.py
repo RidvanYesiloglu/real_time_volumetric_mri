@@ -140,7 +140,7 @@ def main(args=None, im_ind=None):
                 wr_acts.write_freq_actions({'args':args, 't':t, 'start_time':start_time, 'res_dir': res_dir, 'run_number':run_number,\
                     'repr_str':repr_str,'psnrs_r':psnrs_r,'ssims_r':ssims_r,'losses_r':losses_r}, preruni_dict)
             if (t+1) % gif_freq == 0:
-                wr_acts.gif_freq_actions({'args':args, 't':t, 'res_dir': res_dir, 'repr_str':repr_str}, preruni_dict)
+                wr_acts.gif_freq_actions({'args':args, 't':t, 'res_dir': res_dir, 'repr_str':repr_str, 't':t}, preruni_dict)
                 # Save final model
             # if (t + 1) % args.image_save_iter == 0:
             #     model_name = os.path.join(preruni_dict['checkpoint_directory'], 'model_%06d.pt' % (t + 1))

@@ -84,11 +84,11 @@ def main(output_im, ref_im, step, ax_cr_sg, pt_id, res_dir, args, repr_str, plot
     cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
     cb1.set_label('PSNR wrt the Initial Image (dB)')
     if plot_max_mse:
-        plt.suptitle(f"Most Fluctuating {im_type_str.capitalize()} Images ({pt_id}, Time Point: {args.im_ind:3d})")
+        plt.suptitle(f"Most Fluctuating {im_type_str.capitalize()} Images ({pt_id}, Time Point: {args.im_ind:3d}, Epoch: {ep_no:3d})")
     else:
         plt.suptitle(f"{im_type_str.capitalize()} Images ({pt_id}, Time Point: {args.im_ind:3d})")      
     plt.show()
-    plt.savefig(f'{res_dir}{gif_name}', dpi=96, bbox_inches='tight')
+    plt.savefig(f'{res_dir}/{gif_name}', dpi=96, bbox_inches='tight')
     plt.close()
     # with imageio.get_writer(f'{res_dir}{gif_name}.gif', mode='I') as writer:
     #     for filename in filenames:

@@ -49,10 +49,10 @@ def main(output_im, ref_im, step, ax_cr_sg, pt_id, res_dir, args, repr_str, plot
 
     nrows = 2 if plot_max_mse else 4
     ncols = int(2*nrows) if ax_cr_sg == 0 else int(2.5*nrows)
-    sl_nos = mses.max(0).argsort()[-nrows*ncols:] if plot_max_mse else np.arange(0,(nrows*ncols-1)*(mses.shape[1]//(nrows*ncols-1))+1,mses.shape[1]//(nrows*ncols-1))
-    psnrs_of_plots = calc_psnrs_2d(output_im, ref_im, ax_cr_sg)
+    sl_nos = mses.argsort()[-nrows*ncols:] if plot_max_mse else np.arange(0,(nrows*ncols-1)*(mses.shape[1]//(nrows*ncols-1))+1,mses.shape[0]//(nrows*ncols-1))
+    psnrs = calc_psnrs_2d(output_im, ref_im, ax_cr_sg)
     cmap = mpl.cm.get_cmap('jet_r')
-    (min_psnr, max_psnr) = (psnrs_of_plots.min(), min(psnrs_of_plots.max(),100))
+    (min_psnr, max_psnr) = (psnrs.min(), min(psnrs.max(),100))
     norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
     figsize = (16,7.5) if (ax_cr_sg == 0 and plot_max_mse) else (16,7.5) if (ax_cr_sg == 0 and (not plot_max_mse))\
         else (16,9.5) if (ax_cr_sg != 0 and plot_max_mse) else (19.5,11)
@@ -69,7 +69,7 @@ def main(output_im, ref_im, step, ax_cr_sg, pt_id, res_dir, args, repr_str, plot
                 im_to_show = np.concatenate((output_im[sl_no,:,:],ref_im[sl_no,:,:]),1)
             im = ax[i,j].imshow(im_to_show, cmap='gray', interpolation='none', vmin=im_to_show.min(), vmax=im_to_show.max())
             ax[i,j].axis('off')
-            ps = psnrs_of_plots[ncols*i+j]
+            ps = psnrs[sl_no]
             ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))
             # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
             rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')

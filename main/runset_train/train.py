@@ -89,7 +89,8 @@ def main(args=None, im_ind=None):
                 np.save(os.path.join(res_dir,'psnrs_r{}'.format(run_number)), np.asarray(psnrs_r))
                 np.save(os.path.join(res_dir,'ssims_r{}'.format(run_number)), np.asarray(ssims_r))
                 np.save(os.path.join(res_dir,'losses_r{}'.format(run_number)), np.asarray(losses_r))
-                wr_acts.gif_freq_actions({'args':args, 't':t, 'res_dir': res_dir, 'repr_str':repr_str, 't':t}, preruni_dict)
+                if t>2500:
+                    wr_acts.gif_freq_actions({'args':args, 't':t, 'res_dir': res_dir, 'repr_str':repr_str, 't':t}, preruni_dict)
             # if (args.conf == 2) and (test_psnr == max(psnrs_r)): # network training
             #     # Save the test output and the model:
             #     for filename in glob.glob(os.path.join(save_folder, 'savedmodel_run{}*'.format(run_number))):

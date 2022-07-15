@@ -148,11 +148,12 @@ def main(args=None, im_ind=None):
             #                 'enc': preruni_dict['encoder'].B, \
             #                 'opt': preruni_dict['optim'].state_dict(), \
             #                 }, model_name)
+        wr_acts.gif_freq_actions({'args':args, 't':t, 'res_dir': res_dir, 'repr_str':repr_str, 't':t}, preruni_dict)
         #wr_acts.postrun_i_actions({'args':args, 'run_number':run_number, 'save_folder':save_folder, 'losses_r':losses_r, 'psnrs_r':psnrs_r,'device':device, \
          #                         't':t},preallruns_dict, preruni_dict)
 
     #wr_acts.postallruns_actions({'args':args, 'save_folder':save_folder}, preallruns_dict)
-
+    
     # mydicti = globals()
     # for name in mydicti:
     #     print(name)

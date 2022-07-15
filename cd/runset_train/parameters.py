@@ -32,6 +32,7 @@ class Param_Info():
         inp_list = None
         if self.defa is not None:
             inp_list = [self.poss.index(self.defa)+1] if (self.poss is not None) else [self.defa]
+        print(vals_list[names_list.index('reg')])
         if (self.ask[0] != '0') and ((self.ask[0] == '1') or \
                                      eval('any([val {} for val in vals_list[names_list.index(self.ask[1])]])'.format(self.ask[2]))):
             ask_str = self.const_quest_prompt()

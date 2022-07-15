@@ -30,10 +30,10 @@ def calc_psnrs_2d(reconstructed, original, ax_cr_sg):
         return 20*np.log((original**2).max((0,2)))-10*np.log(((original-reconstructed)**2).mean((0,2)))
     elif ax_cr_sg == 2:
         return 20*np.log((original**2).max((1,2)))-10*np.log(((original-reconstructed)**2).mean((1,2)))
-def main(output_im, ref_im, step, ax_cr_sg, pt_id, res_dir, args, repr_str, ep_no, plot_max_mse=False):
+def main(output_im, ref_im, step, ax_cr_sg, res_dir, args, repr_str, ep_no, plot_max_mse=False):
     start_time = time.perf_counter()
     im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'
-    gif_name = f'max_mse_{im_type_str}s_vs_t_{pt_id}' if plot_max_mse else f'all_{im_type_str}s_vs_t_{pt_id}'
+    gif_name = f'mmse_{im_type_str}s_vs_t_{args.pt}_im{args.im_ind}_ep{ep_no}' if plot_max_mse else f'all_{im_type_str}s_vs_t_{args.pt}_im{args.im_ind}_ep{ep_no}'
     print(f'The gif {gif_name} is being created.')
 
 
@@ -84,9 +84,9 @@ def main(output_im, ref_im, step, ax_cr_sg, pt_id, res_dir, args, repr_str, ep_n
     cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
     cb1.set_label('PSNR wrt the Initial Image (dB)')
     if plot_max_mse:
-        plt.suptitle(f"Most Fluctuating {im_type_str.capitalize()} Images ({pt_id}, Time Point: {args.im_ind:3d}, Epoch: {ep_no:3d})")
+        plt.suptitle(f"{im_type_str.capitalize()} Images with Max MSE ({args.pt}, Time Point: {args.im_ind:3d}, Epoch: {ep_no:5d})")
     else:
-        plt.suptitle(f"{im_type_str.capitalize()} Images ({pt_id}, Time Point: {args.im_ind:3d})")      
+        plt.suptitle(f"{im_type_str.capitalize()} Images ({args.pt}, Time Point: {args.im_ind:3d})")      
     plt.show()
     plt.savefig(f'{res_dir}/{gif_name}', dpi=96, bbox_inches='tight')
     plt.close()

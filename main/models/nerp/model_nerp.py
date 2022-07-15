@@ -78,12 +78,13 @@ class Main_Module(nn.Module):
                 test_loss = self.mse_loss_fn(test_kdata, self.gt_kdata).item()
             elif self.conf == 'trn_w_trns':
                 raise ValueError('not impl 2')
-        test_psnr = - 10 * torch.log10(self.mse_loss_fn(output_im, self.image)).item()
+        test_psnr = 20*torch.log10(self.image.max()).item() - 10 * torch.log10(self.mse_loss_fn(output_im, self.image)).item()
         test_ssim = ssim(output_im.cpu().numpy().squeeze(), self.image.cpu().numpy().squeeze(), data_range=self.image.max().item()-self.image.min().item())
         if ret_im:
             return output_im, test_psnr , test_ssim, test_loss
         else:
             return test_psnr , test_ssim, test_loss
+
     def get_to_save_list(self):
         to_save_dict = {'im_nerp_mlp': self.im_nerp_mlp.state_dict(), \
                     'im_nerp_enc':self.im_nerp_enc.B}

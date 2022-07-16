@@ -61,16 +61,23 @@ def main(args=None, im_ind=None):
         #l_components_r = []
         start_time = time.time()
         
+        start_lr = 1e-10
+        warmup_steps = 50
+        
         for ep in tqdm(range(args.max_iter)):
             preruni_dict['main_module'].train()
             for optimizer in preruni_dict['main_module'].optims:
                 optimizer.zero_grad()
             train_loss = preruni_dict['main_module']()
             train_loss.backward()
+            
+            rate = min(args.lr_im, ep*(args.lr_im-start_lr)/warmup_steps + start_lr)
             for optimizer in preruni_dict['main_module'].optims:
+                for p in optimizer.param_groups:
+                    p['lr'] = rate
                 optimizer.step()
+                
             test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim()
-
             losses_r.append(test_loss)
             psnrs_r.append(test_psnr)
             ssims_r.append(test_ssim)

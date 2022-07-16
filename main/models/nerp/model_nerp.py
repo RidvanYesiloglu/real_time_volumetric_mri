@@ -40,7 +40,7 @@ class Main_Module(nn.Module):
             self.im_nerp_enc.B = state_dict['im_nerp_enc']#.cuda(args.gpu_id)
             self.im_nerp_mlp = self.im_nerp_mlp.cuda(args.gpu_id)
             for no,optim in enumerate(self.optims):
-                optim.load_state_dict(state_dict[f'opt{no}'])
+                optim.load_state_dict(state_dict[f'opt{no}'].state_dict())
             print('Load prior model: {}'.format(prior_dir+args.pri_im_path))
         if self.conf != 'pri_emb': #gt_kdata and ktraj needed for loss calc
             self.ktraj, self.im_size_for_rad, self.grid_size_for_rad = create_radial_mask(args.nproj, (64,1,128,128), args.gpu_id, plot=False)
@@ -99,7 +99,7 @@ class Main_Module(nn.Module):
             to_save_dict['tr_nerp_mlp'] = self.tr_nerp_mlp
             to_save_dict['tr_nerp_enc'] = self.tr_nerp_enc
         for no,optim in enumerate(self.optims):
-            to_save_dict[f'opt{no}'] = self.optims[no]
+            to_save_dict[f'opt{no}'] = self.optims[no].state_dict()
         return to_save_dict
 ############ Input Positional Encoding ############
 class Positional_Encoder():

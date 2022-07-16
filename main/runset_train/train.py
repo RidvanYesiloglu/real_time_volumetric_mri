@@ -62,7 +62,7 @@ def main(args=None, im_ind=None):
         start_time = time.time()
         
         start_lr = 1e-10
-        warmup_steps = 50
+        warmup_steps = 100
         
         for ep in tqdm(range(args.max_iter)):
             preruni_dict['main_module'].train()

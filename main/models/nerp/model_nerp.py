@@ -34,7 +34,14 @@ class Main_Module(nn.Module):
         self.im_nerp_mlp.train()
         optim_im_nerp_mlp = torch.optim.Adam(self.im_nerp_mlp.parameters(), lr=args.lr_im, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
         self.optims.append(optim_im_nerp_mlp)
-        
+        if args.ld_pri_im:
+            prior_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/'
+            state_dict = torch.load(prior_dir+args.pri_im_path, map_location=lambda storage, loc: storage.cuda(args.gpu_id))
+            self.im_nerp_mlp.load_state_dict(state_dict['net'])
+            self.im_nerp_enc.B = state_dict['enc']#.cuda(args.gpu_id)
+            self.im_nerp_mlp = self.im_nerp_mlp.cuda(args.gpu_id)
+            #optim.load_state_dict(state_dict['opt'])
+            print('Load prior model: {}'.format(prior_dir+args.pri_im_path))
         if self.conf != 'pri_emb': #gt_kdata and ktraj needed for loss calc
             self.ktraj, self.im_size_for_rad, self.grid_size_for_rad = create_radial_mask(args.nproj, (64,1,128,128), args.gpu_id, plot=False)
             self.gt_kdata = project_radial(self.image, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)

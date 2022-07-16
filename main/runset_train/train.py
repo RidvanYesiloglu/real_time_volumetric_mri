@@ -79,11 +79,11 @@ def main(args=None, im_ind=None):
             # Save the model and the reconstruction
             if (args.conf=='pri_emb') and (test_psnr == max(psnrs_r)):
                 # Save the test output and the model:
-                for filename in glob.glob(os.path.join(res_dir, 'model_{}*'.format(repr_str))):
+                for filename in glob.glob(os.path.join(res_dir, 'md_{}*'.format(repr_str))):
                     os.remove(filename)
                 for filename in glob.glob(os.path.join(res_dir, 'rec_{}*'.format(repr_str))):
                     os.remove(filename)
-                model_name = os.path.join(res_dir, 'model_{}_ep{}_{:.4g}dB.pt'.format(repr_str, t+1, test_psnr))
+                model_name = os.path.join(res_dir, 'md_{}_ep{}_{:.4g}dB.pt'.format(repr_str, t+1, test_psnr))
                 torch.save(preruni_dict['main_module'].get_to_save_list(), model_name)
                 output_im, test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim(ret_im=True)
                 np.save(os.path.join(res_dir,'rec_{}_ep{}_{:.4g}dB'.format(repr_str, t+1, test_psnr)), output_im.detach().cpu().numpy())

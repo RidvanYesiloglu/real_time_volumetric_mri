@@ -7,7 +7,6 @@ from torchnufftexample import create_radial_mask, project_radial, backproject_ra
 from skimage.metrics import structural_similarity as ssim
 
 class Main_Module(nn.Module):
-
     def __init__(self, args):
         super().__init__()
         print('reg is ', args.reg)
@@ -92,7 +91,7 @@ class Main_Module(nn.Module):
         else:
             return test_psnr , test_ssim, test_loss
 
-    def get_to_save_list(self):
+    def get_to_save_dict(self):
         to_save_dict = {'im_nerp_mlp': self.im_nerp_mlp.state_dict(), \
                     'im_nerp_enc':self.im_nerp_enc.B}
         if self.conf == 'trn_w_trns':

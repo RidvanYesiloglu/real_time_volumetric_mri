@@ -77,21 +77,23 @@ def main(args=None, im_ind=None):
             
             #'pri_emb','trn_wo_trns','trn_w_trns'
             # Save the model and the reconstruction
-            if (args.conf=='pri_emb') and (test_psnr == max(psnrs_r)):
+            if (((ep+1)%50==0) or (test_psnr == max(psnrs_r))):
                 # Save the test output and the model:
                 for filename in glob.glob(os.path.join(res_dir, 'md_{}*'.format(repr_str))):
                     os.remove(filename)
                 for filename in glob.glob(os.path.join(res_dir, 'rec_{}*'.format(repr_str))):
                     os.remove(filename)
-                model_name = os.path.join(res_dir, 'md_{}_ep{}_{:.4g}dB.pt'.format(repr_str, ep+1, test_psnr))
-                torch.save(preruni_dict['main_module'].get_to_save_list(), model_name)
                 output_im, test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim(ret_im=True)
-                np.save(os.path.join(res_dir,'rec_{}_ep{}_{:.4g}dB'.format(repr_str, ep+1, test_psnr)), output_im.detach().cpu().numpy())
+                if ((ep+1)%50==0):
+                    model_name = os.path.join(res_dir, 'dd_md_{}_ep{}_{:.4g}dB.pt'.format(repr_str, ep+1, test_psnr))
+                    np.save(os.path.join(res_dir,'dd_rec_{}_ep{}_{:.4g}dB'.format(repr_str, ep+1, test_psnr)), output_im.detach().cpu().numpy())
+                else:
+                    model_name = os.path.join(res_dir, 'md_{}_ep{}_{:.4g}dB.pt'.format(repr_str, ep+1, test_psnr))
+                    np.save(os.path.join(res_dir,'rec_{}_ep{}_{:.4g}dB'.format(repr_str, ep+1, test_psnr)), output_im.detach().cpu().numpy())
+                torch.save(preruni_dict['main_module'].get_to_save_dict(), model_name)
                 np.save(os.path.join(res_dir,'psnrs_r{}'.format(run_number)), np.asarray(psnrs_r))
                 np.save(os.path.join(res_dir,'ssims_r{}'.format(run_number)), np.asarray(ssims_r))
                 np.save(os.path.join(res_dir,'losses_r{}'.format(run_number)), np.asarray(losses_r))
-                if ep>2500:
-                    wr_acts.gif_freq_actions({'args':args, 't':ep, 'res_dir': res_dir, 'repr_str':repr_str}, preruni_dict)
             # if (args.conf == 2) and (test_psnr == max(psnrs_r)): # network training
             #     # Save the test output and the model:
             #     for filename in glob.glob(os.path.join(save_folder, 'savedmodel_run{}*'.format(run_number))):

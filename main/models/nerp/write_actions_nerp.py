@@ -28,7 +28,7 @@ def prerun_i_actions(inps_dict):
 
 
     r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_{}_{}.txt'.format(inps_dict['run_number'], inps_dict['repr_str'])), "a")
-    r_logs.write('Runset Name: {}, Individual Run No: {}\n'.format(args.runsetName, args.indRunNo))
+    r_logs.write('Runset Name: {}, Individual Run No: {}\n'.format(args.rsName, args.indRunNo))
     r_logs.write('Short representation string for parameters set:{}\n'.format(inps_dict['repr_str']))
     r_logs.write('All parameters:\n{}'.format(mlt_line_long_repr))
     r_logs.write(init_psnr_str)

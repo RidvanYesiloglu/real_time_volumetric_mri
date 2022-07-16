@@ -8,7 +8,7 @@ from models.nerp.model_nerp import Main_Module as Main_Module
 from models.nerp.plot_nerp import plot_change_of_value
 import make_gif_of_rec_vs_gt
 
-from utils import prepare_sub_folder, mri_fourier_transform_3d, complex2real, random_sample_uniform_mask, random_sample_gaussian_mask, save_image_3d, PSNR, check_gpu
+from utils import conv_repr_str_to_mlt_line, PSNR, check_gpu
 
 from torchnufftexample import create_radial_mask, project_radial, backproject_radial
 import sys
@@ -24,10 +24,13 @@ def prerun_i_actions(inps_dict):
     main_module.train()
     
     init_psnr_str = 'Initial loss: {:.4f}, initial psnr: {:.4f}, initial ssim: {:.4f}\n'.format(test_loss, test_psnr, test_ssim)
-    
+    mlt_line_long_repr = ''.join(list(conv_repr_str_to_mlt_line(inps_dict['long_repr_str'], '&')))
+
+
     r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_{}_{}.txt'.format(inps_dict['run_number'], inps_dict['repr_str'])), "a")
     r_logs.write('Runset Name: {}, Individual Run No: {}\n'.format(args.runsetName, args.indRunNo))
-    r_logs.write('Configuration: {}\n'.format(inps_dict['repr_str']))
+    r_logs.write('Short representation string for parameters set:{}\n'.format(inps_dict['repr_str']))
+    r_logs.write('All parameters:\n{}'.format(mlt_line_long_repr))
     r_logs.write(init_psnr_str)
     r_logs.close()
     

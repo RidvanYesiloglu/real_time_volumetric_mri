@@ -28,6 +28,7 @@ def main(args=None, im_ind=None):
         args = parameters.get_arguments(params_dict)
     # Create representative string for the training
     repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
+    long_repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=False, params_dict=params_dict)
     print(f'Representative string for the training is: {repr_str}')
     
     
@@ -52,7 +53,7 @@ def main(args=None, im_ind=None):
         torch.cuda.empty_cache()
 
         
-        preruni_dict = wr_acts.prerun_i_actions({'res_dir': res_dir, 'args':args, 'repr_str':repr_str, 'run_number':run_number, 'device':device, 'dtype':dtype})
+        preruni_dict = wr_acts.prerun_i_actions({'res_dir': res_dir, 'args':args, 'repr_str':repr_str, 'long_repr_str':long_repr_str, 'run_number':run_number, 'device':device, 'dtype':dtype})
 
         psnrs_r = [] 
         ssims_r = [] 

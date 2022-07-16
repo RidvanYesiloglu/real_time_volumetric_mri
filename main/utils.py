@@ -10,6 +10,17 @@ import torchvision.utils as vutils
 import math
 #from data import ImageDataset, ImageDataset_2D, ImageDataset_3D, BeamDataset, BeamDataset_wMask
 
+# sub=&
+def conv_repr_str_to_mlt_line(a_str, sub='&'):
+    start = 0
+    prev_start = 0
+    while True:
+        start = a_str.find(sub, start)
+        if start == -1: return
+        yield a_str[prev_start:start]+'\n'
+        start += len(sub) # use start += 1 to find overlapping matches
+        prev_start = start
+        
 def PSNR(reconstructed, original): # input, target
     mse = torch.nn.MSELoss()(reconstructed, original)
     if(mse == 0):  # MSE is zero means no noise is present in the signal .

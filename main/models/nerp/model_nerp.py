@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from torchnufftexample import create_radial_mask, project_radial, backproject_radial
 from skimage.metrics import structural_similarity as ssim
-
+from utils import NoamOpt
 class Main_Module(nn.Module):
     def __init__(self, args):
         super().__init__()
@@ -33,7 +33,8 @@ class Main_Module(nn.Module):
         self.im_nerp_mlp.train()
         if args.ld_pri_im:
             args.we_dec_co=0
-        optim_im_nerp_mlp = torch.optim.Adam(self.im_nerp_mlp.parameters(), lr=args.lr_im, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
+        #optim_im_nerp_mlp = torch.optim.Adam(self.im_nerp_mlp.parameters(), lr=args.lr_im, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
+        optim_im_nerp_mlp = NoamOpt(args.lr_im, 50, 1e-10, torch.optim.Adam(self.im_nerp_mlp.parameters(), lr=1e-10, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co))
         self.optims.append(optim_im_nerp_mlp)
         if args.ld_pri_im:
             prior_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/'

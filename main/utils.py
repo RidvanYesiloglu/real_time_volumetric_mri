@@ -9,7 +9,46 @@ from torch.utils.data import DataLoader
 import torchvision.utils as vutils
 import math
 #from data import ImageDataset, ImageDataset_2D, ImageDataset_3D, BeamDataset, BeamDataset_wMask
-
+class NoamOpt:
+    "Optim wrapper that implements rate."
+    def __init__(self, last_lr, warmup_steps, start_lr, optimizer):
+        self.optimizer = optimizer
+        self._step = 0
+        self.last_lr = last_lr
+        self.warmup_steps = warmup_steps
+        self.start_lr = start_lr
+        self._rate = 0
+    
+    def state_dict(self):
+        """Returns the state of the warmup scheduler as a :class:`dict`.
+        It contains an entry for every variable in self.__dict__ which
+        is not the optimizer.
+        """
+        return {key: value for key, value in self.__dict__.items() if key != 'optimizer'}
+    
+    def load_state_dict(self, state_dict):
+        """Loads the warmup scheduler's state.
+        Arguments:
+            state_dict (dict): warmup scheduler state. Should be an object returned
+                from a call to :meth:`state_dict`.
+        """
+        self.__dict__.update(state_dict) 
+        
+    def step(self):
+        "Update parameters and rate"
+        self._step += 1
+        rate = self.rate()
+        for p in self.optimizer.param_groups:
+            p['lr'] = rate
+        self._rate = rate
+        self.optimizer.step()
+        
+    def rate(self, step = None):
+        "Implement `lrate` above"
+        if step is None:
+            step = self._step
+        return min(self.last_lr, (step-1)*(self.last_lr-self.start_lr)/self.warmup_steps + self.start_lr)
+    
 # sub=&
 def conv_repr_str_to_mlt_line(a_str, sub='&'):
     start = 0

@@ -24,8 +24,8 @@ def prerun_i_actions(inps_dict):
     main_module.train()
     
     init_psnr_str = 'Initial loss: {:.4f}, initial psnr: {:.4f}, initial ssim: {:.4f}\n'.format(test_loss, test_psnr, test_ssim)
+    print(init_psnr_str)
     mlt_line_long_repr = ''.join(list(conv_repr_str_to_mlt_line(inps_dict['long_repr_str'], '&')))
-
 
     r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_{}_{}.txt'.format(inps_dict['run_number'], inps_dict['repr_str'])), "a")
     r_logs.write('Runset Name: {}, Individual Run No: {}\n'.format(args.rsName, args.indRunNo))

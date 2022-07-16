@@ -37,8 +37,8 @@ class Main_Module(nn.Module):
         if args.ld_pri_im:
             prior_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/'
             state_dict = torch.load(prior_dir+args.pri_im_path, map_location=lambda storage, loc: storage.cuda(args.gpu_id))
-            self.im_nerp_mlp.load_state_dict(state_dict['net'])
-            self.im_nerp_enc.B = state_dict['enc']#.cuda(args.gpu_id)
+            self.im_nerp_mlp.load_state_dict(state_dict['im_nerp_mlp'])
+            self.im_nerp_enc.B = state_dict['im_nerp_enc']#.cuda(args.gpu_id)
             self.im_nerp_mlp = self.im_nerp_mlp.cuda(args.gpu_id)
             #optim.load_state_dict(state_dict['opt'])
             print('Load prior model: {}'.format(prior_dir+args.pri_im_path))

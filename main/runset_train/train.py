@@ -78,6 +78,9 @@ def main(args=None, im_ind=None):
             #'pri_emb','trn_wo_trns','trn_w_trns'
             # Save the model and the reconstruction
             if (((ep+1)%50==0) or (test_psnr == max(psnrs_r))):
+                wr_acts.write_freq_actions({'args':args, 't':ep, 'start_time':start_time, 'res_dir': res_dir, 'run_number':run_number,\
+                    'repr_str':repr_str,'psnrs_r':psnrs_r,'ssims_r':ssims_r,'losses_r':losses_r}, preruni_dict)
+            
                 # Save the test output and the model:
                 output_im, test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim(ret_im=True)
                 if ((ep+1)%50==0):

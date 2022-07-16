@@ -39,7 +39,8 @@ class Main_Module(nn.Module):
             self.im_nerp_mlp.load_state_dict(state_dict['im_nerp_mlp'])
             self.im_nerp_enc.B = state_dict['im_nerp_enc']#.cuda(args.gpu_id)
             self.im_nerp_mlp = self.im_nerp_mlp.cuda(args.gpu_id)
-            #optim.load_state_dict(state_dict['opt'])
+            for no,optim in enumerate(self.optims):
+                optim.load_state_dict(state_dict[f'opt{no}'])
             print('Load prior model: {}'.format(prior_dir+args.pri_im_path))
         if self.conf != 'pri_emb': #gt_kdata and ktraj needed for loss calc
             self.ktraj, self.im_size_for_rad, self.grid_size_for_rad = create_radial_mask(args.nproj, (64,1,128,128), args.gpu_id, plot=False)

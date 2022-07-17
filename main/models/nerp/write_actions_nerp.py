@@ -54,14 +54,14 @@ def write_freq_actions(inps_dict, preruni_dict):
     test_psnr, test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim()
     preruni_dict['main_module'].train()
     
-    for optim in preruni_dict['main_module'].optims:
-        for p in optim.param_groups:
-            lr__ = p['lr']
-            break
+    # for optim in preruni_dict['main_module'].optims:
+    #     for p in optim.param_groups:
+    #         lr__ = p['lr']
+    #         break
     
     r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_{}_{}.txt'.format(inps_dict['run_number'], inps_dict['repr_str'])), "a")
     r_logs.write('Epoch: {}/{}, Time: {:}, Loss: {:.4f}, '.format(inps_dict['t']+1,args.max_iter,end_time-inps_dict['start_time'],inps_dict['losses_r'][-1]))
-    r_logs.write("PSNR: {:.4g} | SSIM: {:.4g}, lr:{}\n".format(test_psnr, test_ssim, lr__))
+    r_logs.write("PSNR: {:.4g} | SSIM: {:.4g}\n".format(test_psnr, test_ssim))
     r_logs.close()
     plot_change_of_value(inps_dict['psnrs_r'], 'PSNR', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
     plot_change_of_value(inps_dict['ssims_r'], 'SSIM', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])

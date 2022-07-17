@@ -38,9 +38,9 @@ def main(args=None, im_ind=None):
     dtype = torch.float32
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     np.set_printoptions(precision=7)
-    print_freq = 250 # print results once in "print_frequency" epochs 
-    write_freq = 1 # print results once in "print_frequency" epochs
-    gif_freq = 500
+    print_freq = 500 # print results once in "print_frequency" epochs 
+    write_freq = 1000 # print results once in "print_frequency" epochs
+    gif_freq = 1000
     cudnn.benchmark = True
     
     if not os.path.exists(res_dir):

@@ -46,7 +46,7 @@ def create_opts_strs(args_list, params_dict):
                 elif params_dict.param_infos[no].typ == 'type_check.positive_int_tuple':
                     opts += " --"+name + " " + (str(eval("args."+name))[1:-1].replace(',',''))
                 elif params_dict.param_infos[no].typ == 'type_check.boolean':
-                    opts = (opts + "--"+name + " 1") if eval("args."+name) else (opts + " --"+name + " 0")
+                    opts = (opts + " --"+name + " 1") if eval("args."+name) else (opts + " --"+name + " 0")
                 else:
                     opts += " --"+name + " " + str(eval("args."+name))
         opts_strs += opts + "\n"#":"

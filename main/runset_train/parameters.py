@@ -4,6 +4,7 @@ import argparse
 from runset_train import type_check
 import itertools
 import math
+import shlex
 class Param_Info():
     def __init__(self, name, desc, typ, poss, defa, req, ask, cart, shrt_repr):
         self.name = name
@@ -187,7 +188,7 @@ def get_arguments(params_dict, opts_str=None):
     if opts_str is None:
         args = parser.parse_args()
     else:
-        args = parser.parse_args(opts_str)
+        args = parser.parse_args(shlex.split(opts_str))
     for param_info in params_dict.param_infos:
         if param_info.typ=='type_check.positive_int_tuple':
             exec("args."+param_info.name+"=tuple(args."+param_info.name+")")

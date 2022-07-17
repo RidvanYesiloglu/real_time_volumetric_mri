@@ -66,7 +66,7 @@ def main(args=None):
         print(opts_strs)
         print('boyle')
         args.im_ind = i
-        os.system(f'python3 -m runset_train.train{opts_strs}')
+        os.system(f'python3 -m runset_train.train {opts_strs}')
         
     
     

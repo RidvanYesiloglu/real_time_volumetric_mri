@@ -33,7 +33,6 @@ def main(args=None):
     long_repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=False, params_dict=params_dict)
     print(f'Representative string for the training is: {repr_str}')
     
-    
     # Constants
     pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{args.pt}/'
     res_dir = f'{pt_dir}{args.conf}/t_{args.im_ind}/{repr_str}'

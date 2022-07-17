@@ -53,10 +53,8 @@ class Main_Module(nn.Module):
             self.tr_nerp_mlp.cuda(args.gpu_id)
             self.tr_nerp_mlp.train()
             # Setup optimizer for transformation nerp:
-            optim_tr_nerp_mlp = torch.optim.Adam(self.tr_nerp_mlp.parameters(), lr=args.lr_tr, betas=(args.beta1, args.beta2), weight_decay=args.weight_decay)
+            optim_tr_nerp_mlp = torch.optim.Adam(self.tr_nerp_mlp.parameters(), lr=args.lr_tr, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
             self.optims.append(optim_tr_nerp_mlp)
-
-        
     
     def forward(self):
         if self.conf == 'pri_emb':

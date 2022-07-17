@@ -74,7 +74,6 @@ class Main_Module(nn.Module):
             output_im = output_im.reshape(self.im_shape)
             out_kspace = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
             train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
-            raise ValueError('not impl 2')
         return train_loss
     
     def test_psnr_ssim(self, ret_im=False):

@@ -58,7 +58,7 @@ class Main_Module(nn.Module):
             optim_tr_nerp_mlp = torch.optim.Adam(self.tr_nerp_mlp.parameters(), lr=args.lr_tr, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
             self.optims.append(optim_tr_nerp_mlp)
             if args.use_jc_grid_reg:
-                self.jacob_reg = JacobianReg(gpu_id=args.gpu_id)
+                self.jacob_reg = JacobianReg(gpu_id=args.gpu2_id)
                 self.lambda_JR = args.lambda_JR
     def forward(self):
         if self.conf == 'pri_emb':

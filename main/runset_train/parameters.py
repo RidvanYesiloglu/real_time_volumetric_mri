@@ -181,7 +181,6 @@ def check_args(args, params_dict):
                     break
         if cond_can_be_calc and (not eval(expr_str)): raise ValueError("Condition is violated: {} is False.".format(expr_str)) 
 def get_arguments(params_dict, opts_str=None):
-    print('getargs')
     parser = argparse.ArgumentParser()
     for param_info in params_dict.param_infos:
         parser.add_argument("--"+param_info.name, help=param_info.desc, type=eval(param_info.typ) if not param_info.typ=='type_check.positive_int_tuple' else int, choices=param_info.poss, \
@@ -191,7 +190,7 @@ def get_arguments(params_dict, opts_str=None):
     else:
         args = parser.parse_args(shlex.split(opts_str))
     for keyval in args._get_kwargs():
-        eval(f'args.{keyval[0]}={keyval[1][0]}')
+        setattr(args, keyval[0], keyval[1][0])
     for param_info in params_dict.param_infos:
         if param_info.typ=='type_check.positive_int_tuple':
             exec("args."+param_info.name+"=tuple(args."+param_info.name+")")

@@ -78,6 +78,7 @@ class Main_Module(nn.Module):
             output_im = output_im.reshape(self.im_shape)
             out_kspace = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
             if self.jacob_reg is not None:
+                self.grid.requires_grad = True
                 grid_reg_loss = self.jacob_reg(self.grid, deformed_grid)   # Jacobian regularization
                 train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata) + self.lambda_JR*grid_reg_loss
             else:

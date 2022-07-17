@@ -58,8 +58,10 @@ class Main_Module(nn.Module):
             optim_tr_nerp_mlp = torch.optim.Adam(self.tr_nerp_mlp.parameters(), lr=args.lr_tr, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
             self.optims.append(optim_tr_nerp_mlp)
             if args.use_jc_grid_reg:
-                self.jacob_reg = JacobianReg(gpu_id=args.gpu2_id)
+                self.jacob_reg = JacobianReg(gpu_id=args.gpu_id)
                 self.lambda_JR = args.lambda_JR
+                self.tr_nerp_mlp = nn.DataParallel(self.tr_nerp_mlp,[args.gpu_id,args.gpu2_id])
+                self.im_nerp_mlp = nn.DataParallel(self.im_nerp_mlp,[args.gpu_id, args.gpu2_id])
     def forward(self):
         if self.conf == 'pri_emb':
             output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(self.grid))
@@ -80,7 +82,7 @@ class Main_Module(nn.Module):
             if self.jacob_reg is not None:
                 self.grid.requires_grad = True
                 grid_reg_loss = self.jacob_reg(self.grid, deformed_grid)   # Jacobian regularization
-                train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata) + self.lambda_JR*grid_reg_loss.cuda(0)
+                train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata) + self.lambda_JR*grid_reg_loss
             else:
                 train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
         return train_loss

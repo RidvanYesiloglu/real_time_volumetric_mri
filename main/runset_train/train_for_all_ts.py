@@ -42,13 +42,13 @@ def create_opts_strs(args_list, params_dict):
                         dict_str += "\"{}\":".format(key)
                         dict_str += "\"{}\",".format(inp_dict[key]) if type(inp_dict[key])==str else "{},".format(inp_dict[key])
                     dict_str = dict_str[:-1]+"}"
-                    opts += "--"+name + " " + dict_str
+                    opts += " --"+name + " " + dict_str
                 elif params_dict.param_infos[no].typ == 'type_check.positive_int_tuple':
-                    opts += "--"+name + " " + (str(eval("args."+name))[1:-1].replace(',',''))
+                    opts += " --"+name + " " + (str(eval("args."+name))[1:-1].replace(',',''))
                 elif params_dict.param_infos[no].typ == 'type_check.boolean':
                     opts = (opts + "--"+name + " 1") if eval("args."+name) else (opts + " --"+name + " 0")
                 else:
-                    opts += "--"+name + " " + str(eval("args."+name))
+                    opts += " --"+name + " " + str(eval("args."+name))
         opts_strs += opts + "\n"#":"
     return opts_strs[:-1]
 
@@ -66,7 +66,7 @@ def main(args=None):
         print(opts_strs)
         print('boyle')
         args.im_ind = i
-        os.system(f'python3 -m runset_train.train {opts_strs}')
+        os.system(f'python3 -m runset_train.train{opts_strs}')
         
     
     

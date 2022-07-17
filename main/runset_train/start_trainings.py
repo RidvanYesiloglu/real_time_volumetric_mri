@@ -31,7 +31,7 @@ def main():
         if args.tr_for_all_ts:
             train_for_all_ts.main(args)
         else:
-            train.main(args)
+            train.main(args=args)
 if __name__ == "__main__":
     main()
 

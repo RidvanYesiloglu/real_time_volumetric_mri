@@ -80,7 +80,7 @@ class Main_Module(nn.Module):
             if self.jacob_reg is not None:
                 self.grid.requires_grad = True
                 grid_reg_loss = self.jacob_reg(self.grid, deformed_grid)   # Jacobian regularization
-                train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata) + self.lambda_JR*grid_reg_loss
+                train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata) + self.lambda_JR*grid_reg_loss.cuda(0)
             else:
                 train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
         return train_loss

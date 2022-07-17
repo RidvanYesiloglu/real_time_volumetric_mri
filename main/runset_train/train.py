@@ -26,8 +26,6 @@ def main(args=None):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
     if args is None:
         args = parameters.get_arguments(params_dict)
-    print('ARGS IS')
-    print(args)
     # Create representative string for the training
     repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
     long_repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=False, params_dict=params_dict)

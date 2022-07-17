@@ -63,9 +63,6 @@ def main(args=None):
         args.im_ind = i
         print('Train for all for loop iteration time t = {}'.format(i)),
         opts_strs = create_opts_strs([args], params_dict)
-        print('opts_strts:')
-        print(opts_strs)
-        print('boyle')
         os.system(f'python3 -m runset_train.train{opts_strs}')
         
     

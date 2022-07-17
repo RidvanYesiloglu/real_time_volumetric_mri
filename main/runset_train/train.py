@@ -175,6 +175,8 @@ def main(args=None):
             #                 'enc': preruni_dict['encoder'].B, \
             #                 'opt': preruni_dict['optim'].state_dict(), \
             #                 }, model_name)
+        wr_acts.write_freq_actions({'args':args, 't':ep, 'start_time':start_time, 'res_dir': res_dir, 'run_number':run_number,\
+                    'repr_str':repr_str,'psnrs_r':psnrs_r,'ssims_r':ssims_r,'losses_r':losses_r}, preruni_dict)
         wr_acts.gif_freq_actions({'args':args, 't':ep, 'res_dir': res_dir, 'repr_str':repr_str}, preruni_dict)
         #wr_acts.postrun_i_actions({'args':args, 'run_number':run_number, 'save_folder':save_folder, 'losses_r':losses_r, 'psnrs_r':psnrs_r,'device':device, \
          #                         't':t},preallruns_dict, preruni_dict)

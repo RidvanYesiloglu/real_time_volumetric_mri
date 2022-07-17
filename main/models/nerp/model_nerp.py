@@ -26,7 +26,7 @@ class Main_Module(nn.Module):
         
         im_dir = args.data_dir + args.pt + '/all_vols.npy'
         self.image = torch.from_numpy(np.expand_dims(np.load(im_dir)[args.im_ind],(0,-1)).astype('float32')).cuda(args.gpu_id)
-        
+        print('iamge dshpae', self.image.shape)
         self.im_nerp_enc = Positional_Encoder(args)
         self.im_nerp_mlp = SIREN(args.net_inp_sz, args.net_wd, args.net_dp, args.net_ou_sz)
         self.im_nerp_mlp.cuda(args.gpu_id)

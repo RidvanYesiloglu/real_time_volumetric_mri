@@ -71,6 +71,11 @@ class Main_Module(nn.Module):
             out_kspace = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
             train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
         elif self.conf == 'trn_w_trns':
+            deformed_grid = self.grid + (self.tr_nerp_mlp(self.tr_nerp_enc.embedding(self.grid)))  # [B, C, H, W, 1]
+            output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(deformed_grid))
+            output_im = output_im.reshape(self.im_shape)
+            out_kspace = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
+            train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
             raise ValueError('not impl 2')
         return train_loss
     
@@ -86,7 +91,11 @@ class Main_Module(nn.Module):
                 test_kdata = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
                 test_loss = self.mse_loss_fn(test_kdata, self.gt_kdata).item()
             elif self.conf == 'trn_w_trns':
-                raise ValueError('not impl 2')
+                deformed_grid = self.grid + (self.tr_nerp_mlp(self.tr_nerp_enc.embedding(self.grid)))  # [B, C, H, W, 1]
+                output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(deformed_grid))
+                output_im = output_im.reshape(self.im_shape)
+                out_kspace = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
+                test_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
         test_psnr = 20*torch.log10(self.image.max()).item() - 10 * torch.log10(self.mse_loss_fn(output_im, self.image)).item()
         test_ssim = ssim(output_im.cpu().numpy().squeeze(), self.image.cpu().numpy().squeeze(), data_range=self.image.max().item()-self.image.min().item())
         if ret_im:

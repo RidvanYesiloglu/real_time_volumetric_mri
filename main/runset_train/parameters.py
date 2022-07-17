@@ -28,7 +28,6 @@ class Param_Info():
     
     # 
     def get_input_and_update_runsets(self, cart_prod_runsets, vals_list, params_dict):
-        print(self.name)
         names_list = [info.name for info in params_dict.param_infos]
         inp_list = None
         if self.defa is not None:

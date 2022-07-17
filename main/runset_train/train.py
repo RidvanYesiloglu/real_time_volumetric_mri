@@ -21,11 +21,11 @@ import pickle
 
 
 #working_dir = '/home/yesiloglu/projects/cascaded_nerp/cascade_models'
-def main(args=None, im_ind=None):
+def main(opts_strs=None, im_ind=None):
     # Get arguments
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
-    if args is None:
-        args = parameters.get_arguments(params_dict)
+    args = parameters.get_arguments(params_dict, opts_strs)
+        
     # Create representative string for the training
     repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
     long_repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=False, params_dict=params_dict)

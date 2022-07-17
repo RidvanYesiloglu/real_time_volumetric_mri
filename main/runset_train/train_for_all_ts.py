@@ -61,12 +61,12 @@ def main(args=None):
     print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
     for i in range(args.st_ind, args.end_ind + 1):
         print('Train for all for loop iteration time t = {}'.format(i)),
-        #opts_strs = create_opts_strs([args], params_dict)
-        #print('opts_strts:')
-        #print(opts_strs)
-        #print('boyle')
+        opts_strs = create_opts_strs([args], params_dict)
+        print('opts_strts:')
+        print(opts_strs)
+        print('boyle')
         args.im_ind = i
-        os.system(f'python3 -m runset_train.train{args}')
+        os.system(f'python3 -m runset_train.train{opts_strs}')
         
     
     

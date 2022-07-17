@@ -55,16 +55,18 @@ def create_opts_strs(args_list, params_dict):
 
 def main(args=None):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
-    args.lr_tr = 1e-4
+    #args.lr_tr = 1e-4
     if args.end_ind == -1:
         args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
+    print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
     for i in range(args.st_ind, args.end_ind + 1):
         print('Train for all for loop iteration time t = {}'.format(i)),
-        opts_strs = create_opts_strs([args], params_dict)
+        #opts_strs = create_opts_strs([args], params_dict)
         #print('opts_strts:')
         #print(opts_strs)
         #print('boyle')
-        #os.system(f'python3 -m runset_train.train{opts_strs}')
+        args.im_ind = i
+        os.system(f'python3 -m runset_train.train{args}')
         
     
     

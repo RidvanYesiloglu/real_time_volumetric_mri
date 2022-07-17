@@ -187,7 +187,7 @@ def get_arguments(params_dict, opts_str=None):
     if opts_str is None:
         args = parser.parse_args()
     else:
-        args = parser.parse_args(opts_str.split())
+        args = parser.parse_args(opts_str)
     for param_info in params_dict.param_infos:
         if param_info.typ=='type_check.positive_int_tuple':
             exec("args."+param_info.name+"=tuple(args."+param_info.name+")")

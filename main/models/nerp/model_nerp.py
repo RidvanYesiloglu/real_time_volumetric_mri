@@ -11,12 +11,13 @@ from jacobian import JacobianReg
 class Main_Module(nn.Module):
     def __init__(self, args):
         super().__init__()
-        print('reg is ', args.reg)
         if sum([args.conf==item for item in ['pri_emb','trn_wo_trns','trn_w_trns']])  == 0:
-            raise ValueError('Invalid configuration')
-        if (args.conf == 'pri_emb') and (args.reg is not None):
-            raise ValueError(f'In prior embedding, no regularization can be used but {args.reg} is specified.')
-        self.conf = args.conf
+            raise ValueError('Invalid configuration specified.')
+        if (args.conf == 'pri_emb') and (args.use_sp_cont_reg or args.use_t_cont_reg):
+            raise ValueError('In prior embedding, no regularization can be used.')
+        if (args.conf != 'trn_w_trns') and (args.use_jc_grid_reg):
+            raise ValueError('Jacobian regularization on deformed grid can only be used with transformation NeRP.')
+        self.args = args
         self.optims = []
         grid_np = np.asarray([(x,y,z) for x in range(128) for y in range(128) for z in range(64)]).reshape((1,128,128,64,3))
         grid_np = (grid_np/np.array([128,128,64])) + np.array([1/256.0,1/256.0,1/128.0])
@@ -29,13 +30,13 @@ class Main_Module(nn.Module):
         
         im_dir = args.data_dir + args.pt + '/all_vols.npy'
         self.image = torch.from_numpy(np.expand_dims(np.load(im_dir)[args.im_ind],(0,-1)).astype('float32')).cuda(args.gpu_id)
-        print('iamge dshpae', self.image.shape)
         self.im_nerp_enc = Positional_Encoder(args)
         self.im_nerp_mlp = SIREN(args.net_inp_sz, args.net_wd, args.net_dp, args.net_ou_sz)
         self.im_nerp_mlp.cuda(args.gpu_id)
         self.im_nerp_mlp.train()
         if args.ld_pri_im:
             args.we_dec_co=0
+            print('Since prior image NeRP is desired to be loaded, weight decay coefficient was made zero.')
         optim_im_nerp_mlp = torch.optim.Adam(self.im_nerp_mlp.parameters(), lr=args.lr_im, betas=(args.beta1, args.beta2), weight_decay=args.we_dec_co)
         self.optims.append(optim_im_nerp_mlp)
         if args.ld_pri_im:
@@ -47,10 +48,10 @@ class Main_Module(nn.Module):
             # for no,optim in enumerate(self.optims):
             #     optim.load_state_dict(state_dict[f'opt{no}'].state_dict())
             print('Load prior model: {}'.format(prior_dir+args.pri_im_path))
-        if self.conf != 'pri_emb': #gt_kdata and ktraj needed for loss calc
+        if self.args.conf != 'pri_emb': #gt_kdata and ktraj needed for loss calc
             self.ktraj, self.im_size_for_rad, self.grid_size_for_rad = create_radial_mask(args.nproj, (64,1,128,128), args.gpu_id, plot=False)
             self.gt_kdata = project_radial(self.image, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
-        if self.conf == 'trn_w_trns':
+        if self.args.conf == 'trn_w_trns':
             self.tr_nerp_enc = Positional_Encoder(args)
             self.tr_nerp_mlp = SIREN(args.tr_inp_sz, args.tr_wd, args.tr_dp, args.tr_ou_sz)
             self.tr_nerp_mlp.cuda(args.gpu_id)
@@ -60,46 +61,53 @@ class Main_Module(nn.Module):
             self.optims.append(optim_tr_nerp_mlp)
             if args.use_jc_grid_reg:
                 self.jacob_reg = JacobianReg(gpu_id=args.gpu_id)
-                self.lambda_JR = args.lambda_JR
+                # use model paralelism to ensure models and the regularization calcs fit to gpus
                 self.tr_nerp_mlp = nn.DataParallel(self.tr_nerp_mlp,[args.gpu_id,args.gpu2_id])
                 self.im_nerp_mlp = nn.DataParallel(self.im_nerp_mlp,[args.gpu_id, args.gpu2_id])
     def forward(self):
-        if self.conf == 'pri_emb':
+        if self.args.conf == 'pri_emb':
             output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(self.grid))
             output_im = output_im.reshape(self.im_shape)
             train_loss = self.mse_loss_fn(output_im, self.image)
-        elif self.conf == 'trn_wo_trns':
+        elif self.args.conf == 'trn_wo_trns':
             output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(self.grid))
             output_im = output_im.reshape(self.im_shape)
             #train_spec = mri_fourier_transform_3d(output_im)  # [B, H, W, C]
             #train_spec = train_spec * preruni_dict['mask'][None, ..., None]
             out_kspace = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
             train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
-        elif self.conf == 'trn_w_trns':
+        elif self.args.conf == 'trn_w_trns':
             deformed_grid = self.grid + (self.tr_nerp_mlp(self.tr_nerp_enc.embedding(self.grid)))  # [B, C, H, W, 1]
             output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(deformed_grid))
             output_im = output_im.reshape(self.im_shape)
             out_kspace = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
-            if self.jacob_reg is not None:
-                
+            train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
+            if self.args.use_jc_grid_reg:
                 grid_reg_loss = self.jacob_reg(self.grid, deformed_grid)   # Jacobian regularization
-                train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata) + self.lambda_JR*grid_reg_loss
-            else:
-                train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
+                train_loss = train_loss + self.lambda_JR*grid_reg_loss
+        if self.args.use_sp_cont_reg:
+            gl_x = mse_loss_fn(output_im.narrow(1,1,127), output_im.narrow(1,0,127))
+            gl_y = mse_loss_fn(output_im.narrow(2,1,127), output_im.narrow(2,0,127))
+            gl_z = mse_loss_fn(output_im.narrow(3,1,63), output_im.narrow(3,0,63))
+            sp_cont_loss = (gl_x + gl_y + gl_z)/3.0
+            train_loss = train_loss + sp_cont_loss
         return train_loss
-    
+                
+            gl_t = mse_loss_fn(output_im, preallruns_dict['prev_rec'])
+            geometric_loss = (gl_x + gl_y + gl_z + gl_t)/4.0
+            train_loss = main_loss + args.lambda_JR*Reg_loss + args.lambda_gl*geometric_loss # full loss 
     def test_psnr_ssim(self, ret_im=False):
         with torch.no_grad():
-            if self.conf == 'pri_emb':
+            if self.args.conf == 'pri_emb':
                 output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(self.grid))
                 output_im = output_im.reshape(self.im_shape)
                 test_loss = self.mse_loss_fn(output_im, self.image).item()
-            elif self.conf == 'trn_wo_trns':
+            elif self.args.conf == 'trn_wo_trns':
                 output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(self.grid))
                 output_im = output_im.reshape(self.im_shape)
                 test_kdata = project_radial(output_im, self.ktraj, self.im_size_for_rad, self.grid_size_for_rad)
                 test_loss = self.mse_loss_fn(test_kdata, self.gt_kdata).item()
-            elif self.conf == 'trn_w_trns':
+            elif self.args.conf == 'trn_w_trns':
                 deformed_grid = self.grid + (self.tr_nerp_mlp(self.tr_nerp_enc.embedding(self.grid)))  # [B, C, H, W, 1]
                 output_im = self.im_nerp_mlp(self.im_nerp_enc.embedding(deformed_grid))
                 output_im = output_im.reshape(self.im_shape)
@@ -115,7 +123,7 @@ class Main_Module(nn.Module):
     def get_to_save_dict(self):
         to_save_dict = {'im_nerp_mlp': self.im_nerp_mlp.state_dict(), \
                     'im_nerp_enc':self.im_nerp_enc.B}
-        if self.conf == 'trn_w_trns':
+        if self.args.conf == 'trn_w_trns':
             to_save_dict['tr_nerp_mlp'] = self.tr_nerp_mlp
             to_save_dict['tr_nerp_enc'] = self.tr_nerp_enc
         for no,optim in enumerate(self.optims):

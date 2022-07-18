@@ -16,6 +16,7 @@ def find_prev_rec(args):
         print(f'Args im_ind is now {args.im_ind}')
         prev_args = args
         prev_args.im_ind = args.im_ind - 1
+        prev_args.st_ind = 1
         print(f'Args im_ind is {args.im_ind} after change of prev_args object.')
         params_dict = parameters.decode_arguments_dictionary('params_dictionary')
         repr_str = parameters.create_repr_str(prev_args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)

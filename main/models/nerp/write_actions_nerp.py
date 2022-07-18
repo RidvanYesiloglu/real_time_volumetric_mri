@@ -67,19 +67,22 @@ def write_freq_actions(inps_dict, preruni_dict):
     plot_change_of_value(inps_dict['ssims_r'], 'SSIM', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
     plot_change_of_value(inps_dict['losses_r'], 'Loss', inps_dict['repr_str'], inps_dict['run_number'], to_save=True, save_folder=inps_dict['res_dir'])
 
-def gif_freq_actions(inps_dict, preruni_dict):
+def gif_freq_actions(inps_dict, preruni_dict, output_im=None):
     args = inps_dict['args']
     preruni_dict['main_module'].eval()
-    output_im, test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim(ret_im=True)
+    if output_im is not None:
+        output_im, test_psnr , test_ssim, test_loss = preruni_dict['main_module'].test_psnr_ssim(ret_im=True)
+        output_im=output_im.cpu().detach().numpy().squeeze()
+        print("[Epoch: {}/{}] Loss: {:.4g}, PSNR: {:.4g}, SSIM: {:.4g}".format(inps_dict['t']+1, args.max_iter, test_loss, test_psnr, test_ssim))    
     preruni_dict['main_module'].train()
-    print("[Epoch: {}/{}] Loss: {:.4g}, PSNR: {:.4g}, SSIM: {:.4g}".format(inps_dict['t']+1, args.max_iter, test_loss, test_psnr, test_ssim))
+    #
     for ax_cr_sg in [0,1,2]:
         plot_max_mse=True
         #p = multiprocessing.Process(target = make_gif_of_rec_vs_gt.main, args=(output_im.cpu().detach().numpy().squeeze(), preruni_dict['main_module'].image.cpu().detach().numpy().squeeze(), 350, ax_cr_sg, args.pt, inps_dict['res_dir'], args, inps_dict['repr_str'], plot_max_mse,))
         #p.start()
-        make_gif_of_rec_vs_gt.main(output_im.cpu().detach().numpy().squeeze(), preruni_dict['main_module'].image.cpu().detach().numpy().squeeze(), 350, ax_cr_sg, inps_dict['res_dir'], args, inps_dict['repr_str'], inps_dict['t']+1, plot_max_mse)
+        make_gif_of_rec_vs_gt.main(output_im, preruni_dict['main_module'].image.cpu().detach().numpy().squeeze(), 350, ax_cr_sg, inps_dict['res_dir'], args, inps_dict['repr_str'], inps_dict['t']+1, plot_max_mse)
     
-        
+       
     
 def postrun_i_actions(inps_dict, preallruns_dict, preruni_dict):
     args = inps_dict['args']

@@ -97,7 +97,7 @@ def main(args=None):
                 #    'repr_str':repr_str,'psnrs_r':psnrs_r,'ssims_r':ssims_r,'losses_r':losses_r}, preruni_dict)
             
                 # Save the test output and the model:
-                wr_acts.gif_freq_actions({'args':args, 't':ep, 'res_dir': res_dir, 'repr_str':repr_str}, preruni_dict)
+                
                 # if ((ep+1)%1000==0):
                 #     model_name = os.path.join(res_dir, 'dd_md_{}_ep{}_{:.4g}dB.pt'.format(repr_str, ep+1, test_psnr))
                 #     torch.save(preruni_dict['main_module'].get_to_save_dict(), model_name)
@@ -170,6 +170,8 @@ def main(args=None):
             #                 'enc': preruni_dict['encoder'].B, \
             #                 'opt': preruni_dict['optim'].state_dict(), \
             #                 }, model_name)
+        
+        wr_acts.gif_freq_actions({'args':args, 't':ep, 'res_dir': res_dir, 'repr_str':repr_str}, preruni_dict, output_im=np.load(glob.glob(os.path.join(res_dir, 'rec_{}*'.format(repr_str)))[0]).squeeze())
         np.save(os.path.join(res_dir,'psnrs_r{}'.format(run_number)), np.asarray(psnrs_r))
         np.save(os.path.join(res_dir,'ssims_r{}'.format(run_number)), np.asarray(ssims_r))
         np.save(os.path.join(res_dir,'losses_r{}'.format(run_number)), np.asarray(losses_r)) 

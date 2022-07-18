@@ -90,9 +90,9 @@ class Main_Module(nn.Module):
             gl_y = self.mse_loss_fn(output_im.narrow(2,1,127), output_im.narrow(2,0,127))
             gl_z = self.mse_loss_fn(output_im.narrow(3,1,63), output_im.narrow(3,0,63))
             sp_cont_loss = (gl_x + gl_y + gl_z)/3.0
-            print(f'Train loss before sp reg: {train_loss}')
+            #print(f'Train loss before sp reg: {train_loss}')
             train_loss = train_loss + self.args.lambda_sp * sp_cont_loss
-            print(f'Train loss after sp reg: {train_loss}')
+            #print(f'Train loss after sp reg: {train_loss}')
         return train_loss
                 
             # gl_t = mse_loss_fn(output_im, preallruns_dict['prev_rec'])

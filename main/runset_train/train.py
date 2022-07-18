@@ -103,13 +103,13 @@ def main(args=None):
                 #     torch.save(preruni_dict['main_module'].get_to_save_dict(), model_name)
                 #     np.save(os.path.join(res_dir,'dd_rec_{}_ep{}_{:.4g}dB'.format(repr_str, ep+1, test_psnr)), output_im.detach().cpu().numpy())
                 #if (test_psnr == max(psnrs_r)):
-                for filename in glob.glob(os.path.join(res_dir, 'md_{}*'.format(repr_str))):
+                for filename in glob.glob(os.path.join(res_dir, 'md_*')):
                     os.remove(filename)
-                for filename in glob.glob(os.path.join(res_dir, 'rec_{}*'.format(repr_str))):
+                for filename in glob.glob(os.path.join(res_dir, 'rec_*')):
                     os.remove(filename)
-                model_name = os.path.join(res_dir, 'md_{}_ep{}_{:.4g}dB.pt'.format(repr_str, ep+1, test_psnr))
+                model_name = os.path.join(res_dir, 'md_ep{}_{:.4g}dB.pt'.format(ep+1, test_psnr))
                 torch.save(preruni_dict['main_module'].get_to_save_dict(), model_name)
-                np.save(os.path.join(res_dir,'rec_{}_ep{}_{:.4g}dB'.format(repr_str, ep+1, test_psnr)), output_im.detach().cpu().numpy())
+                np.save(os.path.join(res_dir,'rec_ep{}_{:.4g}dB'.format(ep+1, test_psnr)), output_im.detach().cpu().numpy())
                 
             # if (args.conf == 2) and (test_psnr == max(psnrs_r)): # network training
             #     # Save the test output and the model:
@@ -171,7 +171,7 @@ def main(args=None):
             #                 'opt': preruni_dict['optim'].state_dict(), \
             #                 }, model_name)
         
-        wr_acts.gif_freq_actions({'args':args, 't':ep, 'res_dir': res_dir, 'repr_str':repr_str}, preruni_dict, output_im=np.load(glob.glob(os.path.join(res_dir, 'rec_{}*'.format(repr_str)))[0]).squeeze())
+        wr_acts.gif_freq_actions({'args':args, 't':ep, 'res_dir': res_dir, 'repr_str':repr_str}, preruni_dict, output_im=np.load(glob.glob(os.path.join(res_dir, 'rec_*'))[0]).squeeze())
         np.save(os.path.join(res_dir,'psnrs_r{}'.format(run_number)), np.asarray(psnrs_r))
         np.save(os.path.join(res_dir,'ssims_r{}'.format(run_number)), np.asarray(ssims_r))
         np.save(os.path.join(res_dir,'losses_r{}'.format(run_number)), np.asarray(losses_r)) 

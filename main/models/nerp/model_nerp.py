@@ -97,9 +97,9 @@ class Main_Module(nn.Module):
             #print(f'Train loss after sp reg: {train_loss}')
         if self.args.use_t_cont_reg:
             t_cont_loss = self.mse_loss_fn(output_im, self.prev_rec)
-            print(f'Train loss before t reg: {train_loss}')
+            #print(f'Train loss before t reg: {train_loss}')
             train_loss = train_loss + self.args.lambda_t * t_cont_loss
-            print(f'Train loss after t reg: {train_loss}')
+            #print(f'Train loss after t reg: {train_loss}')
         return train_loss
                 
             # gl_t = mse_loss_fn(output_im, preallruns_dict['prev_rec'])

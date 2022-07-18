@@ -8,47 +8,25 @@ import torch
 from torch.utils.data import DataLoader
 import torchvision.utils as vutils
 import math
+from runset_train import parameters
+import glob
 #from data import ImageDataset, ImageDataset_2D, ImageDataset_3D, BeamDataset, BeamDataset_wMask
-class NoamOpt:
-    "Optim wrapper that implements rate."
-    def __init__(self, last_lr, warmup_steps, start_lr, optimizer):
-        self.optimizer = optimizer
-        self._step = 0
-        self.last_lr = last_lr
-        self.warmup_steps = warmup_steps
-        self.start_lr = start_lr
-        self._rate = 0
-    
-    def state_dict(self):
-        """Returns the state of the warmup scheduler as a :class:`dict`.
-        It contains an entry for every variable in self.__dict__ which
-        is not the optimizer.
-        """
-        return {key: value for key, value in self.__dict__.items() if key != 'optimizer'}
-    
-    def load_state_dict(self, state_dict):
-        """Loads the warmup scheduler's state.
-        Arguments:
-            state_dict (dict): warmup scheduler state. Should be an object returned
-                from a call to :meth:`state_dict`.
-        """
-        self.__dict__.update(state_dict) 
-        
-    def step(self):
-        "Update parameters and rate"
-        self._step += 1
-        rate = self.rate()
-        for p in self.optimizer.param_groups:
-            p['lr'] = rate
-        self._rate = rate
-        self.optimizer.step()
-        
-    def rate(self, step = None):
-        "Implement `lrate` above"
-        if step is None:
-            step = self._step
-        return min(self.last_lr, (step-1)*(self.last_lr-self.start_lr)/self.warmup_steps + self.start_lr)
-    
+def find_prev_rec(args):
+    print('Args im_ind is now {args.im_ind}')
+    prev_args = args
+    prev_args.im_ind = args.im_ind - 1
+    print('Args im_ind is {args.im_ind} after change of prev_args object.')
+    params_dict = parameters.decode_arguments_dictionary('params_dictionary')
+    repr_str = parameters.create_repr_str(prev_args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
+    pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{prev_args.pt}/'
+    prev_res_dir = f'{pt_dir}{prev_args.conf}/t_{prev_args.im_ind}/{repr_str}'
+    prev_recs = glob.glob(os.path.join(prev_res_dir, 'rec_{}*'.format(repr_str)))
+    if ((len(prev_recs) == 0) or (len(prev_recs) > 1)):
+        raise ValueError(f'{len(prev_recs)} prev recs were found!')
+    filename = prev_recs[0]
+    print('Prev rec was found as {filename}')
+    prev_rec = torch.load(filename).cuda(args.gpu_id)
+    return prev_rec    
 # sub=&
 def conv_repr_str_to_mlt_line(a_str, sub='&'):
     start = 0

@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from torchnufftexample import create_radial_mask, project_radial, backproject_radial
 from skimage.metrics import structural_similarity as ssim
-from utils import NoamOpt
+from utils import find_prev_rec
 from jacobian import JacobianReg
 
 class Main_Module(nn.Module):
@@ -17,6 +17,8 @@ class Main_Module(nn.Module):
             raise ValueError('In prior embedding, no regularization can be used.')
         if (args.conf != 'trn_w_trns') and (args.use_jc_grid_reg):
             raise ValueError('Jacobian regularization on deformed grid can only be used with transformation NeRP.')
+        if args.use_t_cont_reg:
+            self.prev_rec = find_prev_rec(args)
         self.args = args
         self.optims = []
         grid_np = np.asarray([(x,y,z) for x in range(128) for y in range(128) for z in range(64)]).reshape((1,128,128,64,3))
@@ -93,6 +95,11 @@ class Main_Module(nn.Module):
             #print(f'Train loss before sp reg: {train_loss}')
             train_loss = train_loss + self.args.lambda_sp * sp_cont_loss
             #print(f'Train loss after sp reg: {train_loss}')
+        if self.args.use_t_cont_reg:
+            t_cont_loss = self.mse_loss_fn(output_im, self.prev_rec)
+            print(f'Train loss before t reg: {train_loss}')
+            train_loss = train_loss + self.args.lambda_t * t_cont_loss
+            print(f'Train loss after t reg: {train_loss}')
         return train_loss
                 
             # gl_t = mse_loss_fn(output_im, preallruns_dict['prev_rec'])

@@ -21,17 +21,17 @@ def find_prev_rec(args):
         repr_str = parameters.create_repr_str(prev_args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
         pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{prev_args.pt}/'
         prev_res_dir = f'{pt_dir}{prev_args.conf}/t_{prev_args.im_ind}/{repr_str}'
+        prev_recs = glob.glob(os.path.join(prev_res_dir, 'rec_*'))
+        if ((len(prev_recs) == 0) or (len(prev_recs) > 1)):
+            input(f'{len(prev_recs)} prev recs were found! Resolve that and press enter.')
+            return find_prev_rec(args)
+        filename = prev_recs[0]
     elif args.im_ind == 1:
         # use prior_dir as prev_res_dir in this case
-        prev_res_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/{args.pri_im_path}'
+        filename = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/{args.pri_im_path}'
     else:
         raise ValueError('Invalid im_ind for loading prev rec: {args.im_ind}.')
-    prev_recs = glob.glob(os.path.join(prev_res_dir, 'rec_*'))
-    if ((len(prev_recs) == 0) or (len(prev_recs) > 1)):
-        input(f'{len(prev_recs)} prev recs were found! Resolve that and press enter.')
-        return find_prev_rec(args)
-    filename = prev_recs[0]
-    print(f'Prev rec was found as {filename}')
+    print(f'Prev rec was found as: {filename}')
     prev_rec = torch.load(filename).cuda(args.gpu_id)
     return prev_rec    
 # sub=&

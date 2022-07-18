@@ -12,19 +12,26 @@ from runset_train import parameters
 import glob
 #from data import ImageDataset, ImageDataset_2D, ImageDataset_3D, BeamDataset, BeamDataset_wMask
 def find_prev_rec(args):
-    print('Args im_ind is now {args.im_ind}')
-    prev_args = args
-    prev_args.im_ind = args.im_ind - 1
-    print('Args im_ind is {args.im_ind} after change of prev_args object.')
-    params_dict = parameters.decode_arguments_dictionary('params_dictionary')
-    repr_str = parameters.create_repr_str(prev_args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
-    pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{prev_args.pt}/'
-    prev_res_dir = f'{pt_dir}{prev_args.conf}/t_{prev_args.im_ind}/{repr_str}'
+    if args.im_ind > 1:
+        print(f'Args im_ind is now {args.im_ind}')
+        prev_args = args
+        prev_args.im_ind = args.im_ind - 1
+        print(f'Args im_ind is {args.im_ind} after change of prev_args object.')
+        params_dict = parameters.decode_arguments_dictionary('params_dictionary')
+        repr_str = parameters.create_repr_str(prev_args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
+        pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{prev_args.pt}/'
+        prev_res_dir = f'{pt_dir}{prev_args.conf}/t_{prev_args.im_ind}/{repr_str}'
+    elif args.im_ind == 1:
+        # use prior_dir as prev_res_dir in this case
+        prev_res_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/{args.pri_im_path}'
+    else:
+        raise ValueError('Invalid im_ind for loading prev rec: {args.im_ind}.')
     prev_recs = glob.glob(os.path.join(prev_res_dir, 'rec_{}*'.format(repr_str)))
     if ((len(prev_recs) == 0) or (len(prev_recs) > 1)):
-        raise ValueError(f'{len(prev_recs)} prev recs were found!')
+        input(f'{len(prev_recs)} prev recs were found! Resolve that and press enter.')
+        return find_prev_rec(args)
     filename = prev_recs[0]
-    print('Prev rec was found as {filename}')
+    print(f'Prev rec was found as {filename}')
     prev_rec = torch.load(filename).cuda(args.gpu_id)
     return prev_rec    
 # sub=&

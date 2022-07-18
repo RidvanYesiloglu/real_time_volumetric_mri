@@ -33,7 +33,7 @@ def find_prev_rec(args):
     else:
         raise ValueError('Invalid im_ind for loading prev rec: {args.im_ind}.')
     print(f'Prev rec was found as: {rec_path}')
-    prev_rec = torch.load(rec_path).cuda(args.gpu_id)
+    prev_rec = torch.from_numpy(np.load(rec_path)).cuda(args.gpu_id)
     return prev_rec    
 # sub=&
 def conv_repr_str_to_mlt_line(a_str, sub='&'):

@@ -29,6 +29,8 @@ def find_prev_rec(args):
     elif args.im_ind == 1:
         # use prior_dir as prev_res_dir in this case
         filename = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/{args.pri_im_path}'
+        # convert model file name to rec file name
+        filename = 'rec_'+filename[:filename.rfind('.')]+'.npy'
     else:
         raise ValueError('Invalid im_ind for loading prev rec: {args.im_ind}.')
     print(f'Prev rec was found as: {filename}')

@@ -25,16 +25,15 @@ def find_prev_rec(args):
         if ((len(prev_recs) == 0) or (len(prev_recs) > 1)):
             input(f'{len(prev_recs)} prev recs were found! Resolve that and press enter.')
             return find_prev_rec(args)
-        filename = prev_recs[0]
+        rec_path = prev_recs[0]
     elif args.im_ind == 1:
         # use prior_dir as prev_res_dir in this case
-        filename = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/{args.pri_im_path}'
-        # convert model file name to rec file name
-        filename = 'rec_'+filename[:filename.rfind('.')]+'.npy'
+        rec_file_name = 'rec_' + args.pri_im_path[:args.pri_im_path.rfind('.')] + '.npy'
+        rec_path = f'/home/yesiloglu/projects/real_time_volumetric_mri/priors/{args.pt}/{rec_file_name}'
     else:
         raise ValueError('Invalid im_ind for loading prev rec: {args.im_ind}.')
-    print(f'Prev rec was found as: {filename}')
-    prev_rec = torch.load(filename).cuda(args.gpu_id)
+    print(f'Prev rec was found as: {rec_path}')
+    prev_rec = torch.load(rec_path).cuda(args.gpu_id)
     return prev_rec    
 # sub=&
 def conv_repr_str_to_mlt_line(a_str, sub='&'):

@@ -84,18 +84,20 @@ class Main_Module(nn.Module):
             train_loss = self.mse_loss_fn(out_kspace, self.gt_kdata)
             if self.args.use_jc_grid_reg:
                 grid_reg_loss = self.jacob_reg(self.grid, deformed_grid)   # Jacobian regularization
-                train_loss = train_loss + self.lambda_JR*grid_reg_loss
+                train_loss = train_loss + self.args.lambda_JR*grid_reg_loss
         if self.args.use_sp_cont_reg:
-            gl_x = mse_loss_fn(output_im.narrow(1,1,127), output_im.narrow(1,0,127))
-            gl_y = mse_loss_fn(output_im.narrow(2,1,127), output_im.narrow(2,0,127))
-            gl_z = mse_loss_fn(output_im.narrow(3,1,63), output_im.narrow(3,0,63))
+            gl_x = self.mse_loss_fn(output_im.narrow(1,1,127), output_im.narrow(1,0,127))
+            gl_y = self.mse_loss_fn(output_im.narrow(2,1,127), output_im.narrow(2,0,127))
+            gl_z = self.mse_loss_fn(output_im.narrow(3,1,63), output_im.narrow(3,0,63))
             sp_cont_loss = (gl_x + gl_y + gl_z)/3.0
-            train_loss = train_loss + sp_cont_loss
+            print(f'Train loss before sp reg: {train_loss}')
+            train_loss = train_loss + self.args.lambda_sp * sp_cont_loss
+            print(f'Train loss after sp reg: {train_loss}')
         return train_loss
                 
-            gl_t = mse_loss_fn(output_im, preallruns_dict['prev_rec'])
-            geometric_loss = (gl_x + gl_y + gl_z + gl_t)/4.0
-            train_loss = main_loss + args.lambda_JR*Reg_loss + args.lambda_gl*geometric_loss # full loss 
+            # gl_t = mse_loss_fn(output_im, preallruns_dict['prev_rec'])
+            # geometric_loss = (gl_x + gl_y + gl_z + gl_t)/4.0
+            # train_loss = main_loss + args.lambda_JR*Reg_loss + args.lambda_gl*geometric_loss # full loss 
     def test_psnr_ssim(self, ret_im=False):
         with torch.no_grad():
             if self.args.conf == 'pri_emb':

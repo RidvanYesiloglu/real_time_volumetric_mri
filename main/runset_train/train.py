@@ -50,8 +50,6 @@ def main(args=None):
 
     for run_number in range(args.noRuns):
         torch.cuda.empty_cache()
-
-        
         preruni_dict = wr_acts.prerun_i_actions({'res_dir': res_dir, 'args':args, 'repr_str':repr_str, 'long_repr_str':long_repr_str, 'run_number':run_number, 'device':device, 'dtype':dtype})
 
         psnrs_r = [] 

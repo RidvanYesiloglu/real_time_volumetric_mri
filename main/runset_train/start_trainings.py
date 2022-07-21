@@ -1,6 +1,6 @@
 from runset_train import parameters
 from argparse import Namespace
-from runset_train import train, train_for_all_ts
+from runset_train import train, train_for_all_ts, train_for_set_of_reg_cos
 
 # get list of params, check validity (type and poss)
 # return list of [name, [val1, val2, ...]]
@@ -29,10 +29,12 @@ def main():
     args_list = get_parameters_of_runs(params_dict)
     for args in args_list:
         print(args)
-        # if args.tr_for_all_ts:
-        #     train_for_all_ts.main(args)
-        # else:
-        #     train.main(args=args)
+        if args.tr_for_set_reg:
+            train_for_set_of_reg_cos.main(args)
+        elif args.tr_for_all_ts:
+            train_for_all_ts.main(args)
+        else:
+            train.main(args=args)
 if __name__ == "__main__":
     main()
 

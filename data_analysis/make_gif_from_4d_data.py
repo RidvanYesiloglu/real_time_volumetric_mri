@@ -140,7 +140,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
         plt.savefig(filename, dpi=96, bbox_inches='tight')
         plt.close()
         '''
-    with imageio.get_writer(f'{gifs_dir}/{gif_name}.gif', mode='I') as writer:
+    with imageio.get_writer(f'{gifs_dir}/{gif_name}.gif', mode='I', duration=2) as writer:
         for filename in filenames:
             image = imageio.imread(filename)
             writer.append_data(image)

@@ -98,7 +98,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
         if plot_most_fluc:
             plt.suptitle(f"Most Fluctuating {im_type_str.capitalize()} Images ({pt_id}, Time Point: {t:3d})")
         else:
-            plt.suptitle(f"{im_type_str.capitalize()} Images (pt_19_5min, Time Point: {t:3d}) (with a colormap common across slices)")      
+            plt.suptitle(f"{im_type_str.capitalize()} Images (pt_19_5min, Time Point: {t:3d})")      
         plt.show()
         plt.savefig(filename, dpi=96, bbox_inches='tight')
         plt.close()

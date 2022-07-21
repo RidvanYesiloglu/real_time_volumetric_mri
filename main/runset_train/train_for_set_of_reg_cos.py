@@ -40,6 +40,7 @@ def find_total_runs(wts, sps, jcs, ts):
                 for t in ts:
                     if wt==0 and jc != 0:
                         continue
+                    print(wt, sp, jc, t)
                     curr_ind += 1
     return curr_ind
 def main(args):
@@ -47,10 +48,10 @@ def main(args):
     if args.end_ind == -1:
         args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
         print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
-    wts = [0,1]
+    wts = [1]
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]
-    ts = [0,1e2]#[1e3,1e4]
+    ts = [1e3,1e4]#[0,1e2]
     print('Experiments will be done with and without transformation.')
     print('Set of spatial regulariation coefficients:', sps)
     print('Set of Jacobian (on grid) regulariation coefficients:', jcs)

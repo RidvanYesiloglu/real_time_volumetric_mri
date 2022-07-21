@@ -50,7 +50,7 @@ def main(args):
     wts = [0,1]
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]
-    ts = [0,1e2,1e3,1e4]
+    ts = [0,1e2]#,1e3,1e4]
     print('Experiments will be done with and without transformation.')
     print('Set of spatial regulariation coefficients:', sps)
     print('Set of Jacobian (on grid) regulariation coefficients:', jcs)

@@ -20,7 +20,7 @@ def find_prev_rec(args):
         print(f'Args im_ind is {args.im_ind} after change of prev_args object.')
         params_dict = parameters.decode_arguments_dictionary('params_dictionary')
         repr_str = parameters.create_repr_str(prev_args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
-        pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{prev_args.pt}/'
+        pt_dir = f'{args.main_folder}{prev_args.pt}/'
         prev_res_dir = f'{pt_dir}{prev_args.conf}/t_{prev_args.im_ind}/{repr_str}'
         prev_recs = glob.glob(os.path.join(prev_res_dir, 'rec_*'))
         if ((len(prev_recs) == 0) or (len(prev_recs) > 1)):

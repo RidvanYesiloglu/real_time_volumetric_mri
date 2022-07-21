@@ -66,6 +66,9 @@ def main(args):
                     curr_ind += 1
                     print('Current run number: {}/{}'.format(curr_ind, tot_runs))
                     args.conf = 'trn_wo_trns' if wt==0 else 'trn_w_trns'
+                    args.use_sp_cont_reg = (sp!=0)
+                    args.use_t_cont_reg = (t!=0)
+                    args.use_jc_grid_reg = (jc!=0)
                     args.lambda_sp = sp
                     args.lambda_JR = sp
                     args.lambda_t = t

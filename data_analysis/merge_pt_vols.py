@@ -28,12 +28,12 @@ def main(pt_id=None):
         finish_time = time.perf_counter()
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
         print('The vol files'' for the patient are being merged in a numpy array.')
-        all_vols = np.zeros((len(vol_dirs),) + vol_size)
-        for vol_no, vol_dir in enumerate(vol_dirs):
-            img = np.fromfile(vol_dir, dtype='float32')
-            all_vols[vol_no] = np.reshape(img.transpose(), vol_size, order="F")
-        finish_time = time.perf_counter()
-        #all_vols = np.load(all_data_folder+'/'+pt_id+'/all_vols.npy')
+        # all_vols = np.zeros((len(vol_dirs),) + vol_size)
+        # for vol_no, vol_dir in enumerate(vol_dirs):
+        #     img = np.fromfile(vol_dir, dtype='float32')
+        #     all_vols[vol_no] = np.reshape(img.transpose(), vol_size, order="F")
+        # finish_time = time.perf_counter()
+        all_vols = np.load(all_data_folder+'/'+pt_id+'/all_vols.npy')
         #np.save(all_data_folder+'/'+pt_id+'/all_vols',all_vols)
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
         
@@ -41,7 +41,7 @@ def main(pt_id=None):
         processes = []
         for plot_most_fluc in [False, True]:
             for ax_cr_sg in [0,1,2]:
-                p = multiprocessing.Process(target = make_gif_from_4d_data.main, args=(all_vols, pt_id+'_rangedeneme', ax_cr_sg, plot_most_fluc,))
+                p = multiprocessing.Process(target = make_gif_from_4d_data.main, args=(all_vols, pt_id, ax_cr_sg, plot_most_fluc,))
                 p.start()
                 processes.append(p)
         # Join all the processes 

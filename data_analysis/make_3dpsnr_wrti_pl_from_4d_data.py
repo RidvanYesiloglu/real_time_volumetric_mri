@@ -49,7 +49,7 @@ def calc_psnrs_wrti(all_vols, ax_cr_sg):
 def main(all_vols, pt_id):
     # Calculate 3d PSNRs with respect to the initial image
     psnrs = calc_3dpsnrs_wrti(all_vols)
-    save_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs'
+    save_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs_first12'
     if not os.path.exists(save_dir):
         print(f'Directory created: {save_dir}')
         os.makedirs(save_dir)

@@ -30,7 +30,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
     im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'
     gif_name = f'most_fluc_{im_type_str}s_vs_t_{pt_id}' if plot_most_fluc else f'all_{im_type_str}s_vs_t_{pt_id}'
     print(f'The gif {gif_name} is being created.')
-    gifs_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs'
+    gifs_dir = f'/raid/yesiloglu/data/real_time_volumetric_mri/{pt_id}/temporal_evol_gifs_first12'
     ind_ims_dir = f'{gifs_dir}/{gif_name}_ims'
     if not os.path.exists(ind_ims_dir):
         print(f'Directory created: {ind_ims_dir}')

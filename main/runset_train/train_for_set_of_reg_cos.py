@@ -80,9 +80,6 @@ def main(args):
                         print('Train for all for loop iteration time t = {}'.format(i))
                         opts_strs = create_opts_strs([args], params_dict)
                         os.system(f'python3 -m runset_train.train{opts_strs}')
-                        term = (input('Terminate? ') == '1')
-                        if term:
-                            sys.exit(0)
                         
     '''
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')

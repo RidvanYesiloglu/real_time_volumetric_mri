@@ -32,7 +32,7 @@ def main(args=None):
     print(f'Representative string for the training is: {repr_str}')
     
     # Constants
-    pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results/{args.pt}/'
+    pt_dir = f'/home/yesiloglu/projects/real_time_volumetric_mri/results_7_20/{args.pt}/'
     res_dir = f'{pt_dir}{args.conf}/t_{args.im_ind}/{repr_str}'
     dtype = torch.float32
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

@@ -24,7 +24,7 @@ def main(pt_id=None):
             continue
         
         print('List of .vol files for the patient is being created.')
-        vol_dirs = create_vol_dirs_list.main(pt_id, sort=True)
+        #vol_dirs = create_vol_dirs_list.main(pt_id, sort=True)
         finish_time = time.perf_counter()
         print(f"Elapsed total for the patient: {finish_time-start_time} seconds")
         print('The vol files'' for the patient are being merged in a numpy array.')

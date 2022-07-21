@@ -90,7 +90,7 @@ def main(args=None):
                 np.save(os.path.join(res_dir,'psnrs_r{}'.format(run_number)), np.asarray(psnrs_r))
                 np.save(os.path.join(res_dir,'ssims_r{}'.format(run_number)), np.asarray(ssims_r))
                 np.save(os.path.join(res_dir,'losses_r{}'.format(run_number)), np.asarray(losses_r))
-            elif ((args.conf != 'pri_emb') and ((test_loss == min(losses_r)) and ((ep+1) > 150))):
+            elif ((args.conf != 'pri_emb') and (test_loss == min(losses_r))):
                 #wr_acts.write_freq_actions({'args':args, 't':ep, 'start_time':start_time, 'res_dir': res_dir, 'run_number':run_number,\
                 #    'repr_str':repr_str,'psnrs_r':psnrs_r,'ssims_r':ssims_r,'losses_r':losses_r}, preruni_dict)
             

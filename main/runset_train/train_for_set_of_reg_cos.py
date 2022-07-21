@@ -40,18 +40,21 @@ def find_total_runs(wts, sps, jcs, ts):
                 for t in ts:
                     if wt==0 and jc != 0:
                         continue
-                    print(wt, sp, jc, t)
                     curr_ind += 1
+                    if curr_ind < 8:
+                        continue
+                    print(wt, sp, jc, t)
+                    
     return curr_ind
 def main(args):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
     if args.end_ind == -1:
         args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
         print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
-    wts = [1]
+    wts = [0,1]
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]
-    ts = [1e3,1e4]#[0,1e2]
+    ts = [0,1e2]#[1e3,1e4]#
     print('Experiments will be done with and without transformation.')
     print('Set of spatial regulariation coefficients:', sps)
     print('Set of Jacobian (on grid) regulariation coefficients:', jcs)
@@ -65,6 +68,8 @@ def main(args):
                         continue
                     print('**************************************************************')
                     curr_ind += 1
+                    if curr_ind < 8:
+                        continue
                     print('Current run number: {}/{}'.format(curr_ind, tot_runs))
                     args.conf = 'trn_wo_trns' if wt==0 else 'trn_w_trns'
                     args.use_sp_cont_reg = (sp!=0)

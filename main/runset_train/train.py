@@ -75,7 +75,7 @@ def main(args=None):
             
             #'pri_emb','trn_wo_trns','trn_w_trns'
             # Save the model and the reconstruction
-            if ((args.conf != 'pri_emb') and (test_psnr == max(psnrs_r))):
+            if ((args.conf == 'pri_emb') and (test_psnr == max(psnrs_r))):
                 #wr_acts.write_freq_actions({'args':args, 't':ep, 'start_time':start_time, 'res_dir': res_dir, 'run_number':run_number,\
                 #    'repr_str':repr_str,'psnrs_r':psnrs_r,'ssims_r':ssims_r,'losses_r':losses_r}, preruni_dict)
             
@@ -147,10 +147,10 @@ def main(args=None):
             #             'opt': preruni_dict['optim'].state_dict()}, \
             #             model_name)
             #     np.save(os.path.join(res_dir,'savedrec_run{}_ep{}_{:.4g}dB'.format(run_number, t+1, test_psnr)), output_im.detach().cpu().numpy())
-            if ep % 100 == 0:
-                np.save(os.path.join(res_dir,'psnrs_{}'.format(repr_str)), np.asarray(psnrs_r))
-                np.save(os.path.join(res_dir,'ssims_{}'.format(repr_str)), np.asarray(ssims_r))
-                np.save(os.path.join(res_dir,'losses_{}'.format(repr_str)), np.asarray(losses_r))
+            # if ep % 100 == 0:
+            #     np.save(os.path.join(res_dir,'psnrs_{}'.format(repr_str)), np.asarray(psnrs_r))
+            #     np.save(os.path.join(res_dir,'ssims_{}'.format(repr_str)), np.asarray(ssims_r))
+            #     np.save(os.path.join(res_dir,'losses_{}'.format(repr_str)), np.asarray(losses_r))
                 # with open('l_comps_{}'.format(run_number), 'wb') as f:
                 #     pickle.dump(l_components_r, f)
             # Print

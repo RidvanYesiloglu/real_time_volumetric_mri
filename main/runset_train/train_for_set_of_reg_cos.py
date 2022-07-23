@@ -53,7 +53,7 @@ def main(args):
     wts = [1]
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]
-    ts = [0,1e2]# [1e3,1e4]
+    ts = [1e3,1e4]#[0,1e2] 
     print('Experiments will be done with and without transformation.')
     print('Set of spatial regulariation coefficients:', sps)
     print('Set of Jacobian (on grid) regulariation coefficients:', jcs)
@@ -67,7 +67,7 @@ def main(args):
                         continue
                     print('**************************************************************')
                     curr_ind += 1
-                    if curr_ind < 10:
+                    if curr_ind < 9:
                         continue
                     print('Current run number: {}/{}'.format(curr_ind, tot_runs))
                     args.conf = 'trn_wo_trns' if wt==0 else 'trn_w_trns'

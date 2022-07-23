@@ -79,7 +79,7 @@ def main(all_vols, pt_id, ax_cr_sg, plot_most_fluc=False):
                     im_to_show = all_vols[t,:,sl_no,:]
                 elif ax_cr_sg == 2:
                     im_to_show = all_vols[t,sl_no,:,:]
-                im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
+                im = ax[i,j].imshow(im_to_show<0,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
                 ax[i,j].axis('off')
                 ps = psnrs[t,sl_no]
                 ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))

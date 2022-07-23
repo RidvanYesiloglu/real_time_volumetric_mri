@@ -59,7 +59,7 @@ def write_freq_actions(inps_dict, preruni_dict):
     #         lr__ = p['lr']
     #         break
     
-    r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_{}_{}.txt'.format(inps_dict['run_number'], inps_dict['repr_str'])), "a")
+    r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_r{}.txt'.format(inps_dict['run_number'])), "a")
     r_logs.write('Epoch: {}/{}, Time: {:}, Loss: {:.4f}, '.format(inps_dict['t']+1,args.max_iter,end_time-inps_dict['start_time'],inps_dict['losses_r'][-1]))
     r_logs.write("PSNR: {:.4g} | SSIM: {:.4g}\n".format(test_psnr, test_ssim))
     r_logs.close()

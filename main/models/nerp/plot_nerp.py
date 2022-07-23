@@ -14,7 +14,7 @@ def plot_change_of_value(vals, metric_name, repr_str, runno, to_save=False, save
     ax1.set_xlabel('Epoch Number')
     plt.show()
     if to_save:
-        plt.savefig(os.path.join(save_folder, f'{metric_name}_vs_ep_{runno}_{repr_str}.png'),bbox_inches='tight')
+        plt.savefig(os.path.join(save_folder, f'{metric_name}_vs_ep_{runno}.png'),bbox_inches='tight')
     plt.close('all')
     return plt
 

@@ -27,7 +27,7 @@ def prerun_i_actions(inps_dict):
     print(init_psnr_str)
     mlt_line_long_repr = ''.join(list(conv_repr_str_to_mlt_line(inps_dict['long_repr_str'], '&')))
 
-    r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_{}_{}.txt'.format(inps_dict['run_number'], inps_dict['repr_str'])), "a")
+    r_logs = open(os.path.join(inps_dict['res_dir'], 'logs_r{}.txt'.format(inps_dict['run_number'])), "a")
     r_logs.write('Runset Name: {}\n'.format(args.rsName))
     r_logs.write('Short representation string for parameters set:{}\n'.format(inps_dict['repr_str']))
     r_logs.write('All parameters:\n{}'.format(mlt_line_long_repr))
@@ -102,7 +102,7 @@ def postrun_i_actions(inps_dict, preallruns_dict, preruni_dict):
     # Must transfer to .cpu() tensor firstly for saving images
     #save_image_3d(test_output, preruni_dict['slice_idx'], os.path.join(preruni_dict['image_directory'], "recon_{}_{:.4g}dB.png".format(inps_dict['t']+1, test_psnr)))
     
-    r_logs = open(os.path.join(inps_dict['save_folder'], 'logs_{}.txt'.format(inps_dict['run_number'])), "a")
+    r_logs = open(os.path.join(inps_dict['save_folder'], 'logs_r{}.txt'.format(inps_dict['run_number'])), "a")
     r_logs.write('Epoch: {}, Train Loss: {:.4f}\n'.format(inps_dict['t']+1,inps_dict['losses_r'][-1]))
     to_write = "[Validation Iteration: {}/{}] Test loss: {:.4g} | Test psnr: {:.4g}".format(inps_dict['t']+1, args.max_iter, test_loss, test_psnr)
     r_logs.write(to_write)

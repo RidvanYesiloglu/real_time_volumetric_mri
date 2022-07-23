@@ -67,7 +67,7 @@ def main(args):
                         continue
                     print('**************************************************************')
                     curr_ind += 1
-                    if curr_ind != 10:
+                    if curr_ind < 10:
                         continue
                     print('Current run number: {}/{}'.format(curr_ind, tot_runs))
                     args.conf = 'trn_wo_trns' if wt==0 else 'trn_w_trns'

@@ -73,7 +73,7 @@ def main():
     if args.end_ind == -1:
         args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
         print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
-    wts = [1]
+    wts = [0]
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]
     ts = [1e3,1e4]#[0,1e2]# 

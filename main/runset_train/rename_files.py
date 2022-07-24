@@ -65,7 +65,7 @@ def get_parameters_of_runs(params_dict):
         args_list.append(curr_args)
         indRunNo += 1
     return args_list
-def main(args):
+def main():
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
     old_params_dict = parameters.decode_arguments_dictionary('old_dict')
     args_list = get_parameters_of_runs(params_dict)

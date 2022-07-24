@@ -73,7 +73,7 @@ def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_en
                 try:
                     loaded_rec = np.load(glob.glob(os.path.join(res_dir, 'rec_*'))[0]).squeeze()
                 except Exception as e:
-                    print('Error in loading:', e)
+                    #print('Error in loading:', e)
                     loaded_rec = np.zeros((128,128,64))
                 if ax_cr_sg == 0:
                     recs[conf_ind,time_ind - t_st] = loaded_rec[:,:,sl_no]
@@ -125,9 +125,9 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB)')
         if args.conf == 'trn_w_trns':
-            plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt_id} - With Transformation NeRP - JC Loss Coef. on Grid: {args.lambda_JR} - Time Point: {t:3d})")
+            plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt} - With Transformation NeRP - JC Loss Coef. on Grid: {args.lambda_JR} - Time Point: {t:3d})")
         else:
-            plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt_id} - Without Transformation NeRP - Time Point: {t:3d})")
+            plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt} - Without Transformation NeRP - Time Point: {t:3d})")
         plt.show()
         plt.savefig(filename, dpi=96, bbox_inches='tight')
         plt.close()

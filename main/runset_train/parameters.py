@@ -143,7 +143,8 @@ def create_repr_str(args, dict_names_list, indRunNo=None, wantShort=False, param
     #dict_names_list = [param_info.name for param_info in params_dict.param_infos]
     #if len(args._get_kwargs()) > len(dict_names_list): raise ValueError('Args somehow includes more than the dictionary.')
     for no, name in enumerate(dict_names_list):
-        #print('arg name = ', str(getattr(args, name)) )
+        print('name ', name)
+        print('arg name = ', str(getattr(args, name)) )
         if (getattr(args, name) is not None) and ((not wantShort) or (params_dict.param_infos[no].shrt_repr=='1') or ((params_dict.param_infos[no].shrt_repr[0]=='2') and eval('args.' + ''.join(params_dict.param_infos[no].shrt_repr[1:])))):
             repr_str += name + '_' + str(getattr(args, name))+'&'
         

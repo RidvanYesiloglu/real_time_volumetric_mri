@@ -72,6 +72,8 @@ def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_en
                 res_dir = f'{pt_dir}{args.conf}/t_{args.im_ind}/{repr_str}'
                 try:
                     loaded_rec = np.load(glob.glob(os.path.join(res_dir, 'rec_*'))[0]).squeeze()
+                    print('LOADED!')
+                    inpp = (input('Bekliyorum'))
                 except Exception as e:
                     print('Error in loading:', e)
                     print('Res dir:', res_dir)

@@ -97,6 +97,8 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
     figsize = (16,7.5) if (ax_cr_sg == 0) else (19.5,11)
     im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'
     ind_ims_dir = f'{gif_dir}{gif_name}_ims/'
+    
+    print('recs:', recs.shape, 'refs:', refs.shape)
     for t in np.arange(0, recs.shape[1]):
         filename = f'{ind_ims_dir}/frame_{t}.png'
         filenames.append(filename)
@@ -104,6 +106,7 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
         for i in range(nrows):
             for j in range(ncols):
                 conf_no = ncols*i+j
+                print('t',t,'confno',conf_no)
                 im_to_show = np.concatenate((recs[conf_no, t-1], refs[t-1]),1)
                 im_to_show[im_to_show<0]=0
                 im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)

@@ -78,7 +78,7 @@ def gif_freq_actions(inps_dict, preruni_dict, output_im=None):
         print("[Epoch: {}/{}] Loss: {:.4g}, PSNR: {:.4g}, SSIM: {:.4g}".format(inps_dict['t']+1, args.max_iter, test_loss, test_psnr, test_ssim))
     else:
         im_nm = glob.glob(os.path.join(inps_dict['res_dir'], 'rec_*'))[0]
-        ep_no = im_nm[im_nm.find('ep')+2:im_nm.find('ep')+im_nm[im_nm.find('ep'):].find('_')]
+        ep_no = int(im_nm[im_nm.find('ep')+2:im_nm.find('ep')+im_nm[im_nm.find('ep'):].find('_')])
     preruni_dict['main_module'].train()
     #
     for ax_cr_sg in [0,1,2]:

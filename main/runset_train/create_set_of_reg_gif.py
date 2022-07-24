@@ -75,14 +75,14 @@ def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_en
                     print('LOADED! is_zeros: ', ((loaded_rec**2).sum()==0))
                     inpp = (input('Bekliyorum'))
                 except Exception as e:
-                    print('Error in loading:', e)
-                    print('Res dir:', res_dir)
-                    print('len: ', len(glob.glob(os.path.join(res_dir, 'rec_*'))))
-                    try:
-                        print('ilk eleman', glob.glob(os.path.join(res_dir, 'rec_*'))[0])
-                    except Exception as e2:
-                        print('ilk yok, error:', e2)
-                    inpp = (input('Bekliyorum'))
+                    # print('Error in loading:', e)
+                    # print('Res dir:', res_dir)
+                    # print('len: ', len(glob.glob(os.path.join(res_dir, 'rec_*'))))
+                    # try:
+                    #     print('ilk eleman', glob.glob(os.path.join(res_dir, 'rec_*'))[0])
+                    # except Exception as e2:
+                    #     print('ilk yok, error:', e2)
+                    # inpp = (input('Bekliyorum'))
                     loaded_rec = np.zeros((128,128,64))
                 if ax_cr_sg == 0:
                     recs[conf_ind,time_ind - t_st] = loaded_rec[:,:,sl_no]

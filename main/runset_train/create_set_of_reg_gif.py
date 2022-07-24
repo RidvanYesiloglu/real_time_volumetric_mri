@@ -97,7 +97,8 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
     figsize = (16,7.5) if (ax_cr_sg == 0) else (19.5,11)
     im_type_str = 'axial' if ax_cr_sg == 0 else 'coronal' if ax_cr_sg == 1 else 'sagittal' if ax_cr_sg == 2 else 'ERROR'
     ind_ims_dir = f'{gif_dir}{gif_name}_ims/'
-    
+    if not os.path.exists(ind_ims_dir):
+        os.makedirs(ind_ims_dir)
     #print('recs:', recs.shape, 'refs:', refs.shape) #(16,12,128,64) , (12,128,64)
     for t in np.arange(0, recs.shape[1]):
         filename = f'{ind_ims_dir}/frame_{t}.png'

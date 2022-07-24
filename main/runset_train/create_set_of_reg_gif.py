@@ -104,11 +104,11 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
         for i in range(nrows):
             for j in range(ncols):
                 conf_no = ncols*i+j
-                im_to_show = np.concatenate((recs[conf_no, t], refs[conf_no]),1)
+                im_to_show = np.concatenate((recs[conf_no-1, t], refs[conf_no-1]),1)
                 im_to_show[im_to_show<0]=0
                 im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
                 ax[i,j].axis('off')
-                ps = psnrs[conf_no,t]
+                ps = psnrs[conf_no-1,t]
                 ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))
                 # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
                 rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')

@@ -12,32 +12,25 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import imageio
 import glob
 from utils import PSNR
-# return a "\n" separated list
-def create_opts_strs(args_list, params_dict):
-    opts_strs = ""
-    names_list = [info.name for info in params_dict.param_infos]
-    for args in args_list:
-        # First check validity of args
-        parameters.check_args(args, params_dict)
-        opts = ""
-        for no,name in enumerate(names_list):
-            if eval("args."+name) is not None:
-                if params_dict.param_infos[no].typ == 'type_check.dictionary':
-                    inp_dict = eval("args."+name)
-                    dict_str = "{"
-                    for key in inp_dict:
-                        dict_str += "\"{}\":".format(key)
-                        dict_str += "\"{}\",".format(inp_dict[key]) if type(inp_dict[key])==str else "{},".format(inp_dict[key])
-                    dict_str = dict_str[:-1]+"}"
-                    opts += " --"+name + " " + dict_str
-                elif params_dict.param_infos[no].typ == 'type_check.positive_int_tuple':
-                    opts += " --"+name + " " + (str(eval("args."+name))[1:-1].replace(',',''))
-                elif params_dict.param_infos[no].typ == 'type_check.boolean':
-                    opts = (opts + " --"+name + " 1") if eval("args."+name) else (opts + " --"+name + " 0")
-                else:
-                    opts += " --"+name + " " + str(eval("args."+name))
-        opts_strs += opts + "\n"#":"
-    return opts_strs[:-1]
+from argparse import Namespace
+def get_parameters_of_runs(params_dict):
+    # First create cart prod runsets.
+    vals_list = []
+    cart_prod_runsets = []
+    for info in params_dict.param_infos:
+        cart_prod_runsets, vals_list = info.get_input_and_update_runsets(cart_prod_runsets, vals_list, params_dict)
+    # Then create args list.
+    args_list = []
+    indRunNo = 1
+    for run in cart_prod_runsets:
+        kwargs = {}
+        for no, name in enumerate([info.name for info in params_dict.param_infos]): kwargs[name] = run[no]
+        kwargs['indRunNo'] = indRunNo # add individual run no
+        kwargs['totalInds'] = len(cart_prod_runsets)
+        curr_args = Namespace(**kwargs)
+        args_list.append(curr_args)
+        indRunNo += 1
+    return args_list
 
 def find_total_runs(wts, sps, jcs, ts):
     curr_ind = 0
@@ -52,7 +45,7 @@ def find_total_runs(wts, sps, jcs, ts):
                     print(wt, sp, jc, (jc!=0))
                     
     return curr_ind
-# TO DO: put a try catch statement to glob to use zeros if rec is not found
+
 def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_end):
     pt_dir = f'{args.main_folder}{args.pt}/'
     im_dim = (128,128) if ax_cr_sg==0 else (128,64)
@@ -76,12 +69,17 @@ def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_en
                 args.im_ind = time_ind
                 repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
                 res_dir = f'{pt_dir}{args.conf}/t_{args.im_ind}/{repr_str}'
+                try:
+                    loaded_rec = np.load(glob.glob(os.path.join(res_dir, 'rec_*'))[0]).squeeze()
+                except Exception as e:
+                    print('Error in loading:', e)
+                    loaded_rec = np.zeros((128,128,64))
                 if ax_cr_sg == 0:
-                    recs[conf_ind,time_ind - t_st] = np.load(glob.glob(os.path.join(res_dir, 'rec_*'))[0]).squeeze()[:,:,sl_no]
+                    recs[conf_ind,time_ind - t_st] = loaded_rec[:,:,sl_no]
                 elif ax_cr_sg == 1:
-                    recs[conf_ind,time_ind - t_st] = np.load(glob.glob(os.path.join(res_dir, 'rec_*'))[0]).squeeze()[:,sl_no,:]
+                    recs[conf_ind,time_ind - t_st] = loaded_rec[:,sl_no,:]
                 elif ax_cr_sg == 2:
-                    recs[conf_ind,time_ind - t_st] = np.load(glob.glob(os.path.join(res_dir, 'rec_*'))[0]).squeeze()[sl_no,:,:]
+                    recs[conf_ind,time_ind - t_st] = loaded_rec[sl_no,:,:]
                 psnrs[conf_ind,time_ind - t_st] = PSNR(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
             conf_ind += 1
             
@@ -134,8 +132,10 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
             image = imageio.imread(filename)
             writer.append_data(image)
 
-def main(args):
+def main():
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
+    args_list = get_parameters_of_runs(params_dict)
+    args = args_list[0]
     if args.end_ind == -1:
         args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
         print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')

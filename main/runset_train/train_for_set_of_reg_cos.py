@@ -5,6 +5,7 @@ import os
 import runset_train.parameters as parameters
 import numpy as np
 import sys
+
 # return a "\n" separated list
 def create_opts_strs(args_list, params_dict):
     opts_strs = ""
@@ -32,6 +33,7 @@ def create_opts_strs(args_list, params_dict):
         opts_strs += opts + "\n"#":"
     return opts_strs[:-1]
 
+
 def find_total_runs(wts, sps, jcs, ts):
     curr_ind = 0
     for wt in wts:
@@ -45,6 +47,7 @@ def find_total_runs(wts, sps, jcs, ts):
                     print(curr_ind, 'wt: ', wt, 'sp', sp, 't', t, 'jc', jc)
                     
     return curr_ind
+
 def main(args):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
     if args.end_ind == -1:

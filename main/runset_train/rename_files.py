@@ -100,6 +100,7 @@ def main():
                     args.lambda_t = t
                     print('Configuration: {}, spatial reg. co.: {}, Jacobian reg. co.: {}, time reg co: {}'.format(args.conf, args.lambda_sp, args.lambda_JR, args.lambda_t))
                     print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
+                    yoklar = 0
                     for i in range(args.st_ind, args.end_ind + 1):
                         print('************************************')
                         args.im_ind = i
@@ -135,6 +136,8 @@ def main():
                         # if else print situtation
                         else:
                             print(f'c:{curr_ind}, t:{i}, yeni de eski de yok.')
+                            yoklar += 1
+                        print('Yoklar: ', yoklar)
                     
                         
     '''

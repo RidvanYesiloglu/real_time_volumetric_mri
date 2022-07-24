@@ -5,6 +5,8 @@ import os
 import runset_train.parameters as parameters
 import numpy as np
 import sys
+from argparse import Namespace
+
 # return a "\n" separated list
 def create_opts_strs(args_list, params_dict):
     opts_strs = ""
@@ -45,9 +47,29 @@ def find_total_runs(wts, sps, jcs, ts):
                     print(curr_ind, 'wt: ', wt, 'sp', sp, 't', t, 'jc', jc)
                     
     return curr_ind
+def get_parameters_of_runs(params_dict):
+    # First create cart prod runsets.
+    vals_list = []
+    cart_prod_runsets = []
+    for info in params_dict.param_infos:
+        cart_prod_runsets, vals_list = info.get_input_and_update_runsets(cart_prod_runsets, vals_list, params_dict)
+    # Then create args list.
+    args_list = []
+    indRunNo = 1
+    for run in cart_prod_runsets:
+        kwargs = {}
+        for no, name in enumerate([info.name for info in params_dict.param_infos]): kwargs[name] = run[no]
+        kwargs['indRunNo'] = indRunNo # add individual run no
+        kwargs['totalInds'] = len(cart_prod_runsets)
+        curr_args = Namespace(**kwargs)
+        args_list.append(curr_args)
+        indRunNo += 1
+    return args_list
 def main(args):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
     old_params_dict = parameters.decode_arguments_dictionary('old_dict')
+    args_list = get_parameters_of_runs(params_dict)
+    args = args_list[0]
     if args.end_ind == -1:
         args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
         print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')

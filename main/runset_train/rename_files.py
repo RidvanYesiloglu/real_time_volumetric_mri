@@ -127,7 +127,7 @@ def main():
                             print(f'c:{curr_ind}, t:{i} exists with the old (long) repr_str. Renaming.')
                             print('Eski:', old_res_dir)
                             print('Yeni to be:', res_dir)
-                            os.raname(old_res_dir,res_dir)
+                            os.rename(old_res_dir,res_dir)
                             # except:
                             #     print('Renaming olmadi :(')
                             #     inpp = input('What to do')

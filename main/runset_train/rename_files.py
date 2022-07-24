@@ -47,13 +47,14 @@ def find_total_runs(wts, sps, jcs, ts):
     return curr_ind
 def main(args):
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')
+    old_params_dict = parameters.decode_arguments_dictionary('old_dict')
     if args.end_ind == -1:
         args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
         print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
     wts = [1]
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]
-    ts = [1e3,1e4]#[0,1e2]# [1e3,1e4]
+    ts = [0,1e2]# [1e3,1e4]
     print('Experiments will be done with and without transformation.')
     print('Set of spatial regulariation coefficients:', sps)
     print('Set of Jacobian (on grid) regulariation coefficients:', jcs)
@@ -67,8 +68,6 @@ def main(args):
                         continue
                     print('**************************************************************')
                     curr_ind += 1
-                    if (curr_ind < 12) or (curr_ind==13) or (curr_ind==15) or (curr_ind==17) or (curr_ind==18) or (curr_ind==19):
-                        continue
                     print('Current run number: {}/{}'.format(curr_ind, tot_runs))
                     args.conf = 'trn_wo_trns' if wt==0 else 'trn_w_trns'
                     args.use_sp_cont_reg = (sp!=0)
@@ -82,9 +81,37 @@ def main(args):
                     for i in range(args.st_ind, args.end_ind + 1):
                         print('************************************')
                         args.im_ind = i
-                        print('Train for all for loop iteration time t = {}'.format(i))
-                        opts_strs = create_opts_strs([args], params_dict)
-                        os.system(f'python3 -m runset_train.train{opts_strs}')
+                        print('Time index: t = {}'.format(i))
+                        pt_dir = f'{args.main_folder}{args.pt}/'
+                        repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
+                        old_repr_str = parameters.create_repr_str(args, [info.name for info in old_params_dict.param_infos], wantShort=True, params_dict=old_params_dict)
+                        res_dir = f'{pt_dir}{args.conf}/t_{args.im_ind}/{repr_str}'
+                        old_res_dir = f'{pt_dir}{args.conf}/t_{args.im_ind}/{old_repr_str}'
+                        # check exists
+                        # if exists, skip
+                        if os.path.exists(res_dir):
+                            print(f'c:{curr_ind}, t:{i} already exists with new (short) repr_str.')
+                            if os.path.exists(old_res_dir):
+                                print('What! It also exists with old (long) repr_str!!!! Check!')
+                                inpp = input('What to do')
+                            else:
+                                continue
+                            # if not, check if other exists
+                        # if other exists, rename it
+                        elif os.path.exists(old_res_dir):
+                            print(f'c:{curr_ind}, t:{i} exists with the old (long) repr_str. Renaming.')
+                            print('Eski:', old_res_dir)
+                            print('Yeni to be:', res_dir)
+                            try:
+                                os.raname(old_res_dir,res_dir)
+                            except:
+                                print('Renaming olmadi :(')
+                                inpp = input('What to do')
+                                raise
+                        # if else print situtation
+                        else:
+                            print('c:{curr_ind}, t:{i}, yeni de eski de yok.')
+                    
                         
     '''
     params_dict = parameters.decode_arguments_dictionary('params_dictionary')

@@ -104,7 +104,7 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
         for i in range(nrows):
             for j in range(ncols):
                 conf_no = ncols*i+j
-                im_to_show = np.concatenate((recs[conf_no, t-1], refs[conf_no]),1)
+                im_to_show = np.concatenate((recs[conf_no, t-1], refs[t-1]),1)
                 im_to_show[im_to_show<0]=0
                 im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
                 ax[i,j].axis('off')

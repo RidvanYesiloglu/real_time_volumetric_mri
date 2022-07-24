@@ -109,6 +109,9 @@ def main():
                         old_repr_str = parameters.create_repr_str(args, [info.name for info in old_params_dict.param_infos], wantShort=True, params_dict=old_params_dict)
                         res_dir = f'{pt_dir}{args.conf}/t_{args.im_ind}/{repr_str}'
                         old_res_dir = f'{pt_dir}{args.conf}/t_{args.im_ind}/{old_repr_str}'
+                        print(f'c:{curr_ind}, t:{i}')
+                        print('Old res dir:', old_res_dir)
+                        print('Res dir:', res_dir)
                         # check exists
                         # if exists, skip
                         if os.path.exists(res_dir):
@@ -132,7 +135,7 @@ def main():
                                 raise
                         # if else print situtation
                         else:
-                            print('c:{curr_ind}, t:{i}, yeni de eski de yok.')
+                            print(f'c:{curr_ind}, t:{i}, yeni de eski de yok.')
                     
                         
     '''

@@ -82,6 +82,7 @@ def main():
     print('Set of Jacobian (on grid) regulariation coefficients:', jcs)
     tot_runs = find_total_runs(wts, sps, jcs, ts)
     curr_ind = 0
+    yoklar = 0
     for wt in wts:
         for sp in sps:
             for jc in jcs:
@@ -100,7 +101,7 @@ def main():
                     args.lambda_t = t
                     print('Configuration: {}, spatial reg. co.: {}, Jacobian reg. co.: {}, time reg co: {}'.format(args.conf, args.lambda_sp, args.lambda_JR, args.lambda_t))
                     print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
-                    yoklar = 0
+                    
                     for i in range(args.st_ind, args.end_ind + 1):
                         print('************************************')
                         args.im_ind = i
@@ -137,7 +138,7 @@ def main():
                         else:
                             print(f'c:{curr_ind}, t:{i}, yeni de eski de yok.')
                             yoklar += 1
-                        print('Yoklar: ', yoklar)
+    print('Yoklar: ', yoklar)
                     
                         
     '''

@@ -11,7 +11,6 @@ import matplotlib.patches as patches
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import imageio
 import glob
-from utils import PSNR
 from argparse import Namespace
 def get_parameters_of_runs(params_dict):
     # First create cart prod runsets.
@@ -45,7 +44,9 @@ def find_total_runs(wts, sps, jcs, ts):
                     print(wt, sp, jc, (jc!=0))
                     
     return curr_ind
-
+def calc_psnr(rec, ref):
+    test_psnr = 20*np.log10(ref.max()) - 10 * np.log10(((rec-ref)**2).mean())
+    return test_psnr
 def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_end):
     pt_dir = f'{args.main_folder}{args.pt}/'
     im_dim = (128,128) if ax_cr_sg==0 else (128,64)
@@ -80,7 +81,8 @@ def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_en
                     recs[conf_ind,time_ind - t_st] = loaded_rec[:,sl_no,:]
                 elif ax_cr_sg == 2:
                     recs[conf_ind,time_ind - t_st] = loaded_rec[sl_no,:,:]
-                psnrs[conf_ind,time_ind - t_st] = PSNR(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
+                psnrs[conf_ind,time_ind - t_st] = calc_psnr(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
+                
             conf_ind += 1
             
     return recs, refs, psnrs   

@@ -146,9 +146,9 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 
                 # Top patch
                 rect_top = patches.Rectangle(
-                    (-5,-15),
-                    138,
-                    153,
+                    (-6,-16),
+                    140,
+                    155,
                     transform=ax[i,j].transData,
                     color=ps_color,
                     linewidth=1,
@@ -187,7 +187,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
                 # fig.colorbar(im, cax=cax, orientation='vertical')
-        plt.subplots_adjust(left=0.04, right=0.55, bottom=0.05, top=0.935, wspace=0.09, hspace=0.24)
+        plt.subplots_adjust(left=0.04, right=0.55, bottom=0.05, top=0.935, wspace=0.09, hspace=0.26)
         tcc_arrow = patches.ConnectionPatch(
             (0,145),
             (128,145),

@@ -152,7 +152,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                     coordsB=ax[i,j].transData,
                     color=ps_color,
                     linewidth=30,
-                    joinstyle='biter',
+                    joinstyle='miter',
                     zorder=-100,
                 )
                 fig.patches.append(rect_top)

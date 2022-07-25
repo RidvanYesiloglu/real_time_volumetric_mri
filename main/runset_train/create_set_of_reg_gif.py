@@ -135,7 +135,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 conf_no = ncols*i+j
                 im_to_show = np.concatenate((recs[conf_no, t], refs[t]),1)
                 im_to_show[im_to_show<0]=0
-                im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
+                
                 ax[i,j].axis('off')
                 ps = psnrs[conf_no,t]
                 ss = ssims[conf_no,t]
@@ -143,6 +143,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
                 rect = patches.Rectangle((0,0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 ax[i,j].add_patch(rect)
+                im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
                 # Top patch
                 # rect_top = patches.Rectangle((0, -5), im_to_show.shape[1], 5, linewidth=5, edgecolor=ps_color, facecolor=ps_color, transform=ax[i,j].transData, zorder=2)
                 # ax[i,j].add_patch(rect_top)

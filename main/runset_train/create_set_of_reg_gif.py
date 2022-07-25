@@ -141,33 +141,34 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 ss = ssims[conf_no,t]
                 ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))
                 # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
-                rect = patches.Rectangle((0,0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
-                ax[i,j].add_patch(rect)
+                # rect = patches.Rectangle((0,0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
+                # ax[i,j].add_patch(rect)
                 
                 # Top patch
                 rect_top = patches.ConnectionPatch(
-                    (10,-15),
-                    (118,-15),
+                    (10,-10),
+                    (118,-10),
                     coordsA=ax[i,j].transData,
                     coordsB=ax[i,j].transData,
                     color=ps_color,
                     linewidth=30,
+                    joinstyle='biter',
                     zorder=-100,
                 )
                 fig.patches.append(rect_top)
                 # rect_top = patches.Rectangle((0, -5), im_to_show.shape[1], 5, linewidth=5, edgecolor=ps_color, facecolor=ps_color, transform=ax[i,j].transData, zorder=2)
                 # ax[i,j].add_patch(rect_top)
                 # Bottom patch
-                rect_bot = patches.ConnectionPatch(
-                    (10,138),
-                    (118,138),
-                    coordsA=ax[i,j].transData,
-                    coordsB=ax[i,j].transData,
-                    color=ps_color,
-                    linewidth=20,
-                    zorder=-100,
-                )
-                fig.patches.append(rect_bot)
+                # rect_bot = patches.ConnectionPatch(
+                #     (10,138),
+                #     (118,138),
+                #     coordsA=ax[i,j].transData,
+                #     coordsB=ax[i,j].transData,
+                #     color=ps_color,
+                #     linewidth=20,
+                #     zorder=-100,
+                # )
+                # fig.patches.append(rect_bot)
                 # rect_bot = patches.Rectangle((0, 128), im_to_show.shape[1], 2, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 # ax[i,j].add_patch(rect_bot)
                 if conf_no == bss_conf_no:

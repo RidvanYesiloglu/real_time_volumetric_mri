@@ -150,7 +150,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 if i == (nrows-1):
                     ax[i,j].text(0.5,-0.5, f'{ts[j]}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
                 if j == 0:
-                    ax[i,j].text(-0.5,0.5, f'{sps[i]}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+                    ax[i,j].text(-0.2,0.5, f'{sps[i]}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
@@ -170,8 +170,8 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         fig.patches.append(tcc_arrow)
         ax[3,0].text(0.5,-0.5, f'{ts[0]}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
         scc_arrow = patches.ConnectionPatch(
-            (-50,0),
-            (-50,128),
+            (-10,0),
+            (-10,128),
             coordsA=ax[0,0].transData,
             coordsB=ax[-1,0].transData,
             # Default shrink parameter is 0 so can be omitted

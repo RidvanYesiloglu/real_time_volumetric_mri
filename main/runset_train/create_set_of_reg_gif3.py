@@ -313,9 +313,9 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, jcs, sps, ax_cr_sg, sl_no, g
         graph_ax.set_xticklabels([str(scc) for scc in sps])
         graph_ax.legend()
         if args.conf == 'trn_w_trns':
-            plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt} - With Transformation NeRP - JC Loss Coef. on Grid: {args.lambda_JR} - Time Point: {(t+t_st):3d})", size=19)
+            plt.suptitle(f"{im_type_str.capitalize()} Images vs JC-on-Grid and Spatial Continuity Loss Coefficients ({args.pt} - With Transformation NeRP - Time Cont. Coef.: {args.lambda_t} - Time Point: {(t+t_st):3d})", size=19)
         else:
-            plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt} - Without Transformation NeRP - Time Point: {(t+t_st):3d})", size=19)
+            plt.suptitle(f"{im_type_str.capitalize()} Images vs JC-on-Grid and Spatial Continuity Loss Coefficients ({args.pt} - Without Transformation NeRP - Time Point: {(t+t_st):3d})", size=19)
         plt.show()
         plt.savefig(filename, dpi=96, bbox_inches='tight')
         plt.close()

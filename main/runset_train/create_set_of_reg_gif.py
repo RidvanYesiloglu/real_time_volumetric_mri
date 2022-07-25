@@ -147,18 +147,18 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
                 else:
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}')
-                if i == (nrows-1):
-                    ax[i,j].text(0.5,-0.15, f'{ts[j]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
-                if j == 0:
-                    ax[i,j].text(-0.2,0.5, f'{sps[i]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+                if i == (nrows-1): #-0.15
+                    ax[i,j].text(0.5,-0.18, f'{ts[j]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+                if j == 0:#-0.2
+                    ax[i,j].text(-0.22,0.5, f'{sps[i]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
                 # fig.colorbar(im, cax=cax, orientation='vertical')
         plt.subplots_adjust(left=0.04, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
         tcc_arrow = patches.ConnectionPatch(
-            (0,150),
-            (128,150),
+            (0,145),
+            (128,145),
             coordsA=ax[-1,0].transData,
             coordsB=ax[-1,-1].transData,
             # Default shrink parameter is 0 so can be omitted

@@ -150,7 +150,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                     (118,-20),
                     coordsA=ax[i,j].transData,
                     coordsB=ax[i,j].transData,
-                    color="blue",
+                    color=ps_color,
                     linewidth=30,
                     zorder=-100,
                 )

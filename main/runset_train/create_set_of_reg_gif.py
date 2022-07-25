@@ -246,20 +246,20 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
             )
             fig.patches.append(scc_tick)
             
-        cbar_ax = fig.add_axes([0.56, 0.15, 0.02, 0.30])
+        cbar_ax = fig.add_axes([0.56, 0.10, 0.015, 0.30])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB) (outer border color)')
-        cbar_ax = fig.add_axes([0.56, 0.47, 0.015, 0.7])
+        cbar_ax = fig.add_axes([0.56, 0.42, 0.015, 0.30])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm_ssim, orientation='vertical')
         cb1.set_label('SSIM (inner border color)')
         # left bottom graph: psnr vs sp
-        graph_ax = fig.add_axes([0.63, 0.25, 0.15, 0.2])
+        graph_ax = fig.add_axes([0.65, 0.25, 0.14, 0.2])
         for no,tcc in enumerate(ts):
             graph_ax.plot(psnrs[no::ncols,t], label=f'TCC:{tcc}')
         graph_ax.set_title('PSNR vs SCC (Spatial Continuity Coefficient)')
         graph_ax.set_ylabel(f'PSNR at t={t}')
         #
-        graph_ax = fig.add_axes([0.63, 0.05, 0.15, 0.2])
+        graph_ax = fig.add_axes([0.65, 0.05, 0.14, 0.2])
         for no,tcc in enumerate(ts):
             graph_ax.plot(psnrs[no::ncols,:].mean(1), label=f'TCC:{tcc}')
         graph_ax.set_ylabel('Av. PSNR')
@@ -268,13 +268,13 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticklabels([str(sp) for sp in sps])
         graph_ax.legend()
         # right bottom graph: ssim vs sp
-        graph_ax = fig.add_axes([0.85, 0.25, 0.15, 0.2])
+        graph_ax = fig.add_axes([0.86, 0.25, 0.14, 0.2])
         for no,tcc in enumerate(ts):
             graph_ax.plot(ssims[no::ncols,t], label=f'TCC:{tcc}')
         graph_ax.set_title('SSIM vs SCC (Spatial Continuity Coefficient)')
         graph_ax.set_ylabel(f'SSIM at t={t}')
         # 
-        graph_ax = fig.add_axes([0.85, 0.05, 0.15, 0.2])
+        graph_ax = fig.add_axes([0.86, 0.05, 0.14, 0.2])
         for no,tcc in enumerate(ts):
             graph_ax.plot(ssims[no::ncols,:].mean(1), label=f'TCC:{tcc}')
         graph_ax.set_ylabel('Av. SSIM')
@@ -283,13 +283,13 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticklabels([str(sp) for sp in sps])
         graph_ax.legend()
         # left top graph: psnr vs tcc
-        graph_ax = fig.add_axes([0.63, 0.72, 0.15, 0.2])
+        graph_ax = fig.add_axes([0.65, 0.72, 0.14, 0.2])
         for no,scc in enumerate(sps):
             graph_ax.plot(psnrs[no*ncols:(no+1)*ncols,t], label=f'SCC:{scc}')
         graph_ax.set_title('PSNR vs TCC (Time Continuity Coefficient)')
         graph_ax.set_ylabel(f'PSNR at t={t}')
         # 
-        graph_ax = fig.add_axes([0.63, 0.52, 0.15, 0.2])
+        graph_ax = fig.add_axes([0.65, 0.52, 0.14, 0.2])
         for no,scc in enumerate(sps):
             graph_ax.plot(psnrs[no*ncols:(no+1)*ncols,:].mean(1), label=f'SCC:{scc}')
         graph_ax.set_ylabel('Av. PSNR')
@@ -298,13 +298,13 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticklabels([str(tcc) for tcc in ts])
         graph_ax.legend()
         # right bottom graph: ssim vs tcc
-        graph_ax = fig.add_axes([0.85, 0.72, 0.15, 0.2])
+        graph_ax = fig.add_axes([0.86, 0.72, 0.14, 0.2])
         for no,scc in enumerate(sps):
             graph_ax.plot(ssims[no*ncols:(no+1)*ncols,t], label=f'SCC:{scc}')
         graph_ax.set_title('SSIM vs TCC (Time Continuity Coefficient)')
         graph_ax.set_ylabel(f'SSIM at t={t}')
         # 
-        graph_ax = fig.add_axes([0.85, 0.52, 0.15, 0.2])
+        graph_ax = fig.add_axes([0.86, 0.52, 0.14, 0.2])
         for no,scc in enumerate(sps):
             graph_ax.plot(ssims[no*ncols:(no+1)*ncols,:].mean(1), label=f'SCC:{scc}')
         graph_ax.set_ylabel('Av. SSIM')

@@ -140,10 +140,10 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
                 else:
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}')
-                ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
-                divider = make_axes_locatable(ax[i,j])
-                cax = divider.append_axes('right', size='5%', pad=0.05)
-                fig.colorbar(im, cax=cax, orientation='vertical')
+                ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
+                # divider = make_axes_locatable(ax[i,j])
+                # cax = divider.append_axes('right', size='5%', pad=0.05)
+                # fig.colorbar(im, cax=cax, orientation='vertical')
         plt.subplots_adjust(left=0.01, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
         cbar_ax = fig.add_axes([0.55, 0.15, 0.02, 0.7])
         # left bottom graph: psnr vs sp

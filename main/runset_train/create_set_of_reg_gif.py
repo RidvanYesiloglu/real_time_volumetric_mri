@@ -156,7 +156,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
                 # fig.colorbar(im, cax=cax, orientation='vertical')
         plt.subplots_adjust(left=0.04, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
-        arrow = patches.ConnectionPatch(
+        tcc_arrow = patches.ConnectionPatch(
             (0,150),
             (128,150),
             coordsA=ax[-1,0].transData,
@@ -167,7 +167,21 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
             mutation_scale=30,  # controls arrow head size
             linewidth=3,
         )
-        fig.patches.append(arrow)
+        fig.patches.append(tcc_arrow)
+        ax[3,0].text(0.5,-0.5, f'{ts[0]}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+        scc_arrow = patches.ConnectionPatch(
+            (-50,0),
+            (-50,128),
+            coordsA=ax[0,0].transData,
+            coordsB=ax[-1,0].transData,
+            # Default shrink parameter is 0 so can be omitted
+            color="red",
+            arrowstyle="-|>",  # "normal" arrow
+            mutation_scale=30,  # controls arrow head size
+            linewidth=3,
+        )
+        fig.patches.append(scc_arrow)
+        
         cbar_ax = fig.add_axes([0.55, 0.15, 0.02, 0.7])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB)')

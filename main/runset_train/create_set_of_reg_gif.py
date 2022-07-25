@@ -145,14 +145,14 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # ax[i,j].add_patch(rect)
                 
                 # Top patch
-                rect_top = patches.ConnectionPatch(
-                    (48,-10),
-                    (88,-10),
-                    coordsA=ax[i,j].transData,
-                    coordsB=ax[i,j].transData,
+                rect_top = patches.Rectangle(
+                    (-5,-10),
+                    138,
+                    143,
+                    transform=ax[i,j].transData,
                     color=ps_color,
-                    linewidth=145,
-                    joinstyle='miter',
+                    linewidth=1,
+                    fill=True,
                     zorder=-100,
                 )
                 fig.patches.append(rect_top)

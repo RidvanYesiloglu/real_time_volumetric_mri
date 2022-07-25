@@ -146,12 +146,12 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 
                 # Top patch
                 rect_top = patches.ConnectionPatch(
-                    (10,-10),
-                    (118,-10),
+                    (48,-10),
+                    (88,-10),
                     coordsA=ax[i,j].transData,
                     coordsB=ax[i,j].transData,
                     color=ps_color,
-                    linewidth=30,
+                    linewidth=145,
                     joinstyle='miter',
                     zorder=-100,
                 )

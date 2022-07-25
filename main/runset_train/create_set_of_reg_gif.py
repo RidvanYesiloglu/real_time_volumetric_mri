@@ -147,10 +147,10 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
                 else:
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}')
-                if i == (nrows-1): #-0.15
-                    ax[i,j].text(0.5,-0.18, f'{ts[j]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
-                if j == 0:#-0.2
-                    ax[i,j].text(-0.22,0.5, f'{sps[i]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+                if i == (nrows-1): #-0.18
+                    ax[i,j].text(0.5,-0.23, f'{ts[j]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+                if j == 0:#-0.22
+                    ax[i,j].text(-0.26,0.5, f'{sps[i]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
@@ -168,6 +168,16 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
             linewidth=3,
         )
         fig.patches.append(tcc_arrow)
+        for i in range(ncols):
+            tcc_tick = patches.ConnectionPatch(
+                (0,143),
+                (0,147),
+                coordsA=ax[-1,i].transData,
+                coordsB=ax[-1,i].transData,
+                color="red",
+                linewidth=3,
+            )
+            fig.patches.append(tcc_tick)
         scc_arrow = patches.ConnectionPatch(
             (-15,0),
             (-15,128),
@@ -180,7 +190,17 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
             linewidth=3,
         )
         fig.patches.append(scc_arrow)
-        
+        for i in range(nrows):
+            scc_tick = patches.ConnectionPatch(
+                (-18,0),
+                (-12,0),
+                coordsA=ax[i,0].transData,
+                coordsB=ax[i,0].transData,
+                color="red",
+                linewidth=3,
+            )
+            fig.patches.append(scc_tick)
+            
         cbar_ax = fig.add_axes([0.55, 0.15, 0.02, 0.7])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB)')

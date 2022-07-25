@@ -146,10 +146,10 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # fig.colorbar(im, cax=cax, orientation='vertical')
         plt.subplots_adjust(left=0.01, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
         cbar_ax = fig.add_axes([0.55, 0.15, 0.02, 0.7])
-        # left bottom graph: psnr vs sp
-        graph_ax = fig.add_axes([0.63, 0.05, 0.17, 0.4])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB)')
+        # left bottom graph: psnr vs sp
+        graph_ax = fig.add_axes([0.63, 0.05, 0.17, 0.2])
         for no,tcc in enumerate(ts):
             graph_ax.plot(psnrs[no::ncols,t], label=f'TCC:{tcc}')
         graph_ax.set_title('PSNR vs SCC (Spatial Continuity Coefficient)')
@@ -158,8 +158,18 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticks(np.arange(len(sps)))
         graph_ax.set_xticklabels([str(sp) for sp in sps])
         graph_ax.legend()
+        #
+        graph_ax = fig.add_axes([0.63, 0.25, 0.17, 0.2])
+        for no,tcc in enumerate(ts):
+            graph_ax.plot(psnrs[no::ncols,:].mean(1), label=f'TCC:{tcc}')
+        graph_ax.set_title('PSNR vs SCC (Spatial Continuity Coefficient)')
+        graph_ax.set_ylabel('PSNR')
+        graph_ax.set_xlabel('SCC')
+        graph_ax.set_xticks(np.arange(len(sps)))
+        graph_ax.set_xticklabels([str(sp) for sp in sps])
+        graph_ax.legend()
         # right bottom graph: ssim vs sp
-        graph_ax = fig.add_axes([0.83, 0.05, 0.17, 0.4])
+        graph_ax = fig.add_axes([0.83, 0.05, 0.17, 0.2])
         for no,tcc in enumerate(ts):
             graph_ax.plot(ssims[no::ncols,t], label=f'TCC:{tcc}')
         graph_ax.set_title('SSIM vs SCC (Spatial Continuity Coefficient)')
@@ -168,8 +178,18 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticks(np.arange(len(sps)))
         graph_ax.set_xticklabels([str(sp) for sp in sps])
         graph_ax.legend()
+        # 
+        graph_ax = fig.add_axes([0.83, 0.25, 0.17, 0.2])
+        for no,tcc in enumerate(ts):
+            graph_ax.plot(ssims[no::ncols,:].mean(1), label=f'TCC:{tcc}')
+        graph_ax.set_title('SSIM vs SCC (Spatial Continuity Coefficient)')
+        graph_ax.set_ylabel('SSIM')
+        graph_ax.set_xlabel('SCC')
+        graph_ax.set_xticks(np.arange(len(sps)))
+        graph_ax.set_xticklabels([str(sp) for sp in sps])
+        graph_ax.legend()
         # left top graph: psnr vs tcc
-        graph_ax = fig.add_axes([0.63, 0.52, 0.17, 0.4])
+        graph_ax = fig.add_axes([0.63, 0.52, 0.17, 0.2])
         for no,scc in enumerate(sps):
             graph_ax.plot(psnrs[no*ncols:(no+1)*ncols,t], label=f'SCC:{scc}')
         graph_ax.set_title('PSNR vs TCC (Time Continuity Coefficient)')
@@ -178,10 +198,30 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticks(np.arange(len(ts)))
         graph_ax.set_xticklabels([str(tcc) for tcc in ts])
         graph_ax.legend()
+        # 
+        graph_ax = fig.add_axes([0.63, 0.72, 0.17, 0.2])
+        for no,scc in enumerate(sps):
+            graph_ax.plot(psnrs[no*ncols:(no+1)*ncols,:].mean(1), label=f'SCC:{scc}')
+        graph_ax.set_title('PSNR vs TCC (Time Continuity Coefficient)')
+        graph_ax.set_ylabel('PSNR')
+        graph_ax.set_xlabel('TCC')
+        graph_ax.set_xticks(np.arange(len(ts)))
+        graph_ax.set_xticklabels([str(tcc) for tcc in ts])
+        graph_ax.legend()
         # right bottom graph: ssim vs tcc
-        graph_ax = fig.add_axes([0.83, 0.52, 0.17, 0.4])
+        graph_ax = fig.add_axes([0.83, 0.52, 0.17, 0.2])
         for no,scc in enumerate(sps):
             graph_ax.plot(ssims[no*ncols:(no+1)*ncols,t], label=f'SCC:{scc}')
+        graph_ax.set_title('SSIM vs TCC (Time Continuity Coefficient)')
+        graph_ax.set_ylabel('SSIM')
+        graph_ax.set_xlabel('TCC')
+        graph_ax.set_xticks(np.arange(len(ts)))
+        graph_ax.set_xticklabels([str(tcc) for tcc in ts])
+        graph_ax.legend()
+        # 
+        graph_ax = fig.add_axes([0.83, 0.72, 0.17, 0.2])
+        for no,scc in enumerate(sps):
+            graph_ax.plot(ssims[no*ncols:(no+1)*ncols,:].mean(1), label=f'SCC:{scc}')
         graph_ax.set_title('SSIM vs TCC (Time Continuity Coefficient)')
         graph_ax.set_ylabel('SSIM')
         graph_ax.set_xlabel('TCC')

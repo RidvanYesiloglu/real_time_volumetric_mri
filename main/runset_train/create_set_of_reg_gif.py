@@ -111,7 +111,8 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
     for t in np.arange(0, recs.shape[1]):
         filename = f'{ind_ims_dir}/frame_{t}.png'
         filenames.append(filename)
-        (min_psnr, max_psnr) = (psnrs[:,].min(), min(psnrs.max(),100))
+        (min_psnr, max_psnr) = (psnrs[:,t].min(), min(psnrs[:,t].max(),100))
+        best_conf_no = psnrs[:,t].argmax()
         norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
         fig,ax = plt.subplots(nrows,ncols, figsize=figsize)
         for i in range(nrows):
@@ -126,7 +127,10 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
                 # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
                 rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
                 ax[i,j].add_patch(rect)
-                ax[i,j].set_title(f'Time CC: {ts[j]}, Spat CC: {sps[i]}')
+                if conf_no == best_conf_no:
+                    ax[i,j].set_title(f'Time CC: {ts[j]}, Spat CC: {sps[i]} (BEST)', color='r')
+                else:
+                    ax[i,j].set_title(f'Time CC: {ts[j]}, Spat CC: {sps[i]}')
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB)'.format(ps), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)

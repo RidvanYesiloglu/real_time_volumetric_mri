@@ -135,7 +135,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 conf_no = ncols*i+j
                 im_to_show = np.concatenate((recs[conf_no, t], refs[t]),1)
                 im_to_show[im_to_show<0]=0
-                
+                im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
                 ax[i,j].axis('off')
                 ps = psnrs[conf_no,t]
                 ss = ssims[conf_no,t]
@@ -143,27 +143,26 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
                 rect = patches.Rectangle((0,0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 ax[i,j].add_patch(rect)
-                im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
-                fig.add_artist(plt.Rectangle((150, 350), 300, 50, edgecolor='red', linewidth=3, fill=False))
+                
                 # Top patch
                 # rect_top = patches.Rectangle((0, -5), im_to_show.shape[1], 5, linewidth=5, edgecolor=ps_color, facecolor=ps_color, transform=ax[i,j].transData, zorder=2)
                 # ax[i,j].add_patch(rect_top)
                 # Bottom patch
                 # rect_bot = patches.Rectangle((0, 128), im_to_show.shape[1], 2, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 # ax[i,j].add_patch(rect_bot)
-                # if conf_no == bss_conf_no:
-                #     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
-                # else:
-                #     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='white')
-                # if i == (nrows-1): #-0.29
-                #     ax[i,j].text(64, 155, f'{ts[j]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
-                #     if j == ((ncols-1)//2):
-                #         ax[i,j].text(140,170, 'Time Continuity Reg. Coefficient', color='red', size=18, ha="center", va="center", transform=ax[i,j].transData)
-                # if j == 0:#-22
-                #     ax[i,j].text(-40,64, f'{sps[i]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
-                #     if i == ((nrows-1)//2):
-                #         ax[i,j].text(-65,140, 'Spatial Continuity Reg. Coefficient', color='red', size=18, ha="center", va="center", rotation='vertical', transform=ax[i,j].transData)
-                # ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
+                if conf_no == bss_conf_no:
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
+                else:
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='white')
+                if i == (nrows-1): #-0.29
+                    ax[i,j].text(64, 155, f'{ts[j]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
+                    if j == ((ncols-1)//2):
+                        ax[i,j].text(140,170, 'Time Continuity Reg. Coefficient', color='red', size=18, ha="center", va="center", transform=ax[i,j].transData)
+                if j == 0:#-22
+                    ax[i,j].text(-40,64, f'{sps[i]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
+                    if i == ((nrows-1)//2):
+                        ax[i,j].text(-65,140, 'Spatial Continuity Reg. Coefficient', color='red', size=18, ha="center", va="center", rotation='vertical', transform=ax[i,j].transData)
+                ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
                 # fig.colorbar(im, cax=cax, orientation='vertical')

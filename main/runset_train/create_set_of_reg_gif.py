@@ -141,17 +141,17 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 ss = ssims[conf_no,t]
                 ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))
                 # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
-                rect = patches.Rectangle((0,-5), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
+                rect = patches.Rectangle((0,0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
                 ax[i,j].add_patch(rect)
                 
                 # Top patch
                 rect_top = patches.ConnectionPatch(
-                    (0,-5),
-                    (128,-5),
+                    (10,-20),
+                    (118,-20),
                     coordsA=ax[i,j].transData,
                     coordsB=ax[i,j].transData,
                     color="blue",
-                    linewidth=10,
+                    linewidth=30,
                 )
                 fig.patches.append(rect_top)
                 # rect_top = patches.Rectangle((0, -5), im_to_show.shape[1], 5, linewidth=5, edgecolor=ps_color, facecolor=ps_color, transform=ax[i,j].transData, zorder=2)

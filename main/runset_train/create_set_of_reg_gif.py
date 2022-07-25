@@ -144,8 +144,11 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
                 ax[i,j].add_patch(rect)
                 # Top patch
-                rect_top = patches.Rectangle((0, -15), im_to_show.shape[1], 15, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
+                rect_top = patches.Rectangle((0, -5), im_to_show.shape[1], 5, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 ax[i,j].add_patch(rect_top)
+                # Bottom patch
+                rect_bot = patches.Rectangle((0, 128), im_to_show.shape[1], 2, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
+                ax[i,j].add_patch(rect_bot)
                 if conf_no == bss_conf_no:
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
                 else:

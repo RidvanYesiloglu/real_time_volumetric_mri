@@ -338,21 +338,30 @@ def main():
     wts = [0,1]
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]
-    ts = [0,1e2,1e3,1e4] 
+    ts = [0,1e2,1e3,1e4]
+    all_psnrs = np.zeros((80,16,12))
+    all_ssims = np.zeros((80,16,12))
+    curr_ind = 0
     for wt in wts:
         for jc in jcs:
             if wt==0 and jc != 0:
                 continue
+            curr_ind += 1
+            
             args.conf = 'trn_wo_trns' if wt==0 else 'trn_w_trns'
             args.use_jc_grid_reg = (jc!=0)
             args.lambda_JR = jc
             print(f'Current wt:{wt}, jc: {jc}. Finding reconstructions...')
             recs, refs, psnrs, ssims = find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_end) #(16,12,128,64) or (16,12,128,128) and  psnrs: (16,12)
+            all_psnrs[curr_ind-1]=psnrs
+            all_ssims[curr_ind-1]=ssims
             gif_dir = f'{args.main_folder}{args.pt}/reg_gifs/sps_ts_wt{wt}_jc{jc}/'
             gif_name = f'sl{sl_no}_sps_ts_wt{wt}_jc{jc}'
             print(f'Reconstructions found. Making the gif: {gif_name}')
             make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
             print('Gif made.')
+    np.save(all_psnrs, 'all_psnrs')
+    np.save(all_ssims, 'all_ssims')
 
 if __name__ == "__main__":
     main() 

@@ -151,7 +151,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         cb1.set_label('PSNR (dB)')
         for no,tcc in enumerate(ts):
             graph_ax.plot(psnrs[no::ncols,t], label=f'TCC:{tcc}')
-        graph_ax.set_xticks(np.arange(sps.shape[0]))
+        graph_ax.set_xticks(np.arange(len(sps)))
         graph_ax.set_xticklabels([str(sp) for sp in sps])
         graph_ax.legend()
         if args.conf == 'trn_w_trns':

@@ -159,12 +159,12 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # fig.colorbar(im, cax=cax, orientation='vertical')
         plt.subplots_adjust(left=0.01, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
         arrow = patches.ConnectionPatch(
-            (140,0),
-            (125,128),
+            (0,150),
+            (128,150),
             coordsA=ax[-1,0].transData,
             coordsB=ax[-1,-1].transData,
             # Default shrink parameter is 0 so can be omitted
-            color="black",
+            color="red",
             arrowstyle="-|>",  # "normal" arrow
             mutation_scale=30,  # controls arrow head size
             linewidth=3,

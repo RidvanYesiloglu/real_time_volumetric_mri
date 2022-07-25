@@ -148,9 +148,9 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 else:
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}')
                 if i == (nrows-1):
-                    ax[i,j].text(0.5,-0.15, f'{ts[j].0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+                    ax[i,j].text(0.5,-0.15, f'{ts[j]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
                 if j == 0:
-                    ax[i,j].text(-0.2,0.5, f'{sps[i].0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+                    ax[i,j].text(-0.2,0.5, f'{sps[i]:.0e}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)

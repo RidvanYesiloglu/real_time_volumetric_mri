@@ -123,13 +123,13 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         bss_conf_no = ssims[:,t].argmax()
         norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
         fig,ax = plt.subplots(nrows,ncols, figsize=figsize)
-        ims_ax = fig.add_axes([0, 0, 0.55, 1])
-        ims_ax.set_xlabel('Time Continuity Coefficient')
-        ims_ax.set_ylabel('Spatial Continuity Coefficient')
-        ims_ax.set_xticks(np.arange(len(ts)))
-        ims_ax.set_xticklabels([str(tcc) for tcc in ts])
-        ims_ax.set_yticks(np.arange(len(sps)))
-        ims_ax.set_yticklabels([str(sp) for sp in sps])
+        # ims_ax = fig.add_axes([0, 0, 0.55, 1])
+        # ims_ax.set_xlabel('Time Continuity Coefficient')
+        # ims_ax.set_ylabel('Spatial Continuity Coefficient')
+        # ims_ax.set_xticks(np.arange(len(ts)))
+        # ims_ax.set_xticklabels([str(tcc) for tcc in ts])
+        # ims_ax.set_yticks(np.arange(len(sps)))
+        # ims_ax.set_yticklabels([str(sp) for sp in sps])
         for i in range(nrows):
             for j in range(ncols):
                 conf_no = ncols*i+j
@@ -151,6 +151,10 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
                 # fig.colorbar(im, cax=cax, orientation='vertical')
+        for no, tcc in enumerate(ts):
+            plt.setp(ax[-1, no], xlabel=f'Time Cont Co: {tcc}')
+        for no, scc in enumerate(sps):
+            plt.setp(ax[no, 0], ylabel=f'Spat Cont Co: {scc}')
         plt.subplots_adjust(left=0.01, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
         
         cbar_ax = fig.add_axes([0.55, 0.15, 0.02, 0.7])

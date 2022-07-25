@@ -67,9 +67,13 @@ def find_recs_for_jcs_sps(args, params_dict, jcs, sps, ax_cr_sg, sl_no, t_st, t_
     ssims = np.zeros((len(jcs)*len(sps), t_end-t_st+1))
     conf_ind = 0
     for jc in jcs:
+        if jc != 1e4:
+            continue
         args.use_jc_grid_reg = (jc!=0)    
         args.lambda_JR = jc
         for sp in sps:
+            if sp != 0:
+                continue
             args.use_sp_cont_reg = (sp!=0)    
             args.lambda_sp = sp
             for time_ind in range(t_st, t_end+1):
@@ -348,18 +352,21 @@ def main():
             continue
         for tcc in ts:
             curr_ind += 1
-            
+            if tcc != 1e3:
+                continue
             args.conf = 'trn_wo_trns' if wt==0 else 'trn_w_trns'
             args.use_t_cont_reg = (tcc!=0)
             args.lambda_t = tcc
             print(f'Current wt:{wt}, t: {tcc}. Finding reconstructions...')
             recs, refs, psnrs, ssims = find_recs_for_jcs_sps(args, params_dict, jcs, sps, ax_cr_sg, sl_no, t_st, t_end) #(16,12,128,64) or (16,12,128,128) and  psnrs: (16,12)
+            np.save('recs_bestssim',recs)
+            np.save('refs',refs)
             all_psnrs[curr_ind-1]=psnrs
             all_ssims[curr_ind-1]=ssims
             gif_dir = f'{args.main_folder}{args.pt}/reg_gifs/jcs_sps_wt{wt}_tcc{tcc}/'
             gif_name = f'sl{sl_no}_jjcs_sps_wt{wt}_tcc{tcc}'
             print(f'Reconstructions found. Making the gif: {gif_name}')
-            make_gif_frames(args, recs, refs, psnrs, ssims, jcs, sps, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
+            #make_gif_frames(args, recs, refs, psnrs, ssims, jcs, sps, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
             print('Gif made.')
     np.save('all_psnrs',all_psnrs)
     np.save('all_ssims',all_ssims)

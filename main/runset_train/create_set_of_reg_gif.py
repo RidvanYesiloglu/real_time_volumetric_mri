@@ -137,17 +137,23 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
                 ax[i,j].add_patch(rect)
                 if conf_no == bss_conf_no:
-                    ax[i,j].set_title(f'TCC: {ts[j]:e}, SCC: {sps[i]:e}', color='r')
+                    ax[i,j].set_title(f'TCC: {ts[j]:.1e}, SCC: {sps[i]:.0e}', color='r')
                 else:
-                    ax[i,j].set_title(f'TCC: {ts[j]:e}, SCC: {sps[i]:e}')
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.1e}')
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')
-        plt.subplots_adjust(left=0.01, right=0.90, bottom=0.05, top=0.935, wspace=0.32)
-        cbar_ax = fig.add_axes([0.94, 0.15, 0.02, 0.7])
+        plt.subplots_adjust(left=0.01, right=0.85, bottom=0.05, top=0.935, wspace=0.20)
+        cbar_ax = fig.add_axes([0.84, 0.15, 0.02, 0.7])
+        graph_ax = fig.add_axes([0.90, 0.15, 0.02, 0.7])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB)')
+        for no,tcc in enumerate(ts):
+            graph_ax.plot(psnrs[no::ncols,t], label=f'TCC:{tcc}')
+        graph_ax.set_xticks(np.arange(sps.shape[0]))
+        graph_ax.set_xticklabels([str(sp) for sp in sps])
+        graph_ax.legend()
         if args.conf == 'trn_w_trns':
             plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt} - With Transformation NeRP - JC Loss Coef. on Grid: {args.lambda_JR} - Time Point: {(t+t_st):3d})")
         else:

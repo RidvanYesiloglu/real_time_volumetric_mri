@@ -144,6 +144,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 rect = patches.Rectangle((0,0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 ax[i,j].add_patch(rect)
                 im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
+                fig.add_artist(plt.Rectangle((150, 350), 300, 50, edgecolor='red', linewidth=3, fill=False))
                 # Top patch
                 # rect_top = patches.Rectangle((0, -5), im_to_show.shape[1], 5, linewidth=5, edgecolor=ps_color, facecolor=ps_color, transform=ax[i,j].transData, zorder=2)
                 # ax[i,j].add_patch(rect_top)

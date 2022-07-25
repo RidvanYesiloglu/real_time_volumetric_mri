@@ -185,17 +185,17 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # rect_bot = patches.Rectangle((0, 128), im_to_show.shape[1], 2, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 # ax[i,j].add_patch(rect_bot)
                 if conf_no == bss_conf_no:
-                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='black')
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='black',fontweight="bold")
                 else:
-                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='black')
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='black',fontweight="bold")
                 if i == (nrows-1): #-0.29
-                    ax[i,j].text(64, 155, f'{ts[j]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
+                    ax[i,j].text(64, 155, f'{ts[j]:.0e}', color='black', size=14, ha="center", va="center", transform=ax[i,j].transData)
                     if j == ((ncols-1)//2):
-                        ax[i,j].text(140,170, 'Time Continuity Reg. Coefficient', color='red', size=18, ha="center", va="center", transform=ax[i,j].transData)
+                        ax[i,j].text(140,170, 'Time Continuity Reg. Coefficient', color='black', size=18, ha="center", va="center", transform=ax[i,j].transData)
                 if j == 0:#-22
-                    ax[i,j].text(-40,64, f'{sps[i]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
+                    ax[i,j].text(-40,64, f'{sps[i]:.0e}', color='black', size=14, ha="center", va="center", transform=ax[i,j].transData)
                     if i == ((nrows-1)//2):
-                        ax[i,j].text(-65,140, 'Spatial Continuity Reg. Coefficient', color='red', size=18, ha="center", va="center", rotation='vertical', transform=ax[i,j].transData)
+                        ax[i,j].text(-67,140, 'Spatial Continuity Reg. Coefficient', color='black', size=18, ha="center", va="center", rotation='vertical', transform=ax[i,j].transData)
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color='black', size=11, ha="center", transform=ax[i,j].transAxes)
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
@@ -219,7 +219,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 (64,147),
                 coordsA=ax[-1,i].transData,
                 coordsB=ax[-1,i].transData,
-                color="red",
+                color="black",
                 linewidth=3,
             )
             fig.patches.append(tcc_tick)
@@ -229,7 +229,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
             coordsA=ax[0,0].transData,
             coordsB=ax[-1,0].transData,
             # Default shrink parameter is 0 so can be omitted
-            color="red",
+            color="black",
             arrowstyle="-|>",  # "normal" arrow
             mutation_scale=30,  # controls arrow head size
             linewidth=3,
@@ -246,10 +246,10 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
             )
             fig.patches.append(scc_tick)
             
-        cbar_ax = fig.add_axes([0.56, 0.10, 0.015, 0.30])
+        cbar_ax = fig.add_axes([0.56, 0.15, 0.015, 0.30])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB) (outer border color)')
-        cbar_ax = fig.add_axes([0.56, 0.42, 0.015, 0.30])
+        cbar_ax = fig.add_axes([0.56, 0.47, 0.015, 0.30])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm_ssim, orientation='vertical')
         cb1.set_label('SSIM (inner border color)')
         # left bottom graph: psnr vs sp

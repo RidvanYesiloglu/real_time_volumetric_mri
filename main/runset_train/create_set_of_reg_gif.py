@@ -146,9 +146,9 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 
                 # Top patch
                 rect_top = patches.Rectangle(
-                    (-5,-10),
+                    (-5,-15),
                     138,
-                    143,
+                    153,
                     transform=ax[i,j].transData,
                     color=ps_color,
                     linewidth=1,

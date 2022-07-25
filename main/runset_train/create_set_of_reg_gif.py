@@ -147,12 +147,10 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
                 else:
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}')
-                # if i == (nrows-1):
-                #     ax[i,j].set_xlabel(f'Time Cont Co: {ts[j]}')
-                #     ax[i,j].xaxis.set_label_coords(0, -0.3)
-                # if j == 0:
-                #     ax[i,j].set_ylabel(f'Spat Cont Co: {sps[i]}')
-                #     ax[i,j].yaxis.set_label_coords(-0.15, 0)
+                if i == (nrows-1):
+                    ax[i,j].text(0.5,-0.5, f'{ts[j]}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
+                if j == 0:
+                    ax[i,j].text(-0.5,0.5, f'{sps[i]}', color='red', size=14, ha="center", transform=ax[i,j].transAxes)
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)

@@ -172,9 +172,9 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # rect_bot = patches.Rectangle((0, 128), im_to_show.shape[1], 2, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 # ax[i,j].add_patch(rect_bot)
                 if conf_no == bss_conf_no:
-                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='black')
                 else:
-                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='w')
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='black')
                 if i == (nrows-1): #-0.29
                     ax[i,j].text(64, 155, f'{ts[j]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
                     if j == ((ncols-1)//2):
@@ -187,7 +187,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
                 # fig.colorbar(im, cax=cax, orientation='vertical')
-        plt.subplots_adjust(left=0.04, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
+        plt.subplots_adjust(left=0.04, right=0.55, bottom=0.05, top=0.935, wspace=0.07, hspace=0.07)
         tcc_arrow = patches.ConnectionPatch(
             (0,145),
             (128,145),

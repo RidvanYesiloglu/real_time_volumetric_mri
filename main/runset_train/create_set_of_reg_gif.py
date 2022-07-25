@@ -147,7 +147,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         plt.subplots_adjust(left=0.01, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
         cbar_ax = fig.add_axes([0.55, 0.15, 0.02, 0.7])
         # left bottom graph: psnr vs sp
-        graph_ax = fig.add_axes([0.60, 0.05, 0.20, 0.4])
+        graph_ax = fig.add_axes([0.62, 0.05, 0.18, 0.4])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB)')
         for no,tcc in enumerate(ts):
@@ -159,7 +159,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticklabels([str(sp) for sp in sps])
         graph_ax.legend()
         # right bottom graph: ssim vs sp
-        graph_ax = fig.add_axes([0.80, 0.05, 0.40, 0.4])
+        graph_ax = fig.add_axes([0.82, 0.05, 0.18, 0.4])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('SSIM')
         for no,tcc in enumerate(ts):
@@ -171,7 +171,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticklabels([str(sp) for sp in sps])
         graph_ax.legend()
         # left top graph: psnr vs tcc
-        graph_ax = fig.add_axes([0.60, 0.55, 0.20, 0.4])
+        graph_ax = fig.add_axes([0.62, 0.55, 0.18, 0.4])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB)')
         for no,scc in enumerate(sps):
@@ -183,7 +183,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
         graph_ax.set_xticklabels([str(tcc) for tcc in ts])
         graph_ax.legend()
         # right bottom graph: ssim vs tcc
-        graph_ax = fig.add_axes([0.80, 0.55, 0.40, 0.4])
+        graph_ax = fig.add_axes([0.82, 0.55, 0.18, 0.4])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('SSIM')
         for no,scc in enumerate(sps):

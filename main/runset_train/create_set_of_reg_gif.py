@@ -12,6 +12,8 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 import imageio
 import glob
 from argparse import Namespace
+from skimage.metrics import structural_similarity as ssim
+
 def get_parameters_of_runs(params_dict):
     # First create cart prod runsets.
     vals_list = []
@@ -47,6 +49,9 @@ def find_total_runs(wts, sps, jcs, ts):
 def calc_psnr(rec, ref):
     test_psnr = 20*np.log10(ref.max()) - 10 * np.log10(((rec-ref)**2).mean())
     return test_psnr
+def calc_ssim(rec, ref):
+    test_ssim = ssim(rec, ref, data_range=ref.max()-ref.min())
+    return test_ssim
 def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_end):
     pt_dir = f'{args.main_folder}{args.pt}/'
     im_dim = (128,128) if ax_cr_sg==0 else (128,64)
@@ -59,6 +64,7 @@ def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_en
     elif ax_cr_sg == 2:
         refs = np.load(ref_dir)[t_st:t_end+1].astype('float32')[:,sl_no,:,:]
     psnrs = np.zeros((len(sps)*len(ts), t_end-t_st+1))
+    ssims = np.zeros((len(sps)*len(ts), t_end-t_st+1))
     conf_ind = 0
     for sp in sps:
         args.use_sp_cont_reg = (sp!=0)
@@ -91,12 +97,12 @@ def find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_en
                 elif ax_cr_sg == 2:
                     recs[conf_ind,time_ind - t_st] = loaded_rec[sl_no,:,:]
                 psnrs[conf_ind,time_ind - t_st] = calc_psnr(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
-                
+                ssims[conf_ind,time_ind - t_st] = calc_ssim(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
             conf_ind += 1
             
-    return recs, refs, psnrs   
+    return recs, refs, psnrs, ssims  
 # TO DO: draw border around subplots, draw a main, big horizontal and vertical axis
-def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st):
+def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st):
     filenames = []
     cmap = mpl.cm.get_cmap('jet')
     
@@ -112,7 +118,9 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
         filename = f'{ind_ims_dir}/frame_{t}.png'
         filenames.append(filename)
         (min_psnr, max_psnr) = (psnrs[:,t].min(), min(psnrs[:,t].max(),100))
-        best_conf_no = psnrs[:,t].argmax()
+        (min_ssim, max_ssim) = (ssims[:,t].min(), ssims[:,t].max())
+        bps_conf_no = psnrs[:,t].argmax()
+        bss_conf_no = ssims[:,t].argmax()
         norm = mpl.colors.Normalize(vmin=min_psnr, vmax=max_psnr)
         fig,ax = plt.subplots(nrows,ncols, figsize=figsize)
         for i in range(nrows):
@@ -123,15 +131,16 @@ def make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, 
                 im = ax[i,j].imshow(im_to_show,cmap='gray', interpolation='none')#, vmin=immin, vmax=immax)
                 ax[i,j].axis('off')
                 ps = psnrs[conf_no,t]
+                ss = ssims[conf_no,t]
                 ps_color = cmap((ps-min_psnr)/(max_psnr-min_psnr))
                 # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
                 rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
                 ax[i,j].add_patch(rect)
-                if conf_no == best_conf_no:
-                    ax[i,j].set_title(f'Time CC: {ts[j]}, Spat CC: {sps[i]} (BEST)', color='r')
+                if conf_no == bss_conf_no:
+                    ax[i,j].set_title(f'TCC: {ts[j]:e}, SCC: {sps[i]:e}', color='r')
                 else:
-                    ax[i,j].set_title(f'Time CC: {ts[j]}, Spat CC: {sps[i]}')
-                ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB)'.format(ps), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
+                    ax[i,j].set_title(f'TCC: {ts[j]:e}, SCC: {sps[i]:e}')
+                ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=10, ha="center", transform=ax[i,j].transAxes)
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')
@@ -174,11 +183,11 @@ def main():
             args.use_jc_grid_reg = (jc!=0)
             args.lambda_JR = jc
             print(f'Current wt:{wt}, jc: {jc}. Finding reconstructions...')
-            recs, refs, psnrs = find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_end) #(16,12,128,64) or (16,12,128,128) and  psnrs: (16,12)
+            recs, refs, psnrs, ssims = find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_end) #(16,12,128,64) or (16,12,128,128) and  psnrs: (16,12)
             gif_dir = f'{args.main_folder}{args.pt}/reg_gifs/sps_ts_wt{wt}_jc{jc}/'
             gif_name = f'sl{sl_no}_sps_ts_wt{wt}_jc{jc}'
             print(f'Reconstructions found. Making the gif: {gif_name}')
-            make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
+            make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
             print('Gif made.')
 
 if __name__ == "__main__":

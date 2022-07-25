@@ -159,8 +159,8 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # fig.colorbar(im, cax=cax, orientation='vertical')
         plt.subplots_adjust(left=0.01, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
         arrow = patches.ConnectionPatch(
-            (-0.99,0),
-            (-0.99,0),
+            (300,150),
+            (-50,100),
             coordsA=ax[-1,0].transData,
             coordsB=ax[-1,-1].transData,
             # Default shrink parameter is 0 so can be omitted

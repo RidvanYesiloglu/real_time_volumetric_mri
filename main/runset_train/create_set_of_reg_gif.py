@@ -175,8 +175,8 @@ def main():
             args.lambda_JR = jc
             print(f'Current wt:{wt}, jc: {jc}. Finding reconstructions...')
             recs, refs, psnrs = find_recs_for_sps_ts(args, params_dict, sps, ts, ax_cr_sg, sl_no, t_st, t_end) #(16,12,128,64) or (16,12,128,128) and  psnrs: (16,12)
-            gif_dir = f'{args.main_folder}{args.pt}/reg_gifs/sl_{sl_no}/'
-            gif_name = f'sps_ts_wt{wt}_jc{jc}'
+            gif_dir = f'{args.main_folder}{args.pt}/reg_gifs/sps_ts_wt{wt}_jc{jc}/'
+            gif_name = f'sl{sl_no}_sps_ts_wt{wt}_jc{jc}'
             print(f'Reconstructions found. Making the gif: {gif_name}')
             make_gif_frames(args, recs, refs, psnrs, sps, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
             print('Gif made.')

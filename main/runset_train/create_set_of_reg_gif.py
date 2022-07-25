@@ -160,8 +160,8 @@ def main():
         print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
     ax_cr_sg = int(input('Axial (0), coronal (1), sagittal (2)?'))
     sl_no = int(input('Slice no:'))
-    t_st = 1
-    t_end = 12
+    t_st = args.st_ind
+    t_end = args.end_ind
     wts = [0,1]
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]

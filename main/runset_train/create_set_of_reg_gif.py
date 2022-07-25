@@ -200,7 +200,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
                 # fig.colorbar(im, cax=cax, orientation='vertical')
-        plt.subplots_adjust(left=0.04, right=0.55, bottom=0.05, top=0.935, wspace=0.05, hspace=0.26)
+        plt.subplots_adjust(left=0.04, right=0.55, bottom=0.05, top=0.92, wspace=0.05, hspace=0.26)
         tcc_arrow = patches.ConnectionPatch(
             (0,145),
             (128,145),
@@ -246,10 +246,10 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
             )
             fig.patches.append(scc_tick)
             
-        cbar_ax = fig.add_axes([0.56, 0.20, 0.015, 0.30])
+        cbar_ax = fig.add_axes([0.56, 0.19, 0.015, 0.30])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB) (outer border color)')
-        cbar_ax = fig.add_axes([0.56, 0.52, 0.015, 0.30])
+        cbar_ax = fig.add_axes([0.56, 0.51, 0.015, 0.30])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm_ssim, orientation='vertical')
         cb1.set_label('SSIM (inner border color)')
         # left bottom graph: psnr vs sp

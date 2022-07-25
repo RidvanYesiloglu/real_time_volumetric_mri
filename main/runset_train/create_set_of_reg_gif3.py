@@ -52,10 +52,10 @@ def calc_psnr(rec, ref):
 def calc_ssim(rec, ref):
     test_ssim = ssim(rec, ref, data_range=ref.max()-ref.min())
     return test_ssim
-def find_recs_for_jcs_ts(args, params_dict, jcs, ts, ax_cr_sg, sl_no, t_st, t_end):
+def find_recs_for_jcs_sps(args, params_dict, jcs, sps, ax_cr_sg, sl_no, t_st, t_end):
     pt_dir = f'{args.main_folder}{args.pt}/'
     im_dim = (128,128) if ax_cr_sg==0 else (128,64)
-    recs = np.zeros((len(jcs)*len(ts), t_end-t_st+1, im_dim[0], im_dim[1]))
+    recs = np.zeros((len(jcs)*len(sps), t_end-t_st+1, im_dim[0], im_dim[1]))
     ref_dir = args.data_dir + args.pt + '/all_vols.npy'
     if ax_cr_sg == 0:
         refs = np.load(ref_dir)[t_st:t_end+1].astype('float32')[:,:,:,sl_no]
@@ -63,15 +63,15 @@ def find_recs_for_jcs_ts(args, params_dict, jcs, ts, ax_cr_sg, sl_no, t_st, t_en
         refs = np.load(ref_dir)[t_st:t_end+1].astype('float32')[:,:,sl_no,:]
     elif ax_cr_sg == 2:
         refs = np.load(ref_dir)[t_st:t_end+1].astype('float32')[:,sl_no,:,:]
-    psnrs = np.zeros((len(jcs)*len(ts), t_end-t_st+1))
-    ssims = np.zeros((len(jcs)*len(ts), t_end-t_st+1))
+    psnrs = np.zeros((len(jcs)*len(sps), t_end-t_st+1))
+    ssims = np.zeros((len(jcs)*len(sps), t_end-t_st+1))
     conf_ind = 0
     for jc in jcs:
         args.use_jc_grid_reg = (jc!=0)    
         args.lambda_JR = jc
-        for t in ts:
-            args.use_t_cont_reg = (t!=0)    
-            args.lambda_t = t
+        for sp in sps:
+            args.use_sp_cont_reg = (sp!=0)    
+            args.lambda_sp = sp
             for time_ind in range(t_st, t_end+1):
                 args.im_ind = time_ind
                 repr_str = parameters.create_repr_str(args, [info.name for info in params_dict.param_infos], wantShort=True, params_dict=params_dict)
@@ -102,7 +102,7 @@ def find_recs_for_jcs_ts(args, params_dict, jcs, ts, ax_cr_sg, sl_no, t_st, t_en
             
     return recs, refs, psnrs, ssims  
 # TO DO: draw border around subplots, draw a main, big horizontal and vertical axis
-def make_gif_frames(args, recs, refs, psnrs, ssims, jcs, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st):
+def make_gif_frames(args, recs, refs, psnrs, ssims, jcs, sps, ax_cr_sg, sl_no, gif_dir, gif_name, t_st):
     filenames = []
     cmap = mpl.cm.get_cmap('jet')
     
@@ -185,13 +185,13 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, jcs, ts, ax_cr_sg, sl_no, gi
                 # rect_bot = patches.Rectangle((0, 128), im_to_show.shape[1], 2, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 # ax[i,j].add_patch(rect_bot)
                 if conf_no == bss_conf_no:
-                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, JCC: {jcs[i]:.0e}', color='black')
+                    ax[i,j].set_title(f'SCC: {sps[j]:.0e}, JCC: {jcs[i]:.0e}', color='black')
                 else:
-                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, JCC: {jcs[i]:.0e}', color='black')
+                    ax[i,j].set_title(f'SCC: {sps[j]:.0e}, JCC: {jcs[i]:.0e}', color='black')
                 if i == (nrows-1): #-0.29
-                    ax[i,j].text(64, 155, f'{ts[j]:.0e}', color='black', size=14, ha="center", va="center", transform=ax[i,j].transData)
+                    ax[i,j].text(64, 155, f'{sps[j]:.0e}', color='black', size=14, ha="center", va="center", transform=ax[i,j].transData)
                     if j == ((ncols-1)//2):
-                        ax[i,j].text(140,170, 'Time Continuity Reg. Coefficient', color='black', size=17, ha="center", va="center", transform=ax[i,j].transData)
+                        ax[i,j].text(140,170, 'Spatial Continuity Reg. Coefficient', color='black', size=17, ha="center", va="center", transform=ax[i,j].transData)
                 if j == 0:#-22
                     ax[i,j].text(-40,64, f'{jcs[i]:.0e}', color='black', size=14, ha="center", va="center", transform=ax[i,j].transData)
                     if i == ((nrows-1)//2):
@@ -252,70 +252,70 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, jcs, ts, ax_cr_sg, sl_no, gi
         cbar_ax = fig.add_axes([0.56, 0.51, 0.015, 0.30])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm_ssim, orientation='vertical')
         cb1.set_label('SSIM (inner border color)')
-        # left bottom graph: psnr vs sp
+          # left bottom graph: psnr vs jc
         graph_ax = fig.add_axes([0.65, 0.25, 0.14, 0.2])
-        for no,tcc in enumerate(ts):
-            graph_ax.plot(psnrs[no::ncols,t], label=f'TCC:{tcc}')
-        graph_ax.set_title('PSNR vs JCC (Coefficient of JC Reg. on Grid)')
+        for no,scc in enumerate(sps):
+            graph_ax.plot(psnrs[no::ncols,t], label=f'SCC:{scc}')
+        graph_ax.set_title('PSNR vs JCC (JC Coefficient)')
         graph_ax.set_ylabel(f'PSNR at t={t}')
         #
         graph_ax = fig.add_axes([0.65, 0.05, 0.14, 0.2])
-        for no,tcc in enumerate(ts):
-            graph_ax.plot(psnrs[no::ncols,:].mean(1), label=f'TCC:{tcc}')
+        for no,scc in enumerate(sps):
+            graph_ax.plot(psnrs[no::ncols,:].mean(1), label=f'SCC:{scc}')
         graph_ax.set_ylabel('Av. PSNR')
-        graph_ax.set_xlabel('SCC')
+        graph_ax.set_xlabel('JCC')
         graph_ax.set_xticks(np.arange(len(jcs)))
         graph_ax.set_xticklabels([str(jc) for jc in jcs])
         graph_ax.legend()
-        # right bottom graph: ssim vs sp
+        # right bottom graph: ssim vs jc
         graph_ax = fig.add_axes([0.86, 0.25, 0.14, 0.2])
-        for no,tcc in enumerate(ts):
-            graph_ax.plot(ssims[no::ncols,t], label=f'TCC:{tcc}')
-        graph_ax.set_title('SSIM vs JCC (Coefficient of JC Reg. on Grid)')
+        for no,scc in enumerate(sps):
+            graph_ax.plot(ssims[no::ncols,t], label=f'SCC:{scc}')
+        graph_ax.set_title('SSIM vs JCC (JC Coefficient)')
         graph_ax.set_ylabel(f'SSIM at t={t}')
         # 
         graph_ax = fig.add_axes([0.86, 0.05, 0.14, 0.2])
-        for no,tcc in enumerate(ts):
-            graph_ax.plot(ssims[no::ncols,:].mean(1), label=f'TCC:{tcc}')
+        for no,scc in enumerate(sps):
+            graph_ax.plot(ssims[no::ncols,:].mean(1), label=f'SCC:{scc}')
         graph_ax.set_ylabel('Av. SSIM')
-        graph_ax.set_xlabel('SCC')
+        graph_ax.set_xlabel('JCC')
         graph_ax.set_xticks(np.arange(len(jcs)))
         graph_ax.set_xticklabels([str(jc) for jc in jcs])
         graph_ax.legend()
-        # left top graph: psnr vs tcc
+        # left top graph: psnr vs scc
         graph_ax = fig.add_axes([0.65, 0.72, 0.14, 0.2])
-        for no,jc in enumerate(jcs):
-            graph_ax.plot(psnrs[no*ncols:(no+1)*ncols,t], label=f'JCC:{jc}')
-        graph_ax.set_title('PSNR vs TCC (Time Continuity Coefficient)')
+        for no,jcc in enumerate(jcs):
+            graph_ax.plot(psnrs[no*ncols:(no+1)*ncols,t], label=f'JCC:{jcc}')
+        graph_ax.set_title('PSNR vs SCC (Spatial Continuity Coefficient)')
         graph_ax.set_ylabel(f'PSNR at t={t}')
         # 
         graph_ax = fig.add_axes([0.65, 0.52, 0.14, 0.2])
-        for no,jc in enumerate(jcs):
-            graph_ax.plot(psnrs[no*ncols:(no+1)*ncols,:].mean(1), label=f'JCC:{jc}')
+        for no,jcc in enumerate(jcs):
+            graph_ax.plot(psnrs[no*ncols:(no+1)*ncols,:].mean(1), label=f'JCC:{jcc}')
         graph_ax.set_ylabel('Av. PSNR')
-        graph_ax.set_xlabel('TCC')
-        graph_ax.set_xticks(np.arange(len(ts)))
-        graph_ax.set_xticklabels([str(tcc) for tcc in ts])
+        graph_ax.set_xlabel('SCC')
+        graph_ax.set_xticks(np.arange(len(sps)))
+        graph_ax.set_xticklabels([str(scc) for scc in sps])
         graph_ax.legend()
-        # right bottom graph: ssim vs tcc
+        # right bottom graph: ssim vs scc
         graph_ax = fig.add_axes([0.86, 0.72, 0.14, 0.2])
-        for no,scc in enumerate(jcs):
-            graph_ax.plot(ssims[no*ncols:(no+1)*ncols,t], label=f'JCC:{jc}')
-        graph_ax.set_title('SSIM vs TCC (Time Continuity Coefficient)')
+        for no,jcc in enumerate(jcs):
+            graph_ax.plot(ssims[no*ncols:(no+1)*ncols,t], label=f'JCC:{jcc}')
+        graph_ax.set_title('SSIM vs SCC (Spatial Continuity Coefficient)')
         graph_ax.set_ylabel(f'SSIM at t={t}')
         # 
         graph_ax = fig.add_axes([0.86, 0.52, 0.14, 0.2])
-        for no,scc in enumerate(jcs):
-            graph_ax.plot(ssims[no*ncols:(no+1)*ncols,:].mean(1), label=f'JCC:{jc}')
+        for no,jcc in enumerate(jcs):
+            graph_ax.plot(ssims[no*ncols:(no+1)*ncols,:].mean(1), label=f'JCC:{jcc}')
         graph_ax.set_ylabel('Av. SSIM')
         graph_ax.set_xlabel('TCC')
-        graph_ax.set_xticks(np.arange(len(ts)))
-        graph_ax.set_xticklabels([str(tcc) for tcc in ts])
+        graph_ax.set_xticks(np.arange(len(sps)))
+        graph_ax.set_xticklabels([str(scc) for scc in sps])
         graph_ax.legend()
         if args.conf == 'trn_w_trns':
-            plt.suptitle(f"{im_type_str.capitalize()} Images vs JC-on-Grid and Temporal Continuity Loss Coefficients ({args.pt} - With Transformation NeRP - JC Loss Coef. on Grid: {args.lambda_JR} - Time Point: {(t+t_st):3d})", size=19)
+            plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt} - With Transformation NeRP - JC Loss Coef. on Grid: {args.lambda_JR} - Time Point: {(t+t_st):3d})", size=19)
         else:
-            plt.suptitle(f"{im_type_str.capitalize()} Images vs JC-on-Grid and Temporal Continuity Loss Coefficients ({args.pt} - Without Transformation NeRP - Time Point: {(t+t_st):3d})", size=19)
+            plt.suptitle(f"{im_type_str.capitalize()} Images vs Spatial and Temporal Continuity Loss Coefficients ({args.pt} - Without Transformation NeRP - Time Point: {(t+t_st):3d})", size=19)
         plt.show()
         plt.savefig(filename, dpi=96, bbox_inches='tight')
         plt.close()
@@ -346,20 +346,20 @@ def main():
     for wt in wts:
         if wt == 0:
             continue
-        for sp in sps:
+        for tcc in ts:
             curr_ind += 1
             
             args.conf = 'trn_wo_trns' if wt==0 else 'trn_w_trns'
-            args.use_sp_cont_reg = (sp!=0)
-            args.lambda_sp = sp
-            print(f'Current wt:{wt}, sp: {sp}. Finding reconstructions...')
-            recs, refs, psnrs, ssims = find_recs_for_jcs_ts(args, params_dict, jcs, ts, ax_cr_sg, sl_no, t_st, t_end) #(16,12,128,64) or (16,12,128,128) and  psnrs: (16,12)
+            args.use_t_cont_reg = (tcc!=0)
+            args.lambda_t = tcc
+            print(f'Current wt:{wt}, t: {tcc}. Finding reconstructions...')
+            recs, refs, psnrs, ssims = find_recs_for_jcs_sps(args, params_dict, jcs, sps, ax_cr_sg, sl_no, t_st, t_end) #(16,12,128,64) or (16,12,128,128) and  psnrs: (16,12)
             all_psnrs[curr_ind-1]=psnrs
             all_ssims[curr_ind-1]=ssims
-            gif_dir = f'{args.main_folder}{args.pt}/reg_gifs/jcs_ts_wt{wt}_sp{sp}/'
-            gif_name = f'sl{sl_no}_jcs_ts_wt{wt}_sp{sp}'
+            gif_dir = f'{args.main_folder}{args.pt}/reg_gifs/jcs_sps_wt{wt}_tcc{tcc}/'
+            gif_name = f'sl{sl_no}_jjcs_sps_wt{wt}_tcc{tcc}'
             print(f'Reconstructions found. Making the gif: {gif_name}')
-            make_gif_frames(args, recs, refs, psnrs, ssims, jcs, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
+            make_gif_frames(args, recs, refs, psnrs, ssims, jcs, sps, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
             print('Gif made.')
     np.save('all_psnrs',all_psnrs)
     np.save('all_ssims',all_ssims)

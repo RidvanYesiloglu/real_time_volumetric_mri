@@ -146,8 +146,8 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 
                 # Top patch
                 rect_top = patches.ConnectionPatch(
-                    (10,-20),
-                    (118,-20),
+                    (10,-15),
+                    (118,-15),
                     coordsA=ax[i,j].transData,
                     coordsB=ax[i,j].transData,
                     color=ps_color,
@@ -158,6 +158,16 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # rect_top = patches.Rectangle((0, -5), im_to_show.shape[1], 5, linewidth=5, edgecolor=ps_color, facecolor=ps_color, transform=ax[i,j].transData, zorder=2)
                 # ax[i,j].add_patch(rect_top)
                 # Bottom patch
+                rect_bot = patches.ConnectionPatch(
+                    (10,138),
+                    (118,138),
+                    coordsA=ax[i,j].transData,
+                    coordsB=ax[i,j].transData,
+                    color=ps_color,
+                    linewidth=30,
+                    zorder=-100,
+                )
+                fig.patches.append(rect_bot)
                 # rect_bot = patches.Rectangle((0, 128), im_to_show.shape[1], 2, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
                 # ax[i,j].add_patch(rect_bot)
                 if conf_no == bss_conf_no:

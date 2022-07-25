@@ -143,10 +143,13 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 # Create a rectangle patch around the image to indicate the PSNR wrt the initial image
                 rect = patches.Rectangle((0, 0), im_to_show.shape[1], im_to_show.shape[0], linewidth=5, edgecolor=ps_color, facecolor='none')
                 ax[i,j].add_patch(rect)
+                # Top patch
+                rect_top = patches.Rectangle((0, -15), im_to_show.shape[1], 15, linewidth=5, edgecolor=ps_color, facecolor=ps_color)
+                ax[i,j].add_patch(rect_top)
                 if conf_no == bss_conf_no:
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
                 else:
-                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}')
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='white')
                 if i == (nrows-1): #-0.29
                     ax[i,j].text(64, 155, f'{ts[j]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
                     if j == ((ncols-1)//2):
@@ -154,7 +157,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 if j == 0:#-22
                     ax[i,j].text(-40,64, f'{sps[i]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
                     if i == ((nrows-1)//2):
-                        ax[i,j].text(-50,140, 'Spatial Continuity Reg. Coefficient', color='red', size=18, ha="center", va="center", rotation='vertical', transform=ax[i,j].transData)
+                        ax[i,j].text(-65,140, 'Spatial Continuity Reg. Coefficient', color='red', size=18, ha="center", va="center", rotation='vertical', transform=ax[i,j].transData)
                 ax[i,j].text(0.5,-0.1-0.01*(ax_cr_sg==0)+0.03*(ax_cr_sg!=0), '({:.1f} dB, {:.3f})'.format(ps, ss), color=ps_color, size=11, ha="center", transform=ax[i,j].transAxes)
                 # divider = make_axes_locatable(ax[i,j])
                 # cax = divider.append_axes('right', size='5%', pad=0.05)
@@ -287,8 +290,8 @@ def main():
     if args.end_ind == -1:
         args.end_ind = np.load(args.data_dir+args.pt+'/all_vols.npy').shape[0] - 1
         print(f'Ending index was made: {args.end_ind} (which is the last data point over time.)')
-    ax_cr_sg = int(input('Axial (0), coronal (1), sagittal (2)?'))
-    sl_no = int(input('Slice no:'))
+    ax_cr_sg = int(input('Axial (0), coronal (1), sagittal (2)? '))
+    sl_no = int(input('Slice no: '))
     t_st = args.st_ind
     t_end = args.end_ind
     wts = [0,1]

@@ -246,12 +246,12 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
             )
             fig.patches.append(scc_tick)
             
-        cbar_ax = fig.add_axes([0.56, 0.15, 0.015, 0.7])
+        cbar_ax = fig.add_axes([0.56, 0.15, 0.02, 0.30])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
-        cb1.set_label('PSNR (dB)')
-        cbar_ax = fig.add_axes([0.60, 0.15, 0.015, 0.7])
+        cb1.set_label('PSNR (dB) (outer border color)')
+        cbar_ax = fig.add_axes([0.56, 0.47, 0.015, 0.7])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm_ssim, orientation='vertical')
-        cb1.set_label('SSIM')
+        cb1.set_label('SSIM (inner border color)')
         # left bottom graph: psnr vs sp
         graph_ax = fig.add_axes([0.63, 0.25, 0.15, 0.2])
         for no,tcc in enumerate(ts):

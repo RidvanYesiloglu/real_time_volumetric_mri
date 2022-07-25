@@ -152,6 +152,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                     coordsB=ax[i,j].transData,
                     color="blue",
                     linewidth=30,
+                    zorder=-100,
                 )
                 fig.patches.append(rect_top)
                 # rect_top = patches.Rectangle((0, -5), im_to_show.shape[1], 5, linewidth=5, edgecolor=ps_color, facecolor=ps_color, transform=ax[i,j].transData, zorder=2)
@@ -162,7 +163,7 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 if conf_no == bss_conf_no:
                     ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='r')
                 else:
-                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}')
+                    ax[i,j].set_title(f'TCC: {ts[j]:.0e}, SCC: {sps[i]:.0e}', color='w')
                 if i == (nrows-1): #-0.29
                     ax[i,j].text(64, 155, f'{ts[j]:.0e}', color='red', size=14, ha="center", va="center", transform=ax[i,j].transData)
                     if j == ((ncols-1)//2):

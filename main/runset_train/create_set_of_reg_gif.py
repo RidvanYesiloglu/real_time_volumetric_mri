@@ -144,9 +144,9 @@ def make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gi
                 divider = make_axes_locatable(ax[i,j])
                 cax = divider.append_axes('right', size='5%', pad=0.05)
                 fig.colorbar(im, cax=cax, orientation='vertical')
-        plt.subplots_adjust(left=0.01, right=0.85, bottom=0.05, top=0.935, wspace=0.20)
-        cbar_ax = fig.add_axes([0.84, 0.15, 0.02, 0.7])
-        graph_ax = fig.add_axes([0.90, 0.15, 0.02, 0.7])
+        plt.subplots_adjust(left=0.01, right=0.55, bottom=0.05, top=0.935, wspace=0.10)
+        cbar_ax = fig.add_axes([0.55, 0.15, 0.02, 0.7])
+        graph_ax = fig.add_axes([0.60, 0.05, 0.40, 0.4])
         cb1 = mpl.colorbar.ColorbarBase(cbar_ax, cmap=cmap, norm=norm, orientation='vertical')
         cb1.set_label('PSNR (dB)')
         for no,tcc in enumerate(ts):

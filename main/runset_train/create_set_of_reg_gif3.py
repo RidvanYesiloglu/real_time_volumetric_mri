@@ -63,6 +63,9 @@ def find_recs_for_jcs_sps(args, params_dict, jcs, sps, ax_cr_sg, sl_no, t_st, t_
         refs = np.load(ref_dir)[t_st:t_end+1].astype('float32')[:,:,sl_no,:]
     elif ax_cr_sg == 2:
         refs = np.load(ref_dir)[t_st:t_end+1].astype('float32')[:,sl_no,:,:]
+    else:
+        refs = np.load(ref_dir)[t_st:t_end+1].astype('float32')
+        recs = np.zeros((len(jcs)*len(sps), t_end-t_st+1, im_dim[0], im_dim[1], 64))
     psnrs = np.zeros((len(jcs)*len(sps), t_end-t_st+1))
     ssims = np.zeros((len(jcs)*len(sps), t_end-t_st+1))
     conf_ind = 0

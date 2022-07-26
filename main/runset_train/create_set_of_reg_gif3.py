@@ -54,7 +54,7 @@ def calc_ssim(rec, ref):
     return test_ssim
 def find_recs_for_jcs_sps(args, params_dict, jcs, sps, ax_cr_sg, sl_no, t_st, t_end):
     pt_dir = f'{args.main_folder}{args.pt}/'
-    im_dim = (128,128) if ax_cr_sg==0 else (128,64)
+    im_dim = (128,128) if ax_cr_sg==0 else (128,128)
     recs = np.zeros((len(jcs)*len(sps), t_end-t_st+1, im_dim[0], im_dim[1]))
     ref_dir = args.data_dir + args.pt + '/all_vols.npy'
     if ax_cr_sg == 0:

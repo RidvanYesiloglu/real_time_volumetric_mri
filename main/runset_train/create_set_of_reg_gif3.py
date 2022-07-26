@@ -103,8 +103,10 @@ def find_recs_for_jcs_sps(args, params_dict, jcs, sps, ax_cr_sg, sl_no, t_st, t_
                     recs[conf_ind,time_ind - t_st] = loaded_rec[:,sl_no,:]
                 elif ax_cr_sg == 2:
                     recs[conf_ind,time_ind - t_st] = loaded_rec[sl_no,:,:]
-                psnrs[conf_ind,time_ind - t_st] = calc_psnr(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
-                ssims[conf_ind,time_ind - t_st] = calc_ssim(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
+                else:
+                    recs[conf_ind,time_ind - t_st] = loaded_rec
+                # psnrs[conf_ind,time_ind - t_st] = calc_psnr(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
+                # ssims[conf_ind,time_ind - t_st] = calc_ssim(recs[conf_ind,time_ind - t_st], refs[time_ind - t_st])
             conf_ind += 1
             
     return recs, refs, psnrs, ssims  

@@ -360,8 +360,8 @@ def main():
             print(f'Reconstructions found. Making the gif: {gif_name}')
             make_gif_frames(args, recs, refs, psnrs, ssims, sps, ts, ax_cr_sg, sl_no, gif_dir, gif_name, t_st)
             print('Gif made.')
-    np.save('all_psnrs',all_psnrs)
-    np.save('all_ssims',all_ssims)
+    np.save('all_psnrs_yeni',all_psnrs)
+    np.save('all_ssims_yeni',all_ssims)
 
 if __name__ == "__main__":
     main() 

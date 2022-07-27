@@ -339,8 +339,8 @@ def main():
     sps = [0,1e2,1e3,1e4]
     jcs = [0,1e2,1e3,1e4]
     ts = [0,1e2,1e3,1e4]
-    all_psnrs = np.zeros((80,16,12))
-    all_ssims = np.zeros((80,16,12))
+    all_psnrs = np.zeros((5,16,12))
+    all_ssims = np.zeros((5,16,12))
     curr_ind = 0
     for wt in wts:
         for jc in jcs:

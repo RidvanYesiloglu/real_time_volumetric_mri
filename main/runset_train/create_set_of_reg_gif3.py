@@ -353,7 +353,7 @@ def main():
     curr_ind = 0
     wt = 1
     for wt in wts:
-        if wt == 0:
+        if wt != 0:
             continue
         for tcc in ts:
             curr_ind += 1

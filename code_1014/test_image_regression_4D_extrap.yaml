@@ -1,0 +1,136 @@
+# Copyright (C) 2017 NVIDIA Corporation.  All rights reserved.
+# Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+
+# Logger options
+log_iter: 10                  # How often to log the training loss 
+val_iter: 100                # How often to validate testing and save output images during training
+image_save_iter: 100         # How often do you want to save output images during training
+
+# Optimization options
+max_iter: 1000                # Maximum number of training iterations
+batch_size: 1                 # Batch size
+loss: L2
+optimizer: Adam               # Optimizer for trainings
+weight_decay: 0.0001          # Weight decay
+beta1: 0.9 # 0.5 (CT) / 0.9 (MRI)                    # Adam parameter
+beta2: 0.999                  # Adam parameter
+lr: 0.0001                    # Initial learning rate
+# lr_policy: step               # learning rate scheduler
+# step_size: 100000             # how often to decay learning rate
+# gamma: 0.5                    # how much to decay learning rate
+
+pretrain_path: './outputs/train_image_regression_4D/Liver_2phase/'
+
+
+################### 2D CT Image ###################
+# Model options (2D CT)
+model: SIREN                  # Options for MLP models [FFN | SIREN]
+net: 
+  network_input_size: 512     # Input size for network
+  network_output_size: 1
+  network_depth: 8            # Depth of MLP layers
+  network_width: 256          # Width of MLP layers
+
+encoder:
+  embedding: gauss            #  Input embedding method
+  scale: 4
+  embedding_size: 256         # Embedding size for input Fourier feature encoding
+  coordinates_size: 4
+
+pos_end: 15
+neg_end: 5
+
+### Raw patients data
+data: Liver_2phase
+z_dim: 32
+y_dim: 64
+x_dim: 64
+img_id1: 1
+img_id2: 11
+img_path: '../data/pt_73_5min_resize/volume_{}.bin'  # Image path for data loading
+display_image_num: 10
+
+
+# data: lung_4dct_real
+# img_size: 256     # (120, 512, 512)
+# img_slice: 46     # 36 - 46
+# img_path: ./data/ct_data/lung_4dct_inhale.npz  # Image path for data loading
+
+
+
+### mvf simulation data
+# data: headneck
+# img_size: 512                 # Input image size
+# img_slice: 200 # 43, 56, 200
+# img_path: ./data/ct_data/patient_data/headneck_1.npz  # Image path for data loading
+
+# data: brain_4dct
+# img_size: 128                 # Input image size
+# img_slice: 66
+# img_path: ./data/ct_data/brain_4dct_1.npz  # Image path for data loading
+
+# data: pancs_4dct
+# img_size: 256                 # Input image size
+# img_slice: 28
+# img_path: ./data/ct_data/pancs_4dct_1.npz  # Image path for data loading
+
+# data: lung_4dct
+# img_size: 128                 # Input image size
+# img_slice: 60
+# img_path: ./data/ct_data/lung_4dct_1.npz  # Image path for data loading
+
+# data: lung_ct
+# img_size: 128                 # Input image size
+# img_path: ./data/ct_data/lidc_ct_1.npz  # Image path for data loading
+
+
+
+
+
+################### 2D MRI Image ###################
+# # Model options (2D MRI)
+# model: SIREN                  # Options for MLP models [FFN | SIREN]
+# net: 
+#   network_input_size: 512     # Input size for network
+#   network_output_size: 1
+#   network_depth: 8            # Depth of MLP layers
+#   network_width: 512          # Width of MLP layers
+
+# encoder:
+#   embedding: gauss            # Input embedding method
+#   scale: 3
+#   embedding_size: 256         # Embedding size for input Fourier feature encoding
+#   coordinates_size: 2
+
+
+# # data: brain_tumor_t1
+# # img_size: 256  # [320, 260]          # Input image size
+# # img_slice: 17                 # Slices: 16 / 17
+# # img_path: ./data/mri_data/btr_001/T1prereg_1.npz
+
+# # data: brain_tumor_t1post
+# # img_size:  256  # [320, 260] # 256          # Input image size
+# # img_slice: 16                 # Slices: 16 / 17
+# # img_path: ./data/mri_data/btr_001/T1post_1.npz
+
+# # data: brain_tumor_t2
+# # img_size: 256 # [320, 260]          # Input image size
+# # img_slice: 16                 # Slices: 16 / 17
+# # img_path: ./data/mri_data/btr_001/T2reg_1.npz
+
+# data: brain_tumor_flair
+# img_size: 256  # [320, 260]          # Input image size
+# img_slice: 16                 # Slices: 16 / 17
+# img_path: ./data/mri_data/btr_001/FLAIRreg_1.npz
+
+
+
+
+################### Phantom Image ###################
+# data: phantom
+# img_size: 128                 # Input image size
+# img_path: ./data/phantom.png  # Image path for data loading
+
+
+
+
